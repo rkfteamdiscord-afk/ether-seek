@@ -7,26 +7,28 @@ import {
   MessageCircle,
   Bot,
   Code2,
+  ShieldCheck,
   ArrowUpRight,
   Terminal,
 } from "lucide-react";
+import { MatrixRain } from "@/components/MatrixRain";
 import bannerAsset from "@/assets/zrk-banner.png.asset.json";
 import avatarAsset from "@/assets/zrk-avatar.gif.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ȥrk — Développeur web, apps & bots" },
+      { title: "Ȥrk — Dev web, apps, bots & cybersécurité" },
       {
         name: "description",
         content:
-          "Ȥrk conçoit des sites web, des applications publiées sur l'App Store et le Play Store, et des bots Telegram, WhatsApp et Discord sur mesure.",
+          "Ȥrk : prestations sur mesure en sites web, applications App Store / Play Store, bots Telegram, WhatsApp, Discord et cybersécurité.",
       },
-      { property: "og:title", content: "Ȥrk — Développeur web, apps & bots" },
+      { property: "og:title", content: "Ȥrk — Dev web, apps, bots & cybersécurité" },
       {
         property: "og:description",
         content:
-          "Sites web, applications mobiles, bots Telegram / WhatsApp / Discord — conçus et livrés par Ȥrk.",
+          "Sites web, applications mobiles, bots et cybersécurité — prestations signées Ȥrk.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,7 +43,7 @@ export const Route = createFileRoute("/")({
           name: "Ȥrk",
           jobTitle: "Développeur full-stack",
           description:
-            "Sites web, applications mobiles et bots Telegram, WhatsApp, Discord sur mesure.",
+            "Sites web, applications mobiles, bots Telegram, WhatsApp, Discord et cybersécurité.",
         }),
       },
     ],
@@ -83,8 +85,14 @@ const SERVICES = [
     desc: "Modération, tickets, économie, musique — tout ce qu'une communauté peut demander.",
   },
   {
-    icon: Code2,
+    icon: ShieldCheck,
     num: "06",
+    title: "Cybersécurité",
+    desc: "Audit, tests d'intrusion, sécurisation de serveurs, chiffrement, protection anti-bot et anti-fuite de données.",
+  },
+  {
+    icon: Code2,
+    num: "07",
     title: "Et bien plus",
     desc: "Scripts, APIs, outils internes, intégrations sur mesure — parlez-moi de votre projet.",
   },
@@ -99,6 +107,9 @@ const STACK = [
   "React Native",
   "PostgreSQL",
   "Tailwind",
+  "Linux",
+  "Docker",
+  "Pentest",
 ];
 
 function Portfolio() {
@@ -114,14 +125,15 @@ function Portfolio() {
       <section className="relative flex min-h-screen flex-col">
         {/* bannière */}
         <div className="absolute inset-0 overflow-hidden">
+          <MatrixRain className="absolute inset-0 h-full w-full opacity-45" />
           <img
             src={bannerAsset.url}
             alt="Bannière Ȥrk — code et néon rouge"
-            className={`h-full w-full object-cover transition-all duration-[2500ms] ease-out ${
-              ready ? "scale-100 opacity-60" : "scale-110 opacity-0"
+            className={`absolute inset-x-0 top-0 max-h-[52vh] w-full object-contain object-top transition-all duration-[2500ms] ease-out ${
+              ready ? "opacity-55" : "opacity-0"
             }`}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+          <div className="scanlines absolute inset-0 bg-gradient-to-b from-background/30 via-background/75 to-background" />
         </div>
 
         {/* nav minimaliste */}
@@ -160,10 +172,10 @@ function Portfolio() {
             style={{ opacity: ready ? 1 : 0 }}
           >
             <Terminal className="h-3.5 w-3.5 text-destructive" />
-            développeur full-stack
+            développeur full-stack · cybersécurité
           </p>
 
-          <h1 className="font-display mt-5 text-[clamp(3.2rem,11vw,7.5rem)] leading-none font-light tracking-tight">
+          <h1 className="font-display text-glitch mt-5 text-[clamp(3.2rem,11vw,7.5rem)] leading-none font-light tracking-tight">
             Ȥ<span className="text-destructive drop-shadow-[0_0_25px_oklch(0.55_0.17_25/60%)]">rk</span>
           </h1>
 
@@ -171,7 +183,9 @@ function Portfolio() {
             Je construis des <span className="text-foreground">sites web</span>, des{" "}
             <span className="text-foreground">applications</span> publiées sur l'App Store et le
             Play Store, et des <span className="text-foreground">bots</span> Telegram, WhatsApp et
-            Discord — sur mesure, du premier prototype à la mise en production.
+            Discord. Je suis aussi <span className="text-[color:var(--matrix)]">spécialisé en cybersécurité</span> —
+            et je touche à tous les domaines : chaque prestation est réalisée par moi, du premier
+            prototype à la mise en production.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
@@ -290,16 +304,16 @@ function Portfolio() {
           src={bannerAsset.url}
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover opacity-25"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-20"
         />
+        <MatrixRain className="absolute inset-0 h-full w-full opacity-35" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/80" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 py-32 text-center md:py-44">
           <h2 className="font-display text-[clamp(2.2rem,6vw,4.5rem)] leading-tight font-light">
             Un projet en tête ?
           </h2>
           <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Site web, application mobile, bot Telegram, WhatsApp ou Discord — envoyez votre demande
-            sur le serveur Discord, réponse rapide garantie.
+            Site web, application mobile, bot Telegram, WhatsApp, Discord ou audit de sécurité — envoyez votre demande sur le serveur Discord, réponse rapide garantie.
           </p>
           <a
             href={DISCORD_URL}
