@@ -38,12 +38,12 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       ctx.font = `${size}px ui-monospace, monospace`;
 
       for (let i = 0; i < cols; i++) {
-        const y = drops[i] * size;
-        const char = glyphs[Math.floor(Math.random() * glyphs.length)];
+        const y = (drops[i] ?? 0) * size;
+        const char = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
         ctx.fillStyle = Math.random() > 0.985 ? "rgba(220,255,235,0.9)" : "rgba(70, 220, 140, 0.55)";
         ctx.fillText(char, i * size, y);
         if (y > canvas.offsetHeight && Math.random() > 0.975) drops[i] = 0;
-        drops[i] += 1;
+        drops[i] = (drops[i] ?? 0) + 1;
       }
     };
     raf = requestAnimationFrame(draw);
