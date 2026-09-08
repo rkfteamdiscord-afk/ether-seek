@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-/** Pluie de caractères style "matrice", discrète, en fond. */
+/** Pluie de caractères style "matrice", rouge néon, discrète, en fond. */
 export function MatrixRain({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
 
@@ -20,6 +20,8 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       canvas.width = canvas.offsetWidth * dpr;
       canvas.height = canvas.offsetHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = "#05070c";
+      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       cols = Math.ceil(canvas.offsetWidth / size);
       drops = Array.from({ length: cols }, () => Math.random() * -60);
     };
@@ -33,14 +35,18 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       if (t - last < 60) return;
       last = t;
 
-      ctx.fillStyle = "rgba(6, 10, 14, 0.14)";
+      // fondu bleu-noir : jamais de vert
+      ctx.fillStyle = "rgba(5, 7, 12, 0.2)";
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       ctx.font = `${size}px ui-monospace, monospace`;
 
       for (let i = 0; i < cols; i++) {
         const y = (drops[i] ?? 0) * size;
         const char = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
-        ctx.fillStyle = Math.random() > 0.985 ? "rgba(120, 200, 255, 0.85)" : "rgba(60, 140, 200, 0.45)";
+        const head = Math.random() > 0.985;
+        ctx.fillStyle = head
+          ? "rgba(255, 120, 130, 0.9)" // tête lumineuse
+          : "rgba(200, 40, 55, 0.4)"; // corps rouge néon
         ctx.fillText(char, i * size, y);
         if (y > canvas.offsetHeight && Math.random() > 0.975) drops[i] = 0;
         drops[i] = (drops[i] ?? 0) + 1;
