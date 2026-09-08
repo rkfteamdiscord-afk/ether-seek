@@ -1,348 +1,333 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Globe,
+  Smartphone,
+  Send,
+  MessageCircle,
+  Bot,
+  Code2,
+  ArrowUpRight,
+  Terminal,
+} from "lucide-react";
+import bannerAsset from "@/assets/zrk-banner.png.asset.json";
+import avatarAsset from "@/assets/zrk-avatar.gif.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "atmospherexplore — a room that answers to attention" },
+      { title: "Ȥrk — Développeur web, apps & bots" },
       {
         name: "description",
         content:
-          "Six faint signals in a dark room. Linger, and they open. No menu until you ask for one.",
+          "Ȥrk conçoit des sites web, des applications publiées sur l'App Store et le Play Store, et des bots Telegram, WhatsApp et Discord sur mesure.",
       },
-      { property: "og:title", content: "atmospherexplore" },
+      { property: "og:title", content: "Ȥrk — Développeur web, apps & bots" },
       {
         property: "og:description",
-        content: "Six faint signals in a dark room. Linger, and they open.",
+        content:
+          "Sites web, applications mobiles, bots Telegram / WhatsApp / Discord — conçus et livrés par Ȥrk.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Ȥrk",
+          jobTitle: "Développeur full-stack",
+          description:
+            "Sites web, applications mobiles et bots Telegram, WhatsApp, Discord sur mesure.",
+        }),
       },
     ],
   }),
-  component: Atmosphere,
+  component: Portfolio,
 });
 
-type Signal = {
-  id: string;
-  label: string;
-  whisper: string;
-  body: string;
-  x: number;
-  y: number;
-  hue: string;
-};
+const DISCORD_URL = "https://discord.gg/m6Gf2bHFhF";
 
-const SIGNALS: Signal[] = [
+const SERVICES = [
   {
-    id: "i",
-    label: "the long room",
-    whisper: "it is longer at night",
-    body: "Nothing is stored here. The room simply keeps the shape of whoever waited in it last, and lets it go by morning.",
-    x: 22,
-    y: 30,
-    hue: "oklch(0.82 0.07 74 / 0.5)",
+    icon: Globe,
+    num: "01",
+    title: "Sites web",
+    desc: "Vitrines, portfolios, plateformes — rapides, soignés, optimisés pour le référencement.",
   },
   {
-    id: "ii",
-    label: "low tide, inland",
-    whisper: "water where no water is",
-    body: "Sound arrives before weather. If you hold still long enough, the floor reads like a shoreline and you are the thing left behind.",
-    x: 68,
-    y: 22,
-    hue: "oklch(0.66 0.05 240 / 0.5)",
+    icon: Smartphone,
+    num: "02",
+    title: "Applications mobiles",
+    desc: "Des apps publiables sur l'App Store et le Play Store, de l'idée jusqu'à la mise en ligne.",
   },
   {
-    id: "iii",
-    label: "a borrowed lamp",
-    whisper: "returned unlit",
-    body: "Light is on loan here. Use it briefly, on one thing at a time, and expect the edges to stay unaccounted for.",
-    x: 44,
-    y: 56,
-    hue: "oklch(0.84 0.06 82 / 0.5)",
+    icon: Send,
+    num: "03",
+    title: "Bots Telegram",
+    desc: "Automatisation, paiements, modération, notifications — des bots qui travaillent pour vous.",
   },
   {
-    id: "iv",
-    label: "unfinished corridor",
-    whisper: "it ends politely",
-    body: "There was a plan for this passage. What remains is the intention, thinned out — walkable, but only slowly.",
-    x: 82,
-    y: 62,
-    hue: "oklch(0.6 0.04 300 / 0.45)",
+    icon: MessageCircle,
+    num: "04",
+    title: "Bots WhatsApp",
+    desc: "Réponses automatiques, service client, diffusion — votre business joignable 24/7.",
   },
   {
-    id: "v",
-    label: "someone's weather",
-    whisper: "not yours, still felt",
-    body: "A climate left running in an empty room. Warm at the centre, cold at the wall, no explanation offered.",
-    x: 14,
-    y: 72,
-    hue: "oklch(0.7 0.05 190 / 0.45)",
+    icon: Bot,
+    num: "05",
+    title: "Bots Discord",
+    desc: "Modération, tickets, économie, musique — tout ce qu'une communauté peut demander.",
   },
   {
-    id: "vi",
-    label: "the quiet exit",
-    whisper: "you may already be through it",
-    body: "Every visit ends the same way: attention loosens, the grain settles, and the room continues without you.",
-    x: 56,
-    y: 86,
-    hue: "oklch(0.8 0.05 40 / 0.45)",
+    icon: Code2,
+    num: "06",
+    title: "Et bien plus",
+    desc: "Scripts, APIs, outils internes, intégrations sur mesure — parlez-moi de votre projet.",
   },
 ];
 
-const NUMERALS = ["one", "two", "three", "four", "five", "six"];
+const STACK = [
+  "TypeScript",
+  "React",
+  "Node.js",
+  "Python",
+  "Vue",
+  "React Native",
+  "PostgreSQL",
+  "Tailwind",
+];
 
-function Atmosphere() {
-  const [entered, setEntered] = useState(false);
-  const [found, setFound] = useState<string[]>([]);
-  const [open, setOpen] = useState<Signal | null>(null);
-  const [menu, setMenu] = useState(false);
-  const [cursor, setCursor] = useState({ x: 50, y: 45 });
-  const frame = useRef<number | null>(null);
-
-  const reveal = useCallback((s: Signal) => {
-    setOpen(s);
-    setFound((prev) => (prev.includes(s.id) ? prev : [...prev, s.id]));
-  }, []);
-
+function Portfolio() {
+  const [ready, setReady] = useState(false);
   useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      if (frame.current) return;
-      frame.current = requestAnimationFrame(() => {
-        frame.current = null;
-        setCursor({
-          x: (e.clientX / window.innerWidth) * 100,
-          y: (e.clientY / window.innerHeight) * 100,
-        });
-      });
-    };
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
+    const t = setTimeout(() => setReady(true), 150);
+    return () => clearTimeout(t);
   }, []);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(null);
-        setMenu(false);
-      }
-      if (e.key === "/" || e.key === "m") setMenu((m) => !m);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const complete = found.length === SIGNALS.length;
-  const counted = useMemo(
-    () => (found.length === 0 ? "nothing yet" : `${NUMERALS[found.length - 1]} of six`),
-    [found.length],
-  );
 
   return (
-    <main className="grain vignette relative min-h-screen overflow-hidden bg-background">
-      {/* drifting pools of light */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div
-          className="pool breathe h-[52vmax] w-[52vmax]"
-          style={{
-            left: "-12vmax",
-            top: "-14vmax",
-            background: "radial-gradient(circle, oklch(0.84 0.06 82 / 0.16), transparent 70%)",
-          }}
-        />
-        <div
-          className="pool breathe h-[46vmax] w-[46vmax]"
-          style={{
-            right: "-14vmax",
-            bottom: "-10vmax",
-            animationDelay: "5s",
-            background: "radial-gradient(circle, oklch(0.6 0.06 250 / 0.15), transparent 70%)",
-          }}
-        />
-        <div
-          className="pool breathe h-[30vmax] w-[30vmax]"
-          style={{
-            left: "40%",
-            top: "45%",
-            animationDelay: "9s",
-            background: "radial-gradient(circle, oklch(0.78 0.04 60 / 0.1), transparent 70%)",
-          }}
-        />
-        {/* the light that follows attention */}
-        <div
-          className="hidden md:block"
-          style={{
-            position: "absolute",
-            left: `${cursor.x}%`,
-            top: `${cursor.y}%`,
-            width: "38vmax",
-            height: "38vmax",
-            transform: "translate(-50%, -50%)",
-            transition: "left 1.6s cubic-bezier(0.16,1,0.3,1), top 1.6s cubic-bezier(0.16,1,0.3,1)",
-            background: "radial-gradient(circle, oklch(0.9 0.03 80 / 0.07), transparent 65%)",
-            filter: "blur(40px)",
-          }}
-        />
-      </div>
+    <main className="grain relative min-h-screen overflow-x-clip bg-background text-foreground">
+      {/* ===== HERO ===== */}
+      <section className="relative flex min-h-screen flex-col">
+        {/* bannière */}
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={bannerAsset.url}
+            alt="Bannière Ȥrk — code et néon rouge"
+            className={`h-full w-full object-cover transition-all duration-[2500ms] ease-out ${
+              ready ? "scale-100 opacity-60" : "scale-110 opacity-0"
+            }`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+        </div>
 
-      {/* threshold */}
-      <section
-        aria-hidden={entered}
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center px-6 text-center transition-all duration-[2600ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          entered
-            ? "pointer-events-none opacity-0 blur-md"
-            : "bg-background/70 opacity-100 backdrop-blur-xl"
-        }`}
-      >
-        <h1 className="font-display text-[clamp(2rem,6vw,4.25rem)] font-light tracking-[0.22em] lowercase slow-rise text-foreground/90">
-          atmospherexplore
-        </h1>
-        <p
-          className="slow-rise mt-8 max-w-xs text-[0.7rem] leading-relaxed tracking-[0.28em] text-muted-foreground uppercase"
-          style={{ animationDelay: "1.2s" }}
-        >
-          a dark room, kept warm
-        </p>
-        <button
-          onClick={() => setEntered(true)}
-          className="slow-rise mt-16 border-b border-border/70 pb-2 text-[0.68rem] tracking-[0.4em] text-foreground/60 uppercase transition-all duration-1000 hover:border-ember/70 hover:tracking-[0.55em] hover:text-ember"
-          style={{ animationDelay: "2.4s" }}
-        >
-          step inside
-        </button>
+        {/* nav minimaliste */}
+        <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12">
+          <span className="font-mono text-sm tracking-[0.35em] text-primary uppercase">
+            Ȥrk<span className="text-destructive">.</span>
+          </span>
+          <a
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2 border border-border/70 px-4 py-2 text-[0.65rem] tracking-[0.3em] uppercase transition-all duration-500 hover:border-primary hover:bg-primary/10"
+          >
+            Discord
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </header>
+
+        {/* contenu hero */}
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
+          <div
+            className={`relative transition-all duration-[1800ms] ${
+              ready ? "opacity-100 blur-0" : "opacity-0 blur-md"
+            }`}
+          >
+            <div className="absolute -inset-4 rounded-full bg-destructive/25 blur-3xl" />
+            <img
+              src={avatarAsset.url}
+              alt="Logo néon Ȥrk"
+              className="relative h-36 w-36 rounded-full border border-primary/40 object-cover shadow-[0_0_60px_-8px] shadow-destructive/50 md:h-44 md:w-44"
+            />
+          </div>
+
+          <p
+            className="mt-10 flex items-center gap-2 font-mono text-[0.62rem] tracking-[0.45em] text-muted-foreground uppercase transition-all delay-300 duration-[1500ms]"
+            style={{ opacity: ready ? 1 : 0 }}
+          >
+            <Terminal className="h-3.5 w-3.5 text-destructive" />
+            développeur full-stack
+          </p>
+
+          <h1 className="font-display mt-5 text-[clamp(3.2rem,11vw,7.5rem)] leading-none font-light tracking-tight">
+            Ȥ<span className="text-destructive drop-shadow-[0_0_25px_oklch(0.55_0.17_25/60%)]">rk</span>
+          </h1>
+
+          <p className="mt-6 max-w-xl text-sm leading-relaxed font-light text-muted-foreground md:text-base">
+            Je construis des <span className="text-foreground">sites web</span>, des{" "}
+            <span className="text-foreground">applications</span> publiées sur l'App Store et le
+            Play Store, et des <span className="text-foreground">bots</span> Telegram, WhatsApp et
+            Discord — sur mesure, du premier prototype à la mise en production.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+            <a
+              href={DISCORD_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden border border-destructive bg-destructive/15 px-8 py-4 text-[0.7rem] font-medium tracking-[0.3em] uppercase transition-all duration-500 hover:bg-destructive hover:text-destructive-foreground hover:shadow-[0_0_50px_-5px] hover:shadow-destructive/60"
+            >
+              Commander un projet
+              <ArrowUpRight className="ml-2 inline h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </a>
+            <a
+              href="#services"
+              className="px-6 py-4 text-[0.65rem] tracking-[0.3em] text-muted-foreground uppercase transition-colors duration-500 hover:text-foreground"
+            >
+              voir les services ↓
+            </a>
+          </div>
+        </div>
       </section>
 
-      {/* the field of signals */}
-      <div
-        className={`relative z-10 min-h-screen transition-all duration-[3000ms] ${
-          entered ? "opacity-100 blur-0" : "pointer-events-none opacity-0 blur-xl"
-        }`}
-      >
-        <div className="relative mx-auto h-[190vh] w-full max-w-6xl md:h-screen">
-          {SIGNALS.map((s, i) => {
-            const seen = found.includes(s.id);
-            return (
-              <button
-                key={s.id}
-                onClick={() => reveal(s)}
-                onFocus={() => void 0}
-                className="group absolute -translate-x-1/2 -translate-y-1/2 px-6 py-5 text-left"
-                style={{
-                  left: `${s.x}%`,
-                  top: `${s.y}%`,
-                  transitionDelay: `${i * 120}ms`,
-                }}
-              >
-                <span
-                  className={`flicker block h-[7px] w-[7px] rounded-full transition-all duration-[1400ms] group-hover:h-3 group-hover:w-3 ${
-                    seen ? "opacity-100" : ""
-                  }`}
-                  style={{
-                    background: s.hue,
-                    boxShadow: `0 0 26px 9px ${s.hue}`,
-                    animationDelay: `${i * 700}ms`,
-                  }}
-                />
-                <span className="pointer-events-none absolute top-full left-0 mt-3 block w-52 opacity-0 blur-sm transition-all delay-300 duration-[1600ms] group-hover:opacity-100 group-hover:blur-0 group-focus-visible:opacity-100 group-focus-visible:blur-0">
-                  <span className="font-display block text-base lowercase italic text-foreground/85">
-                    {s.label}
-                  </span>
-                  <span className="mt-1 block text-[0.6rem] tracking-[0.3em] text-muted-foreground uppercase">
-                    {s.whisper}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* progressive discovery marker */}
-        <p className="fixed bottom-6 left-1/2 z-20 -translate-x-1/2 text-[0.58rem] tracking-[0.42em] text-muted-foreground/70 uppercase transition-opacity duration-[2000ms]">
-          {complete ? "the room is fully lit — briefly" : `noticed: ${counted}`}
-        </p>
-
-        {found.length === 0 ? (
-          <p
-            className="slow-rise fixed top-8 left-1/2 z-20 -translate-x-1/2 text-center text-[0.58rem] tracking-[0.4em] text-muted-foreground/60 uppercase"
-            style={{ animationDelay: "3s" }}
-          >
-            rest on a light
-          </p>
-        ) : null}
-      </div>
-
-      {/* hidden menu: edge-hover on desktop, small mark on touch */}
-      <div
-        onMouseEnter={() => setMenu(true)}
-        onMouseLeave={() => setMenu(false)}
-        className={`fixed top-0 right-0 z-30 flex h-full items-center transition-all duration-[1600ms] ${
-          entered ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      >
-        <div className="flex h-full w-14 items-center justify-end pr-5 md:w-24">
-          <button
-            aria-label="reveal the index"
-            onClick={() => setMenu((m) => !m)}
-            className="text-[0.55rem] tracking-[0.4em] text-muted-foreground/60 uppercase [writing-mode:vertical-rl] transition-colors duration-1000 hover:text-ember"
-          >
-            elsewhere
-          </button>
-        </div>
-        <nav
-          className={`absolute top-0 right-0 h-full w-72 border-l border-border/60 bg-card/40 px-8 py-16 backdrop-blur-2xl transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:w-80 ${
-            menu ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-6 opacity-0"
-          }`}
-        >
-          <p className="text-[0.55rem] tracking-[0.4em] text-muted-foreground uppercase">
-            what you have noticed
-          </p>
-          <ul className="mt-8 space-y-5">
-            {SIGNALS.map((s) => {
-              const seen = found.includes(s.id);
-              return (
-                <li key={s.id}>
-                  <button
-                    disabled={!seen}
-                    onClick={() => reveal(s)}
-                    className={`font-display text-left text-lg lowercase transition-all duration-1000 ${
-                      seen
-                        ? "text-foreground/85 hover:text-ember hover:italic"
-                        : "cursor-default text-muted-foreground/35 blur-[3px] select-none"
-                    }`}
-                  >
-                    {seen ? s.label : "— — — —"}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-          <p className="mt-12 text-[0.58rem] leading-loose tracking-[0.22em] text-muted-foreground/70 uppercase">
-            press / to hide this again
-          </p>
-        </nav>
-      </div>
-
-      {/* revealed fragment */}
-      <div
-        onClick={() => setOpen(null)}
-        className={`fixed inset-0 z-40 flex items-center justify-center px-8 transition-all duration-[1800ms] ${
-          open
-            ? "bg-background/55 opacity-100 backdrop-blur-lg"
-            : "pointer-events-none opacity-0 backdrop-blur-none"
-        }`}
-      >
-        {open ? (
-          <article className="max-w-md text-center">
-            <p className="text-[0.55rem] tracking-[0.45em] text-muted-foreground uppercase">
-              {open.whisper}
+      {/* ===== SERVICES ===== */}
+      <section id="services" className="relative mx-auto max-w-6xl px-6 py-28 md:px-12 md:py-36">
+        <div className="mb-16 flex items-end justify-between gap-6">
+          <div>
+            <p className="font-mono text-[0.62rem] tracking-[0.45em] text-destructive uppercase">
+              // services
             </p>
-            <h2 className="font-display mt-6 text-[clamp(1.7rem,4vw,2.6rem)] leading-tight font-light lowercase italic text-foreground/90">
-              {open.label}
+            <h2 className="font-display mt-4 text-[clamp(2rem,5vw,3.5rem)] leading-tight font-light">
+              Ce que je peux
+              <br />
+              construire pour vous
             </h2>
-            <p className="mt-8 text-sm leading-[2] font-light text-muted-foreground">{open.body}</p>
-            <p className="mt-12 text-[0.55rem] tracking-[0.4em] text-muted-foreground/60 uppercase">
-              anywhere to let it go
-            </p>
-          </article>
-        ) : null}
-      </div>
+          </div>
+          <p className="hidden max-w-xs text-right text-xs leading-loose text-muted-foreground md:block">
+            Chaque projet est unique. Vous décrivez l'idée, je m'occupe du reste — design, code,
+            mise en ligne.
+          </p>
+        </div>
+
+        <div className="grid gap-px border border-border/60 bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((s) => (
+            <article
+              key={s.num}
+              className="group relative bg-background p-8 transition-colors duration-700 hover:bg-card md:p-10"
+            >
+              <span className="font-mono text-[0.6rem] tracking-[0.35em] text-muted-foreground/60">
+                {s.num}
+              </span>
+              <s.icon className="mt-6 h-7 w-7 text-muted-foreground transition-all duration-700 group-hover:scale-110 group-hover:text-destructive" />
+              <h3 className="font-display mt-5 text-xl font-light tracking-wide">{s.title}</h3>
+              <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">{s.desc}</p>
+              <span className="absolute bottom-0 left-0 h-px w-0 bg-destructive transition-all duration-700 group-hover:w-full" />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== STACK ===== */}
+      <section className="border-y border-border/50 bg-card/30">
+        <div className="mx-auto max-w-6xl px-6 py-14 md:px-12">
+          <p className="font-mono text-[0.62rem] tracking-[0.45em] text-muted-foreground uppercase">
+            // technologies
+          </p>
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-4">
+            {STACK.map((t) => (
+              <span
+                key={t}
+                className="font-display text-lg font-light tracking-wide text-muted-foreground transition-colors duration-500 hover:text-primary md:text-xl"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PROCESS ===== */}
+      <section className="mx-auto max-w-6xl px-6 py-28 md:px-12 md:py-36">
+        <p className="font-mono text-[0.62rem] tracking-[0.45em] text-destructive uppercase">
+          // comment ça marche
+        </p>
+        <div className="mt-14 grid gap-12 md:grid-cols-3">
+          {[
+            {
+              n: "1",
+              t: "On discute",
+              d: "Rejoignez le Discord et décrivez votre idée : site, app, bot… on définit le projet ensemble.",
+            },
+            {
+              n: "2",
+              t: "Je construis",
+              d: "Design, développement, tests. Vous suivez l'avancement étape par étape.",
+            },
+            {
+              n: "3",
+              t: "C'est en ligne",
+              d: "Livraison complète : site hébergé, app publiée sur les stores ou bot déployé 24/7.",
+            },
+          ].map((step) => (
+            <div key={step.n} className="group">
+              <span className="font-display text-6xl font-light text-muted-foreground/25 transition-colors duration-700 group-hover:text-destructive/70">
+                {step.n}
+              </span>
+              <h3 className="font-display mt-4 text-2xl font-light">{step.t}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== CTA FINAL ===== */}
+      <section className="relative overflow-hidden border-t border-border/50">
+        <img
+          src={bannerAsset.url}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/80" />
+        <div className="relative z-10 mx-auto max-w-3xl px-6 py-32 text-center md:py-44">
+          <h2 className="font-display text-[clamp(2.2rem,6vw,4.5rem)] leading-tight font-light">
+            Un projet en tête ?
+          </h2>
+          <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Site web, application mobile, bot Telegram, WhatsApp ou Discord — envoyez votre demande
+            sur le serveur Discord, réponse rapide garantie.
+          </p>
+          <a
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-12 inline-flex items-center gap-3 border border-destructive bg-destructive px-10 py-5 text-[0.72rem] font-medium tracking-[0.3em] text-destructive-foreground uppercase transition-all duration-500 hover:shadow-[0_0_70px_-8px] hover:shadow-destructive/70"
+          >
+            <Bot className="h-4 w-4" />
+            Faire une demande
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </a>
+        </div>
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="flex flex-col items-center justify-between gap-4 border-t border-border/50 px-6 py-8 sm:flex-row md:px-12">
+        <span className="font-mono text-[0.62rem] tracking-[0.35em] text-muted-foreground uppercase">
+          © 2026 Ȥrk — tous droits réservés
+        </span>
+        <a
+          href={DISCORD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-[0.62rem] tracking-[0.35em] text-muted-foreground uppercase transition-colors duration-500 hover:text-destructive"
+        >
+          discord.gg/m6Gf2bHFhF
+        </a>
+      </footer>
     </main>
   );
 }
