@@ -13,7 +13,7 @@ export function MatrixRain({ className = "" }: { className?: string }) {
     const glyphs = "アカサタナハマヤラワ0123456789ȤRKabcdef<>/{}[]$#@*".split("");
     let cols = 0;
     let drops: number[] = [];
-    const size = 14;
+    const size = 16;
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -21,7 +21,7 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       canvas.height = canvas.offsetHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cols = Math.ceil(canvas.offsetWidth / size);
-      drops = Array.from({ length: cols }, () => Math.random() * -50);
+      drops = Array.from({ length: cols }, () => Math.random() * -60);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -30,19 +30,19 @@ export function MatrixRain({ className = "" }: { className?: string }) {
     let last = 0;
     const draw = (t: number) => {
       raf = requestAnimationFrame(draw);
-      if (t - last < 70) return;
+      if (t - last < 60) return;
       last = t;
 
-      ctx.fillStyle = "rgba(6, 10, 14, 0.22)";
+      ctx.fillStyle = "rgba(6, 10, 14, 0.14)";
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       ctx.font = `${size}px ui-monospace, monospace`;
 
       for (let i = 0; i < cols; i++) {
         const y = (drops[i] ?? 0) * size;
         const char = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
-        ctx.fillStyle = Math.random() > 0.992 ? "rgba(160, 210, 255, 0.45)" : "rgba(40, 90, 140, 0.18)";
+        ctx.fillStyle = Math.random() > 0.985 ? "rgba(120, 200, 255, 0.85)" : "rgba(60, 140, 200, 0.45)";
         ctx.fillText(char, i * size, y);
-        if (y > canvas.offsetHeight && Math.random() > 0.985) drops[i] = 0;
+        if (y > canvas.offsetHeight && Math.random() > 0.975) drops[i] = 0;
         drops[i] = (drops[i] ?? 0) + 1;
       }
     };
