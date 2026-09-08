@@ -33,16 +33,16 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       if (t - last < 70) return;
       last = t;
 
-      ctx.fillStyle = "rgba(6, 10, 14, 0.16)";
+      ctx.fillStyle = "rgba(6, 10, 14, 0.22)";
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       ctx.font = `${size}px ui-monospace, monospace`;
 
       for (let i = 0; i < cols; i++) {
         const y = (drops[i] ?? 0) * size;
         const char = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
-        ctx.fillStyle = Math.random() > 0.985 ? "rgba(220,255,235,0.9)" : "rgba(70, 220, 140, 0.55)";
+        ctx.fillStyle = Math.random() > 0.992 ? "rgba(160, 210, 255, 0.45)" : "rgba(40, 90, 140, 0.18)";
         ctx.fillText(char, i * size, y);
-        if (y > canvas.offsetHeight && Math.random() > 0.975) drops[i] = 0;
+        if (y > canvas.offsetHeight && Math.random() > 0.985) drops[i] = 0;
         drops[i] = (drops[i] ?? 0) + 1;
       }
     };
