@@ -231,12 +231,12 @@ function Atmosphere() {
                 }}
               >
                 <span
-                  className={`flicker block h-[5px] w-[5px] rounded-full transition-all duration-[1400ms] group-hover:h-2 group-hover:w-2 ${
+                  className={`flicker block h-[7px] w-[7px] rounded-full transition-all duration-[1400ms] group-hover:h-3 group-hover:w-3 ${
                     seen ? "opacity-100" : ""
                   }`}
                   style={{
                     background: s.hue,
-                    boxShadow: `0 0 18px 6px ${s.hue}`,
+                    boxShadow: `0 0 26px 9px ${s.hue}`,
                     animationDelay: `${i * 700}ms`,
                   }}
                 />
@@ -257,6 +257,15 @@ function Atmosphere() {
         <p className="fixed bottom-6 left-1/2 z-20 -translate-x-1/2 text-[0.58rem] tracking-[0.42em] text-muted-foreground/70 uppercase transition-opacity duration-[2000ms]">
           {complete ? "the room is fully lit — briefly" : `noticed: ${counted}`}
         </p>
+
+        {found.length === 0 ? (
+          <p
+            className="slow-rise fixed top-8 left-1/2 z-20 -translate-x-1/2 text-center text-[0.58rem] tracking-[0.4em] text-muted-foreground/60 uppercase"
+            style={{ animationDelay: "3s" }}
+          >
+            rest on a light
+          </p>
+        ) : null}
       </div>
 
       {/* hidden menu: edge-hover on desktop, small mark on touch */}
