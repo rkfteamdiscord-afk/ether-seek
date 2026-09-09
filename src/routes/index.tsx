@@ -125,16 +125,17 @@ function Portfolio() {
       <section className="relative flex min-h-screen flex-col">
         {/* bannière */}
         <div className="absolute inset-0 overflow-hidden">
-          <MatrixRain className="absolute inset-0 h-full w-full opacity-45" />
           <img
             src={bannerAsset.url}
             alt="Bannière Ȥrk — code et néon rouge"
             className={`absolute inset-x-0 top-0 max-h-[52vh] w-full object-contain object-top transition-all duration-[2500ms] ease-out ${
-              ready ? "opacity-55" : "opacity-0"
+              ready ? "opacity-45" : "opacity-0"
             }`}
           />
-          <div className="scanlines absolute inset-0 bg-gradient-to-b from-background/30 via-background/75 to-background" />
+          <MatrixRain className="absolute inset-0 z-[1] h-full w-full opacity-60" />
+          <div className="absolute inset-0 z-[2] bg-gradient-to-b from-background/30 via-background/75 to-background" />
         </div>
+
 
         {/* nav minimaliste */}
         <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12">

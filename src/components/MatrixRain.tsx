@@ -20,8 +20,7 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       canvas.width = canvas.offsetWidth * dpr;
       canvas.height = canvas.offsetHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = "#05070c";
-      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       cols = Math.ceil(canvas.offsetWidth / size);
       drops = Array.from({ length: cols }, () => Math.random() * -60);
     };
@@ -36,7 +35,7 @@ export function MatrixRain({ className = "" }: { className?: string }) {
       last = t;
 
       // fondu bleu-noir : jamais de vert
-      ctx.fillStyle = "rgba(5, 7, 12, 0.2)";
+      ctx.fillStyle = "rgba(5, 7, 12, 0.14)";
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       ctx.font = `${size}px ui-monospace, monospace`;
 
