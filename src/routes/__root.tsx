@@ -77,15 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "atmospherexplore" },
+      { title: "Ȥrk — Dev web, apps, bots & cybersécurité" },
       {
         name: "description",
-        content: "A slow, dark room of drifting light. Move gently; the details answer to attention.",
+        content:
+          "Ȥrk : développeur full-stack et spécialiste cybersécurité. Sites web, apps App Store / Play Store, bots Telegram, WhatsApp et Discord.",
       },
-      { property: "og:title", content: "atmospherexplore" },
+      { property: "og:title", content: "Ȥrk — Dev web, apps, bots & cybersécurité" },
       {
         property: "og:description",
-        content: "A slow, dark room of drifting light. Move gently; the details answer to attention.",
+        content: "Sites, applications, bots et sécurité — prestations signées Ȥrk.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -99,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Karla:wght@300;400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],

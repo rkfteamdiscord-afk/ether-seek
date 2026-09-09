@@ -44,8 +44,8 @@ export function MatrixRain({ className = "" }: { className?: string }) {
         const char = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
         const head = Math.random() > 0.985;
         ctx.fillStyle = head
-          ? "rgba(255, 120, 130, 0.9)" // tête lumineuse
-          : "rgba(200, 40, 55, 0.4)"; // corps rouge néon
+          ? "rgba(140, 255, 180, 0.75)" // tête lumineuse
+          : "rgba(0, 255, 65, 0.22)"; // corps vert matrice, discret
         ctx.fillText(char, i * size, y);
         if (y > canvas.offsetHeight && Math.random() > 0.975) drops[i] = 0;
         drops[i] = (drops[i] ?? 0) + 1;
