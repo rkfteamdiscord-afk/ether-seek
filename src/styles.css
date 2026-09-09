@@ -31,8 +31,9 @@
   --color-ember: var(--ember);
   --color-haze: var(--haze);
   --color-matrix: var(--matrix);
-  --font-display: "Cormorant Garamond", serif;
-  --font-body: "Karla", sans-serif;
+  --font-display: "JetBrains Mono", ui-monospace, monospace;
+  --font-body: "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 :root {
