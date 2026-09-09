@@ -1,14 +1,16 @@
-# Welcome to your Lovable project
+# Atmosphere Explore
+
+Create a minimal, mysterious website named “atmospherexplore.” Use an exploration-based flow with no conventional section layout or obvious navigation. Make it immersive and intentionally slow: dark tones, film grain, blur, soft pools of light, abundant empty space, and small restrained text. Add subtle fades, delayed transitions, hover-revealed details, a hidden menu, and progressive discovery. Use Claude to refine the tone, microcopy, and interaction ideas. Prioritize a polished atmospheric experience and responsive behavior.
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/f8984f16-2969-46ea-a56a-5e67940e8145).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +22,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
