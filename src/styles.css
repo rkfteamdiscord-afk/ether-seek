@@ -39,19 +39,19 @@
 :root {
   --radius: 0.25rem;
   --background: oklch(0.145 0.008 260);
-  --foreground: oklch(0.86 0.012 90);
+  --foreground: oklch(0.84 0.09 27);
   --card: oklch(0.19 0.01 260);
-  --card-foreground: oklch(0.88 0.01 90);
+  --card-foreground: oklch(0.86 0.09 27);
   --popover: oklch(0.19 0.01 260);
-  --popover-foreground: oklch(0.88 0.01 90);
-  --primary: oklch(0.84 0.045 82);
+  --popover-foreground: oklch(0.86 0.09 27);
+  --primary: oklch(0.66 0.2 26);
   --primary-foreground: oklch(0.16 0.01 260);
   --secondary: oklch(0.24 0.012 260);
-  --secondary-foreground: oklch(0.86 0.01 90);
+  --secondary-foreground: oklch(0.84 0.09 27);
   --muted: oklch(0.24 0.012 260);
-  --muted-foreground: oklch(0.58 0.014 265);
+  --muted-foreground: oklch(0.62 0.11 27);
   --accent: oklch(0.28 0.02 250);
-  --accent-foreground: oklch(0.9 0.01 90);
+  --accent-foreground: oklch(0.88 0.08 27);
   --destructive: oklch(0.55 0.17 25);
   --destructive-foreground: oklch(0.95 0.01 90);
   --border: oklch(0.3 0.012 260 / 45%);
@@ -59,12 +59,12 @@
   --ring: oklch(0.6 0.03 82);
   --ember: oklch(0.82 0.07 74);
   --haze: oklch(0.66 0.03 240);
-  --matrix: #00ff41;
+  --matrix: oklch(0.64 0.25 26);
 }
 
 .dark {
   --background: oklch(0.145 0.008 260);
-  --foreground: oklch(0.86 0.012 90);
+  --foreground: oklch(0.84 0.09 27);
 }
 
 @layer base {
@@ -212,27 +212,55 @@
 }
 
 
-/* boîtes 3D pour les spécialités */
+/* boîtes réellement 3D — inclinaison pilotée par la souris (--rx/--ry) */
 @utility card-3d {
   transform-style: preserve-3d;
-  transform: perspective(900px) rotateX(4deg) rotateY(-4deg);
+  transform: perspective(1000px) rotateY(var(--rx, 0deg)) rotateX(var(--ry, 0deg));
   box-shadow:
-    0 1px 0 color-mix(in oklab, var(--matrix) 22%, transparent),
-    8px 10px 0 -2px oklch(0.2 0.01 260),
-    10px 14px 30px -10px oklch(0 0 0 / 0.8);
+    0 1px 0 color-mix(in oklab, var(--matrix) 30%, transparent),
+    6px 8px 0 -2px oklch(0.17 0.01 260),
+    12px 16px 0 -4px oklch(0.14 0.01 260),
+    18px 26px 42px -12px oklch(0 0 0 / 0.85);
   transition:
-    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 500ms ease,
-    border-color 500ms ease;
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 400ms ease,
+    border-color 400ms ease;
+  will-change: transform;
 
   &:hover {
-    transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateY(-6px);
-    border-color: color-mix(in oklab, var(--matrix) 55%, transparent);
+    border-color: color-mix(in oklab, var(--matrix) 60%, transparent);
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--matrix) 35%, transparent),
-      14px 18px 0 -2px oklch(0.22 0.01 260),
-      0 0 60px -14px color-mix(in oklab, var(--matrix) 45%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--matrix) 45%, transparent),
+      8px 12px 0 -2px oklch(0.19 0.01 260),
+      16px 22px 0 -4px oklch(0.15 0.01 260),
+      0 0 72px -14px color-mix(in oklab, var(--matrix) 55%, transparent);
   }
+}
+
+/* reflet lumineux qui suit le curseur (--mx/--my) */
+@utility card-glare {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--matrix) 28%, transparent),
+      transparent 42%
+    );
+    opacity: 0;
+    transition: opacity 350ms ease;
+  }
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+/* contenu qui « sort » de la carte en profondeur */
+@utility layer-pop {
+  transform: translateZ(30px);
 }
 
 @utility terminal-line {
