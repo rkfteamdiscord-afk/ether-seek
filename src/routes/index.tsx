@@ -208,11 +208,11 @@ function Portfolio() {
               ready ? "opacity-100 blur-0" : "opacity-0 blur-md"
             }`}
           >
-            <div className="absolute -inset-4 rounded-full bg-destructive/25 blur-3xl" />
+            <div className="absolute -inset-4 rounded-lg bg-destructive/25 blur-3xl" />
             <img
               src={avatarUrl}
               alt="Logo néon Ȥrk"
-              className="relative h-36 w-36 rounded-full border border-primary/40 object-cover shadow-[0_0_60px_-8px] shadow-destructive/50 md:h-44 md:w-44"
+              className="relative h-36 w-36 rounded-lg border border-primary/40 object-cover shadow-[0_0_60px_-8px] shadow-destructive/50 md:h-44 md:w-44"
             />
           </div>
 
