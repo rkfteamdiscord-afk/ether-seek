@@ -17,6 +17,8 @@ import {
   Zap,
 } from "lucide-react";
 import { MatrixRain } from "@/components/MatrixRain";
+import { TiltCard } from "@/components/TiltCard";
+import { CodeTyper } from "@/components/CodeTyper";
 
 const bannerUrl = "/zrk-banner.png";
 const avatarUrl = "/zrk-avatar.gif";
@@ -279,6 +281,21 @@ function Portfolio() {
         </div>
       </section>
 
+      {/* ===== TERMINAL 3D ===== */}
+      <section className="mx-auto max-w-6xl px-6 pt-24 md:px-12 md:pt-32">
+        <div className="mb-10 flex flex-col gap-3">
+          <p className="font-mono text-[0.62rem] tracking-[0.45em] text-[color:var(--matrix)] uppercase">
+            // live
+          </p>
+          <h2 className="font-display text-[clamp(1.5rem,3.5vw,2.4rem)] font-extrabold">
+            Du code, en direct
+          </h2>
+        </div>
+        <TiltCard className="mx-auto max-w-3xl" max={8}>
+          <CodeTyper className="card-3d card-glare relative overflow-hidden border border-border/70 bg-card/70 backdrop-blur-sm" />
+        </TiltCard>
+      </section>
+
       {/* ===== SERVICES 3D ===== */}
       <section id="services" className="relative mx-auto max-w-6xl px-6 py-28 md:px-12 md:py-36">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -300,29 +317,30 @@ function Portfolio() {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
-            <article
-              key={s.num}
-              className="card-3d group relative border border-border/70 bg-card/60 p-7 backdrop-blur-sm"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[0.6rem] tracking-[0.35em] text-muted-foreground/60">
-                  {s.num}
-                </span>
-                <s.icon className="h-6 w-6 text-muted-foreground transition-colors duration-500 group-hover:text-[color:var(--matrix)]" />
-              </div>
-              <h3 className="mt-6 font-display text-lg font-bold tracking-wide">{s.title}</h3>
-              <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">{s.desc}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {s.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="border border-border/60 px-2 py-1 font-mono text-[0.55rem] tracking-[0.15em] text-muted-foreground uppercase"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </article>
+            <TiltCard key={s.num} className="h-full">
+              <article className="card-3d card-glare group relative h-full overflow-hidden border border-border/70 bg-card/60 p-7 backdrop-blur-sm">
+                <div className="layer-pop relative z-[2]">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[0.6rem] tracking-[0.35em] text-muted-foreground/60">
+                      {s.num}
+                    </span>
+                    <s.icon className="h-6 w-6 text-muted-foreground transition-colors duration-500 group-hover:text-[color:var(--matrix)]" />
+                  </div>
+                  <h3 className="mt-6 font-display text-lg font-bold tracking-wide">{s.title}</h3>
+                  <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">{s.desc}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {s.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="border border-border/60 px-2 py-1 font-mono text-[0.55rem] tracking-[0.15em] text-muted-foreground uppercase"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -353,13 +371,17 @@ function Portfolio() {
               { icon: Zap, t: "Rapidité", d: "Premiers livrables en quelques jours." },
               { icon: ShieldCheck, t: "Sécurité by design", d: "Chaque projet audité avant livraison." },
             ].map((b) => (
-              <div key={b.t} className="card-3d border border-border/70 bg-background/70 p-6">
-                <b.icon className="h-5 w-5 text-[color:var(--matrix)]" />
-                <h3 className="mt-4 font-display text-base font-bold">{b.t}</h3>
-                <p className="mt-2 font-mono text-[0.72rem] leading-relaxed text-muted-foreground">
-                  {b.d}
-                </p>
-              </div>
+              <TiltCard key={b.t} className="h-full">
+                <div className="card-3d card-glare relative h-full overflow-hidden border border-border/70 bg-background/70 p-6">
+                  <div className="layer-pop relative z-[2]">
+                    <b.icon className="h-5 w-5 text-[color:var(--matrix)]" />
+                    <h3 className="mt-4 font-display text-base font-bold">{b.t}</h3>
+                    <p className="mt-2 font-mono text-[0.72rem] leading-relaxed text-muted-foreground">
+                      {b.d}
+                    </p>
+                  </div>
+                </div>
+              </TiltCard>
             ))}
           </div>
         </div>
