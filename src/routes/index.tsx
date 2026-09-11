@@ -17,8 +17,9 @@ import {
   Zap,
 } from "lucide-react";
 import { MatrixRain } from "@/components/MatrixRain";
-import bannerAsset from "@/assets/zrk-banner.png.asset.json";
-import avatarAsset from "@/assets/zrk-avatar.gif.asset.json";
+
+const bannerUrl = "/zrk-banner.png";
+const avatarUrl = "/zrk-avatar.gif";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -174,7 +175,7 @@ function Portfolio() {
       <section className="relative flex min-h-screen flex-col">
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src={bannerAsset.url}
+            src={bannerUrl}
             alt="Bannière Ȥrk — code et néon rouge"
             className={`absolute inset-x-0 top-0 max-h-[52vh] w-full object-contain object-top transition-all duration-[2500ms] ease-out ${
               ready ? "opacity-40" : "opacity-0"
@@ -209,7 +210,7 @@ function Portfolio() {
           >
             <div className="absolute -inset-4 rounded-full bg-destructive/25 blur-3xl" />
             <img
-              src={avatarAsset.url}
+              src={avatarUrl}
               alt="Logo néon Ȥrk"
               className="relative h-36 w-36 rounded-full border border-primary/40 object-cover shadow-[0_0_60px_-8px] shadow-destructive/50 md:h-44 md:w-44"
             />
@@ -420,7 +421,7 @@ function Portfolio() {
       {/* ===== CTA FINAL ===== */}
       <section className="relative overflow-hidden border-t border-border/50">
         <img
-          src={bannerAsset.url}
+          src={bannerUrl}
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover object-center opacity-20"
