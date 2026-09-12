@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
   component: Portfolio,
 });
 
-const DISCORD_URL = "https://discord.gg/m6Gf2bHFhF";
+const DISCORD_URL = "https://discord.gg/2EMzc7Qw7F";
 
 const SERVICES = [
   {
