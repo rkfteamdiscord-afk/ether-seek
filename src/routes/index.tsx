@@ -9,7 +9,6 @@ import {
   Code2,
   ShieldCheck,
   ArrowUpRight,
-  Terminal,
   BadgeCheck,
   Server,
   Cpu,
