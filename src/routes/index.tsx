@@ -6,6 +6,7 @@ import {
   Send,
   MessageCircle,
   Bot,
+  terminal,
   Code2,
   ShieldCheck,
   ArrowUpRight,
