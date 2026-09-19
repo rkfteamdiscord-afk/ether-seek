@@ -18,9 +18,9 @@ import {
 } from "lucide-react";
 import { MatrixRain } from "@/components/MatrixRain";
 import { TiltCard } from "@/components/TiltCard";
-import { CodeTyper } from "@/components/CodeTyper";
+import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 
-const bannerUrl = "/zrk-banner.png";
+const bannerUrl = bannerHd;
 const avatarUrl = "/zrk-avatar.gif";
 
 export const Route = createFileRoute("/")({
@@ -174,17 +174,19 @@ function Portfolio() {
   return (
     <main className="grain relative min-h-screen overflow-x-clip bg-background font-body text-foreground">
       {/* ===== HERO ===== */}
-      <section className="relative flex min-h-screen flex-col">
+      <section className="relative flex min-h-[min(58rem,100svh)] flex-col overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={bannerUrl}
-            alt="Bannière Ȥrk — code et néon rouge"
-            className={`absolute inset-x-0 top-0 max-h-[52vh] w-full object-contain object-top transition-all duration-[2500ms] ease-out ${
-              ready ? "opacity-40" : "opacity-0"
+            alt="Univers de développement Ȥrk — code, ordinateur et néon rouge"
+            fetchPriority="high"
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-[2500ms] ease-out ${
+              ready ? "scale-100 opacity-85" : "scale-[1.03] opacity-0"
             }`}
           />
-          <MatrixRain className="absolute inset-0 z-[1] h-full w-full opacity-40" />
-          <div className="absolute inset-0 z-[2] bg-linear-to-b from-background/30 via-background/75 to-background" />
+          <MatrixRain className="absolute inset-0 z-[1] h-full w-full opacity-20 mix-blend-screen" />
+          <div className="absolute inset-0 z-[2] bg-linear-to-b from-background/15 via-background/35 to-background" />
+          <div className="absolute inset-0 z-[2] bg-linear-to-r from-background/25 via-transparent to-background/25" />
         </div>
 
         {/* nav */}
@@ -235,14 +237,11 @@ function Portfolio() {
             ancien partenaire discord
           </p>
 
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Je construis des <span className="text-foreground">sites web</span>, des{" "}
-            <span className="text-foreground">applications</span> publiées sur l'App Store et le
-            Play Store, et des <span className="text-foreground">bots</span> Telegram, WhatsApp et
-            Discord. Je suis aussi{" "}
-            <span className="text-[color:var(--matrix)]">spécialisé en cybersécurité</span> — et je
-            touche à tous les domaines : chaque prestation est réalisée par moi, du premier prototype
-            à la mise en production.
+          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-foreground/85 drop-shadow-[0_2px_14px_var(--background)] md:text-base">
+            Je transforme vos idées en <span className="text-foreground">sites web performants</span>,
+            en <span className="text-foreground">applications prêtes pour l'App Store et le Play Store</span>
+            et en <span className="text-foreground">bots Telegram, WhatsApp ou Discord</span> fiables.
+            Une seule personne pilote votre projet, de sa conception jusqu'à sa mise en ligne.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
@@ -281,19 +280,52 @@ function Portfolio() {
         </div>
       </section>
 
-      {/* ===== TERMINAL 3D ===== */}
-      <section className="mx-auto max-w-6xl px-6 pt-24 md:px-12 md:pt-32">
-        <div className="mb-10 flex flex-col gap-3">
+      {/* ===== PRÉSENTATION ===== */}
+      <section className="relative mx-auto grid max-w-6xl gap-12 px-6 pt-24 md:grid-cols-[0.8fr_1.2fr] md:px-12 md:pt-32">
+        <div>
           <p className="font-mono text-[0.62rem] tracking-[0.45em] text-[color:var(--matrix)] uppercase">
-            // live
+            // présentation
           </p>
-          <h2 className="font-display text-[clamp(1.5rem,3.5vw,2.4rem)] font-extrabold">
-            Du code, en direct
+          <h2 className="mt-4 font-display text-[clamp(1.8rem,4.5vw,3.2rem)] leading-tight font-extrabold">
+            Vos idées deviennent des produits qui fonctionnent.
           </h2>
+          <p className="mt-6 border-l-2 border-destructive pl-5 font-mono text-xs leading-loose text-muted-foreground">
+            Sites. Applications. Bots. Automatisation. Sécurité.
+          </p>
         </div>
-        <TiltCard className="mx-auto max-w-3xl" max={8}>
-          <CodeTyper className="card-3d card-glare relative overflow-hidden border border-border/70 bg-card/70 backdrop-blur-sm" />
-        </TiltCard>
+
+        <div className="space-y-6 text-sm leading-8 text-muted-foreground md:text-[0.95rem]">
+          <p>
+            Je suis <strong className="font-medium text-foreground">Ȥrk, développeur full-stack indépendant</strong>.
+            Mon travail consiste d'abord à construire des expériences numériques complètes : un site
+            vitrine qui donne confiance, une plateforme web rapide et évolutive, ou une application
+            mobile pensée pour être réellement publiée sur l'App Store et le Play Store.
+          </p>
+          <p>
+            Je développe également des <strong className="font-medium text-foreground">bots sur mesure</strong>
+            pour Telegram, WhatsApp et Discord : modération, tickets, paiements, notifications,
+            automatisation, gestion de communautés et connexions avec vos outils. Ancien partenaire
+            Discord, je connais les contraintes des grandes communautés et les exigences d'un service
+            disponible en continu.
+          </p>
+          <p>
+            Chaque prestation est suivie directement par moi, sans agence ni intermédiaire. Je prends
+            en charge l'interface, le développement, les données, le déploiement et la maintenance pour
+            livrer un ensemble cohérent. Ma spécialisation en cybersécurité complète cette approche :
+            protection des accès, audit, durcissement des serveurs et bonnes pratiques sont intégrés
+            dès la conception, quel que soit le domaine du projet.
+          </p>
+          <div className="grid gap-3 pt-3 sm:grid-cols-2">
+            {["Sites web sur mesure", "Apps iOS & Android", "Bots & automatisations", "Cybersécurité intégrée"].map(
+              (item) => (
+                <div key={item} className="border border-border/70 bg-card/35 px-4 py-3 font-mono text-[0.7rem] text-foreground">
+                  <span className="mr-2 text-[color:var(--matrix)]">›</span>
+                  {item}
+                </div>
+              ),
+            )}
+          </div>
+        </div>
       </section>
 
       {/* ===== SERVICES 3D ===== */}
