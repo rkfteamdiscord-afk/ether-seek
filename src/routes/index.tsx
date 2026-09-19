@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { MatrixRain } from "@/components/MatrixRain";
 import { TiltCard } from "@/components/TiltCard";
-import bannerHd from "@/assets/zrk-banner-hd.png";
+import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 
 const bannerUrl = bannerHd;
 const avatarUrl = "/zrk-avatar.gif";
