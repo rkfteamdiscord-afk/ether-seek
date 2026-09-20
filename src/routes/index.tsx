@@ -7,6 +7,7 @@ import {
   Code2,
   Globe2,
   HeartHandshake,
+  Mail,
   MessageCircle,
   Send,
   ShieldCheck,
@@ -16,6 +17,8 @@ import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/XJRjPvYHB3";
+const emailUrl = "mailto:zrk.pro.dev@gmail.com";
+const whatsappUrl = "https://wa.me/33787444309";
 
 export const Route = createFileRoute("/")({
   head: () => ({
