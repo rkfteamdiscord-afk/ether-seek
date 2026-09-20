@@ -1,521 +1,258 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import {
-  Globe,
-  Smartphone,
-  Send,
-  MessageCircle,
-  Bot,
-  Terminal,
-  Code2,
-  ShieldCheck,
-  ArrowUpRight,
+  ArrowRight,
   BadgeCheck,
-  Server,
-  Cpu,
-  Lock,
-  Zap,
+  Bot,
+  Check,
+  Code2,
+  Globe2,
+  HeartHandshake,
+  MessageCircle,
+  Send,
+  ShieldCheck,
+  Smartphone,
 } from "lucide-react";
-import { MatrixRain } from "@/components/MatrixRain";
-import { TiltCard } from "@/components/TiltCard";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 
-const bannerUrl = bannerHd;
 const avatarUrl = "/zrk-avatar.gif";
+const discordUrl = "https://discord.gg/XJRjPvYHB3";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ȥrk — Dev web, apps, bots & cybersécurité" },
+      { title: "Ȥrk — Création de sites web et applications" },
       {
         name: "description",
         content:
-          "Ȥrk : prestations sur mesure en sites web, applications App Store / Play Store, bots Telegram, WhatsApp, Discord et cybersécurité. Ancien partenaire Discord.",
+          "Ȥrk conçoit des sites web, applications iOS et Android, bots et solutions numériques sécurisées sur mesure.",
       },
-      { property: "og:title", content: "Ȥrk — Dev web, apps, bots & cybersécurité" },
+      { property: "og:title", content: "Ȥrk — Studio de création numérique" },
       {
         property: "og:description",
-        content:
-          "Sites web, applications mobiles, bots et cybersécurité — prestations signées Ȥrk, ancien partenaire Discord.",
+        content: "Sites web, applications mobiles, bots et cybersécurité : un accompagnement humain, complet et sur mesure.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: "Ȥrk",
-          jobTitle: "Développeur full-stack & expert cybersécurité",
-          description:
-            "Sites web, applications mobiles, bots Telegram, WhatsApp, Discord et cybersécurité. Ancien partenaire Discord.",
-        }),
-      },
-    ],
   }),
   component: Portfolio,
 });
 
-const DISCORD_URL = "https://discord.gg/2EMzc7Qw7F";
-
-const SERVICES = [
+const services = [
   {
-    icon: Globe,
-    num: "01",
+    icon: Globe2,
     title: "Sites web",
-    desc: "Vitrines, portfolios, plateformes SaaS — rapides, soignés, optimisés SEO.",
-    tags: ["React", "Next", "Tailwind", "SEO"],
+    text: "Sites vitrines, portfolios, boutiques et plateformes rapides, élégants et pensés pour convertir vos visiteurs.",
   },
   {
     icon: Smartphone,
-    num: "02",
     title: "Applications mobiles",
-    desc: "Apps publiables sur l'App Store et le Play Store, de l'idée à la validation store.",
-    tags: ["React Native", "Expo", "iOS", "Android"],
-  },
-  {
-    icon: Send,
-    num: "03",
-    title: "Bots Telegram",
-    desc: "Automatisation, paiements crypto, modération, notifications, mini-apps.",
-    tags: ["Bot API", "Webhooks", "Paiements"],
-  },
-  {
-    icon: MessageCircle,
-    num: "04",
-    title: "Bots WhatsApp",
-    desc: "Réponses automatiques, service client, diffusion — joignable 24/7.",
-    tags: ["Cloud API", "CRM", "Broadcast"],
+    text: "Applications iOS et Android prêtes à être publiées sur l’App Store et le Play Store.",
   },
   {
     icon: Bot,
-    num: "05",
-    title: "Bots Discord",
-    desc: "Modération, tickets, économie, giveaways, dashboards web, musique.",
-    tags: ["discord.js", "Slash", "Dashboard"],
+    title: "Bots & automatisations",
+    text: "Bots Telegram, WhatsApp et Discord conçus autour de vos besoins, de votre communauté ou de votre activité.",
   },
   {
     icon: ShieldCheck,
-    num: "06",
     title: "Cybersécurité",
-    desc: "Audit, tests d'intrusion, durcissement serveur, chiffrement, anti-bot, anti-leak.",
-    tags: ["Pentest", "OSINT", "Hardening"],
-  },
-  {
-    icon: Server,
-    num: "07",
-    title: "Infra & hébergement",
-    desc: "VPS, Docker, CI/CD, monitoring, sauvegardes automatiques, uptime surveillé.",
-    tags: ["Linux", "Docker", "Nginx"],
-  },
-  {
-    icon: Cpu,
-    num: "08",
-    title: "Automatisation & IA",
-    desc: "Scripts, scrapers, APIs, intégrations IA sur mesure dans vos outils.",
-    tags: ["Python", "Node", "API"],
-  },
-  {
-    icon: Code2,
-    num: "09",
-    title: "Et bien plus",
-    desc: "Outils internes, systèmes de licences, anti-cheat, intégrations custom.",
-    tags: ["Custom", "Sur devis"],
+    text: "Audit, protection des accès et bonnes pratiques intégrés pour livrer des produits solides et fiables.",
   },
 ];
 
-const STACK = [
-  "TypeScript",
-  "React",
-  "Node.js",
-  "Python",
-  "Vue",
-  "React Native",
-  "PostgreSQL",
-  "Redis",
-  "Tailwind",
-  "Linux",
-  "Docker",
-  "Nginx",
-  "Rust",
-  "Pentest",
-  "Burp Suite",
-  "Wireshark",
-];
-
-const STATS = [
-  { k: "7+", v: "années de code" },
-  { k: "150+", v: "projets livrés" },
-  { k: "40+", v: "bots en production" },
-  { k: "24/7", v: "monitoring & support" },
-];
-
-const FACTS = [
-  "Autodidacte depuis l'adolescence, premier bot Discord codé à 14 ans.",
-  "Ancien partenaire Discord — serveur reconnu par le programme officiel.",
-  "Bots ayant servi des communautés de plus de 300 000 membres cumulés.",
-  "Spécialisé cybersécurité : audit offensif, reverse, durcissement d'infra.",
-  "Travaille en direct avec le client : pas d'agence, pas d'intermédiaire.",
-  "Code documenté, livré avec sources, accès complet et sans dépendance.",
-  "Disponible en français et en anglais, réponse généralement sous 24 h.",
-  "Confidentialité totale : NDA sur demande, aucune donnée revendue.",
+const commitments = [
+  "Un interlocuteur unique du premier échange à la livraison",
+  "Une solution conçue sur mesure, sans modèle générique",
+  "Un suivi clair et régulier pendant toute la création",
+  "La sécurité prise en compte dès le début du projet",
 ];
 
 function Portfolio() {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 150);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
-    <main className="grain relative min-h-screen overflow-x-clip bg-background font-body text-foreground">
-      {/* ===== HERO ===== */}
-      <section className="relative flex min-h-[min(58rem,100svh)] flex-col overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <img
-            src={bannerUrl}
-            alt="Univers de développement Ȥrk — code, ordinateur et néon rouge"
-            fetchPriority="high"
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-[2500ms] ease-out ${
-              ready ? "scale-100 opacity-85" : "scale-[1.03] opacity-0"
-            }`}
-          />
-          <MatrixRain className="absolute inset-0 z-[1] h-full w-full opacity-20 mix-blend-screen" />
-          <div className="absolute inset-0 z-[2] bg-linear-to-b from-background/15 via-background/35 to-background" />
-          <div className="absolute inset-0 z-[2] bg-linear-to-r from-background/25 via-transparent to-background/25" />
-        </div>
-
-        {/* nav */}
-        <header className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-6 py-6 md:px-12">
-          <span className="truncate font-display text-sm font-bold tracking-[0.35em] text-primary uppercase">
-            Ȥrk<span className="text-[color:var(--matrix)]">_</span>
-          </span>
+    <main className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
+          <a href="#accueil" className="font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
+            Ȥrk<span className="text-primary">.</span>
+          </a>
+          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
+            <a className="transition-colors hover:text-foreground" href="#services">Services</a>
+            <a className="transition-colors hover:text-foreground" href="#apropos">À propos</a>
+            <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
+          </nav>
           <a
-            href={DISCORD_URL}
+            href={discordUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex shrink-0 items-center gap-2 border border-border/70 px-4 py-2 text-[0.65rem] tracking-[0.3em] uppercase transition-all duration-500 hover:border-[color:var(--matrix)] hover:text-[color:var(--matrix)]"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
           >
-            Discord
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            Discuter du projet <ArrowRight className="h-4 w-4" />
           </a>
-        </header>
-
-        {/* contenu hero */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
-          <div
-            className={`relative transition-all duration-[1800ms] ${
-              ready ? "opacity-100 blur-0" : "opacity-0 blur-md"
-            }`}
-          >
-            <div className="absolute -inset-4 rounded-lg bg-destructive/25 blur-3xl" />
-            <img
-              src={avatarUrl}
-              alt="Logo néon Ȥrk"
-              className="relative h-36 w-36 rounded-lg border border-primary/40 object-cover shadow-[0_0_60px_-8px] shadow-destructive/50 md:h-44 md:w-44"
-            />
-          </div>
-
-          <p
-            className="mt-10 flex flex-wrap items-center justify-center gap-2 font-mono text-[0.62rem] tracking-[0.4em] text-muted-foreground uppercase transition-all delay-300 duration-[1500ms]"
-            style={{ opacity: ready ? 1 : 0 }}
-          >
-            <Terminal className="h-3.5 w-3.5 text-[color:var(--matrix)]" />
-            développeur full-stack · cybersécurité
-          </p>
-
-          <h1 className="font-display text-glitch mt-5 text-[clamp(3rem,10vw,7rem)] leading-none font-extrabold tracking-tight">
-            Ȥ<span className="text-destructive drop-shadow-[0_0_25px_oklch(0.55_0.17_25/60%)]">rk</span>
-          </h1>
-
-          <p className="mt-4 inline-flex items-center gap-2 border border-[color:var(--matrix)]/40 bg-[color:var(--matrix)]/5 px-4 py-2 font-mono text-[0.6rem] tracking-[0.25em] text-[color:var(--matrix)] uppercase">
-            <BadgeCheck className="h-3.5 w-3.5" />
-            ancien partenaire discord
-          </p>
-
-          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-foreground/85 drop-shadow-[0_2px_14px_var(--background)] md:text-base">
-            Je transforme vos idées en <span className="text-foreground">sites web performants</span>,
-            en <span className="text-foreground">applications prêtes pour l'App Store et le Play Store</span>
-            et en <span className="text-foreground">bots Telegram, WhatsApp ou Discord</span> fiables.
-            Une seule personne pilote votre projet, de sa conception jusqu'à sa mise en ligne.
-          </p>
-
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-            <a
-              href={DISCORD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative overflow-hidden border border-destructive bg-destructive/15 px-8 py-4 font-display text-[0.7rem] font-bold tracking-[0.3em] uppercase transition-all duration-500 hover:bg-destructive hover:text-destructive-foreground hover:shadow-[0_0_50px_-5px] hover:shadow-destructive/60"
-            >
-              Commander un projet
-              <ArrowUpRight className="ml-2 inline h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </a>
-            <a
-              href="#services"
-              className="px-6 py-4 font-mono text-[0.65rem] tracking-[0.3em] text-muted-foreground uppercase transition-colors duration-500 hover:text-[color:var(--matrix)]"
-            >
-              ./voir_les_services ↓
-            </a>
-          </div>
         </div>
-      </section>
+      </header>
 
-      {/* ===== STATS ===== */}
-      <section className="border-y border-border/50 bg-card/30">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px px-6 py-10 md:grid-cols-4 md:px-12">
-          {STATS.map((s) => (
-            <div key={s.v} className="px-2 py-4 text-center">
-              <p className="font-display text-3xl font-extrabold text-[color:var(--matrix)] md:text-4xl">
-                {s.k}
-              </p>
-              <p className="mt-2 font-mono text-[0.6rem] tracking-[0.25em] text-muted-foreground uppercase">
-                {s.v}
-              </p>
+      <section id="accueil" className="relative border-b border-border bg-secondary/45">
+        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-20">
+          <div className="max-w-3xl">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-primary" />
+              Studio digital indépendant
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== PRÉSENTATION ===== */}
-      <section className="relative mx-auto grid max-w-6xl gap-12 px-6 pt-24 md:grid-cols-[0.8fr_1.2fr] md:px-12 md:pt-32">
-        <div>
-          <p className="font-mono text-[0.62rem] tracking-[0.45em] text-[color:var(--matrix)] uppercase">
-            // présentation
-          </p>
-          <h2 className="mt-4 font-display text-[clamp(1.8rem,4.5vw,3.2rem)] leading-tight font-extrabold">
-            Vos idées deviennent des produits qui fonctionnent.
-          </h2>
-          <p className="mt-6 border-l-2 border-destructive pl-5 font-mono text-xs leading-loose text-muted-foreground">
-            Sites. Applications. Bots. Automatisation. Sécurité.
-          </p>
-        </div>
-
-        <div className="space-y-6 text-sm leading-8 text-muted-foreground md:text-[0.95rem]">
-          <p>
-            Je suis <strong className="font-medium text-foreground">Ȥrk, développeur full-stack indépendant</strong>.
-            Mon travail consiste d'abord à construire des expériences numériques complètes : un site
-            vitrine qui donne confiance, une plateforme web rapide et évolutive, ou une application
-            mobile pensée pour être réellement publiée sur l'App Store et le Play Store.
-          </p>
-          <p>
-            Je développe également des <strong className="font-medium text-foreground">bots sur mesure</strong>
-            pour Telegram, WhatsApp et Discord : modération, tickets, paiements, notifications,
-            automatisation, gestion de communautés et connexions avec vos outils. Ancien partenaire
-            Discord, je connais les contraintes des grandes communautés et les exigences d'un service
-            disponible en continu.
-          </p>
-          <p>
-            Chaque prestation est suivie directement par moi, sans agence ni intermédiaire. Je prends
-            en charge l'interface, le développement, les données, le déploiement et la maintenance pour
-            livrer un ensemble cohérent. Ma spécialisation en cybersécurité complète cette approche :
-            protection des accès, audit, durcissement des serveurs et bonnes pratiques sont intégrés
-            dès la conception, quel que soit le domaine du projet.
-          </p>
-          <div className="grid gap-3 pt-3 sm:grid-cols-2">
-            {["Sites web sur mesure", "Apps iOS & Android", "Bots & automatisations", "Cybersécurité intégrée"].map(
-              (item) => (
-                <div key={item} className="border border-border/70 bg-card/35 px-4 py-3 font-mono text-[0.7rem] text-foreground">
-                  <span className="mr-2 text-[color:var(--matrix)]">›</span>
-                  {item}
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SERVICES 3D ===== */}
-      <section id="services" className="relative mx-auto max-w-6xl px-6 py-28 md:px-12 md:py-36">
-        <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="font-mono text-[0.62rem] tracking-[0.45em] text-[color:var(--matrix)] uppercase">
-              // spécialités
+            <h1 className="font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
+              Ȥrk crée vos sites et applications avec sérieux.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
             </p>
-            <h2 className="mt-4 font-display text-[clamp(1.8rem,4.5vw,3rem)] leading-tight font-extrabold">
-              Ce que je peux
-              <br />
-              construire pour vous
-            </h2>
-          </div>
-          <p className="max-w-xs font-mono text-xs leading-loose text-muted-foreground md:text-right">
-            Chaque projet est unique. Vous décrivez l'idée, je m'occupe du reste — design, code,
-            déploiement, maintenance.
-          </p>
-        </div>
-
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => (
-            <TiltCard key={s.num} className="h-full">
-              <article className="card-3d card-glare group relative h-full overflow-hidden border border-border/70 bg-card/60 p-7 backdrop-blur-sm">
-                <div className="layer-pop relative z-[2]">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[0.6rem] tracking-[0.35em] text-muted-foreground/60">
-                      {s.num}
-                    </span>
-                    <s.icon className="h-6 w-6 text-muted-foreground transition-colors duration-500 group-hover:text-[color:var(--matrix)]" />
-                  </div>
-                  <h3 className="mt-6 font-display text-lg font-bold tracking-wide">{s.title}</h3>
-                  <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">{s.desc}</p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {s.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="border border-border/60 px-2 py-1 font-mono text-[0.55rem] tracking-[0.15em] text-muted-foreground uppercase"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            </TiltCard>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== À PROPOS / FACTS ===== */}
-      <section className="border-y border-border/50 bg-card/20">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-12">
-          <p className="font-mono text-[0.62rem] tracking-[0.45em] text-[color:var(--matrix)] uppercase">
-            // whoami
-          </p>
-          <h2 className="mt-4 font-display text-[clamp(1.7rem,4vw,2.6rem)] font-extrabold">
-            À propos de Ȥrk
-          </h2>
-          <div className="mt-10 grid gap-x-12 gap-y-4 md:grid-cols-2">
-            {FACTS.map((f) => (
-              <p
-                key={f}
-                className="terminal-line font-mono text-[0.78rem] leading-relaxed text-muted-foreground transition-colors duration-500 hover:text-foreground"
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={discordUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90 hover:shadow-lg"
               >
-                {f}
-              </p>
-            ))}
-          </div>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {[
-              { icon: Lock, t: "Confidentialité", d: "NDA, code privé, données chiffrées." },
-              { icon: Zap, t: "Rapidité", d: "Premiers livrables en quelques jours." },
-              { icon: ShieldCheck, t: "Sécurité by design", d: "Chaque projet audité avant livraison." },
-            ].map((b) => (
-              <TiltCard key={b.t} className="h-full">
-                <div className="card-3d card-glare relative h-full overflow-hidden border border-border/70 bg-background/70 p-6">
-                  <div className="layer-pop relative z-[2]">
-                    <b.icon className="h-5 w-5 text-[color:var(--matrix)]" />
-                    <h3 className="mt-4 font-display text-base font-bold">{b.t}</h3>
-                    <p className="mt-2 font-mono text-[0.72rem] leading-relaxed text-muted-foreground">
-                      {b.d}
-                    </p>
-                  </div>
-                </div>
-              </TiltCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== STACK ===== */}
-      <section className="mx-auto max-w-6xl px-6 py-20 md:px-12">
-        <p className="font-mono text-[0.62rem] tracking-[0.45em] text-muted-foreground uppercase">
-          // technologies
-        </p>
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-          {STACK.map((t) => (
-            <span
-              key={t}
-              className="font-display text-base font-medium tracking-wide text-muted-foreground transition-colors duration-500 hover:text-[color:var(--matrix)] md:text-lg"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== PROCESS ===== */}
-      <section className="mx-auto max-w-6xl px-6 pb-28 md:px-12 md:pb-36">
-        <p className="font-mono text-[0.62rem] tracking-[0.45em] text-destructive uppercase">
-          // comment ça marche
-        </p>
-        <div className="mt-14 grid gap-12 md:grid-cols-3">
-          {[
-            {
-              n: "1",
-              t: "On discute",
-              d: "Rejoignez le Discord et décrivez votre idée : site, app, bot, audit… on cadre le projet et le budget ensemble.",
-            },
-            {
-              n: "2",
-              t: "Je construis",
-              d: "Design, développement, tests de sécurité. Vous suivez l'avancement étape par étape.",
-            },
-            {
-              n: "3",
-              t: "C'est en ligne",
-              d: "Livraison complète : site hébergé, app publiée sur les stores ou bot déployé 24/7, avec suivi.",
-            },
-          ].map((step) => (
-            <div key={step.n} className="group">
-              <span className="font-display text-5xl font-extrabold text-muted-foreground/25 transition-colors duration-700 group-hover:text-[color:var(--matrix)]/70">
-                0{step.n}
-              </span>
-              <h3 className="mt-4 font-display text-xl font-bold">{step.t}</h3>
-              <p className="mt-3 font-mono text-[0.78rem] leading-relaxed text-muted-foreground">
-                {step.d}
-              </p>
+                Commander un site <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="#services"
+                className="inline-flex items-center justify-center rounded-md border border-border bg-background px-6 py-3.5 font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
+              >
+                Découvrir mes services
+              </a>
             </div>
-          ))}
+            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sur mesure</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sécurisé</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Accompagnement direct</span>
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="absolute -inset-5 rounded-md border border-primary/15 bg-primary/5" />
+            <div className="relative overflow-hidden rounded-md border border-border bg-card p-4 shadow-xl">
+              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="aspect-square w-full rounded-sm object-cover" />
+              <div className="flex items-center justify-between gap-4 px-2 pb-1 pt-5">
+                <div>
+                  <p className="font-display text-2xl font-bold">Ȥrk</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Créateur de produits numériques</p>
+                </div>
+                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <BadgeCheck className="h-6 w-6" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ===== CTA FINAL ===== */}
-      <section className="relative overflow-hidden border-t border-border/50">
-        <img
-          src={bannerUrl}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-20"
-        />
-        <MatrixRain className="absolute inset-0 h-full w-full opacity-30" />
-        <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-background/80" />
-        <div className="relative z-10 mx-auto max-w-3xl px-6 py-32 text-center md:py-44">
-          <h2 className="font-display text-[clamp(1.9rem,5vw,3.6rem)] leading-tight font-extrabold">
-            Un projet en tête ?
-          </h2>
-          <p className="mx-auto mt-6 max-w-md font-mono text-[0.8rem] leading-relaxed text-muted-foreground">
-            Site web, application mobile, bot Telegram, WhatsApp, Discord ou audit de sécurité —
-            envoyez votre demande sur le serveur Discord, réponse rapide garantie.
-          </p>
+      <section id="services" className="py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase text-primary">Ce que je crée</p>
+            <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Une solution complète pour votre projet.</h2>
+            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+              De la première maquette à la publication, je construis des produits utiles, agréables à utiliser et simples à faire évoluer.
+            </p>
+          </div>
+          <div className="mt-14 grid gap-5 md:grid-cols-2">
+            {services.map((service) => (
+              <article key={service.title} className="group rounded-md border border-border bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <service.icon className="h-6 w-6" />
+                </div>
+                <h3 className="mt-6 font-display text-2xl font-bold">{service.title}</h3>
+                <p className="mt-3 max-w-xl leading-7 text-muted-foreground">{service.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="apropos" className="border-y border-border bg-secondary/55 py-24 lg:py-32">
+        <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
+          <div>
+            <p className="text-sm font-bold uppercase text-primary">À propos de moi</p>
+            <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Je suis Ȥrk.</h2>
+            <div className="mt-7 overflow-hidden rounded-md border border-border bg-card p-3 shadow-sm">
+              <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-sm object-cover" />
+            </div>
+          </div>
+          <div className="space-y-6 text-base leading-8 text-muted-foreground sm:text-lg">
+            <p>
+              Je suis développeur indépendant et fondateur de <strong className="font-semibold text-foreground">Ȥrk</strong>. J’accompagne les particuliers, créateurs, communautés et entreprises qui veulent donner vie à une idée numérique sans devoir coordonner plusieurs prestataires.
+            </p>
+            <p>
+              Mon cœur de métier est la <strong className="font-semibold text-foreground">création de sites web et d’applications mobiles</strong>. Je m’occupe de l’apparence, du fonctionnement, des données, de la mise en ligne et du suivi. Je développe aussi des bots Telegram, WhatsApp et Discord ainsi que des outils d’automatisation adaptés à votre activité.
+            </p>
+            <p>
+              Ma spécialisation en cybersécurité n’est pas là pour donner une image inquiétante : elle me permet surtout de concevoir des projets plus fiables. Les accès, les données et l’hébergement sont réfléchis avec sérieux dès le départ.
+            </p>
+            <p>
+              Je privilégie une relation simple et transparente. Vous parlez directement avec la personne qui conçoit votre projet, vous suivez son avancement et vous recevez une solution qui vous appartient vraiment.
+            </p>
+            <div className="grid gap-3 pt-3 sm:grid-cols-2">
+              {commitments.map((item) => (
+                <div key={item} className="flex gap-3 rounded-md border border-border bg-background p-4 text-sm leading-6 text-foreground">
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-primary" /> {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="methode" className="py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
+            <div>
+              <p className="text-sm font-bold uppercase text-primary">Une collaboration simple</p>
+              <h2 className="mt-4 font-display text-4xl font-bold">Votre idée, accompagnée de A à Z.</h2>
+            </div>
+            <div className="grid gap-8 sm:grid-cols-3">
+              {[
+                { icon: MessageCircle, n: "01", t: "On échange", d: "Vous m’expliquez votre idée, vos objectifs et votre budget." },
+                { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
+                { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
+              ].map((step) => (
+                <article key={step.n}>
+                  <div className="flex items-center justify-between border-b border-border pb-4">
+                    <step.icon className="h-6 w-6 text-primary" />
+                    <span className="text-sm font-bold text-muted-foreground">{step.n}</span>
+                  </div>
+                  <h3 className="mt-5 font-display text-xl font-bold">{step.t}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{step.d}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-primary/15 bg-primary text-primary-foreground">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
+          <div className="max-w-2xl">
+            <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
+            <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Besoin d’un site, d’une app ou d’un bot ?</h2>
+            <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet sur Discord. Je vous répondrai directement pour voir comment le réaliser.</p>
+          </div>
           <a
-            href={DISCORD_URL}
+            href={discordUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-12 inline-flex items-center gap-3 border border-destructive bg-destructive px-10 py-5 font-display text-[0.72rem] font-bold tracking-[0.3em] text-destructive-foreground uppercase transition-all duration-500 hover:shadow-[0_0_70px_-8px] hover:shadow-destructive/70"
+            className="inline-flex shrink-0 items-center gap-2 rounded-md bg-background px-6 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary"
           >
-            <Bot className="h-4 w-4" />
-            Faire une demande
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+            <Send className="h-4 w-4" /> Commander un site
           </a>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="flex flex-col items-center justify-between gap-4 border-t border-border/50 px-6 py-8 sm:flex-row md:px-12">
-        <span className="font-mono text-[0.62rem] tracking-[0.35em] text-muted-foreground uppercase">
-          © 2026 Ȥrk — tous droits réservés
-        </span>
-        <a
-          href={DISCORD_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-[0.62rem] tracking-[0.35em] text-muted-foreground uppercase transition-colors duration-500 hover:text-[color:var(--matrix)]"
-        >
-          discord.gg/m6Gf2bHFhF
-        </a>
+      <footer className="bg-background">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
+          <p>© 2026 Ȥrk — Création numérique sur mesure</p>
+          <p>Design sous les conseils de Madame Eliza</p>
+        </div>
       </footer>
     </main>
   );
