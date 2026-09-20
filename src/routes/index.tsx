@@ -86,7 +86,7 @@ function Portfolio() {
             <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
           </nav>
           <a
-            href={discordUrl}
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
@@ -111,18 +111,18 @@ function Portfolio() {
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
-                href={discordUrl}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90 hover:shadow-lg"
               >
-                Commander un site <ArrowRight className="h-4 w-4" />
+                Commander un site <MessageCircle className="h-4 w-4" />
               </a>
               <a
-                href="#services"
-                className="inline-flex items-center justify-center rounded-md border border-border bg-background px-6 py-3.5 font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
+                href={emailUrl}
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-6 py-3.5 font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
               >
-                Découvrir mes services
+                <Mail className="h-4 w-4" /> Me contacter par e-mail
               </a>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted-foreground">
