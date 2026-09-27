@@ -9,7 +9,6 @@ import {
   HeartHandshake,
   MessageCircle,
   Mail,
-  Send,
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
@@ -282,7 +281,7 @@ function Portfolio() {
       <footer className="bg-background">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <p>© 2026 Ȥrk — Création numérique sur mesure</p>
-          <p>Design sous les conseils de Madame Eliza</p>
+          <p>Designed by Eliza</p>
         </div>
       </footer>
     </main>
