@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
-  Bot,
   Check,
+  Bot,
   Code2,
   Globe2,
   HeartHandshake,
