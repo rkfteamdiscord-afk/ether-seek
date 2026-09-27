@@ -249,7 +249,7 @@ function Portfolio() {
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
             <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Besoin d’un site, d’une app ou d’un bot ?</h2>
-            <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet sur Discord. Je vous répondrai directement pour voir comment le réaliser.</p>
+            <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
           </div>
           <div className="flex w-full shrink-0 flex-wrap gap-3 sm:w-auto">
             <a
