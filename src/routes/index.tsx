@@ -17,7 +17,9 @@ import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/XJRjPvYHB3";
 const emailUrl = "mailto:zrk.pro.dev@gmail.com";
-const whatsappUrl = "https://wa.me/33787444309";
+const whatsappUrl =
+  "https://api.whatsapp.com/send?phone=33787444309&text=" +
+  encodeURIComponent("Bonjour Ȥrk, je souhaite commander un site / une application.");
 
 const WhatsAppIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
