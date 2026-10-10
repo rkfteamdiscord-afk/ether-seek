@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep seasonal offer terms in a browser-safe shared module, tested separately from presentation; this avoids conflicting promotion details across the page.
