@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep seasonal offer terms in a browser-safe shared module, tested separately from presentation; this avoids conflicting promotion details across the page.
+- Keep Halloween decorations in a reusable, aria-hidden presentation module with pointer-events disabled; decorations must not interfere with reading or contacting the studio.

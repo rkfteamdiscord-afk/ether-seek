@@ -19,6 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
+import { Cobweb, Pumpkins, HalloweenGarland } from "@/components/HalloweenDecor";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
@@ -105,20 +106,20 @@ function Portfolio() {
             <a className="transition-colors hover:text-foreground" href="#apropos">À propos</a>
             <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
           </nav>
-          <Button asChild className="h-11 bg-seasonal text-seasonal-foreground hover:bg-seasonal/90">
-            <a href="#contact">Commander un site <ArrowRight className="h-4 w-4" /></a>
+          <Button asChild className="halloween-button h-11 bg-seasonal text-seasonal-foreground hover:bg-seasonal/90">
+            <a href="#contact"><Cobweb /> Commander un site <ArrowRight className="h-4 w-4" /></a>
           </Button>
         </div>
       </header>
 
       {showOffer && (
-        <aside role="status" aria-label="Offre Halloween" className="border-b border-seasonal/20 bg-seasonal-soft text-foreground">
+        <aside role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/20 bg-seasonal text-seasonal-foreground">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3 lg:px-10">
-            <Ghost className="h-6 w-6 shrink-0 text-seasonal" aria-hidden="true" />
+            <Pumpkins className="pumpkins-notice" />
             <p className="flex-1 text-sm leading-6">
-              <strong className="text-seasonal">Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code <strong className="font-bold">{halloweenOffer.code}</strong>.
+              <strong>Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code <strong className="font-bold">{halloweenOffer.code}</strong>.
             </p>
-            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 text-seasonal">
+            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 text-seasonal-foreground hover:bg-seasonal-foreground/10 hover:text-seasonal-foreground">
               <X />
             </Button>
           </div>
@@ -126,21 +127,25 @@ function Portfolio() {
       )}
 
       <section id="accueil" className="relative border-b border-border bg-secondary/45">
+        <HalloweenGarland />
+        <Cobweb className="web-section-left" />
+        <Cobweb className="web-section-right" />
         <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-20">
           <div className="max-w-3xl">
             <div className="mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
               <Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" />
               Studio digital indépendant
             </div>
-            <h1 className="font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
+            <h1 className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
+              <Cobweb />
               Ȥrk crée vos sites et applications avec sérieux.
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button asChild size="lg" className="h-auto min-h-12 py-3.5">
-                <a href="#contact">Commander un site <MessageCircle className="h-4 w-4" /></a>
+              <Button asChild size="lg" className="halloween-button h-auto min-h-12 bg-seasonal py-3.5 text-seasonal-foreground hover:bg-seasonal/90">
+                <a href="#contact"><Cobweb /> Commander un site <MessageCircle className="h-4 w-4" /></a>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto min-h-12 whitespace-normal py-3.5">
                 <a href={discordUrl} target="_blank" rel="noopener noreferrer">
@@ -156,6 +161,8 @@ function Portfolio() {
           </div>
 
           <div className="relative mx-auto w-full max-w-md">
+            <Cobweb className="web-avatar" />
+            <Pumpkins className="pumpkins-avatar" />
             <div className="absolute -inset-5 rounded-md border border-primary/15 bg-primary/5" />
             <div className="relative overflow-hidden rounded-md border border-border bg-card p-4 shadow-xl">
               <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="aspect-square w-full rounded-sm object-cover" />
@@ -173,18 +180,21 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="services" className="py-24 lg:py-32">
+      <section id="services" className="relative py-24 lg:py-32">
+        <Pumpkins className="pumpkins-section" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-3xl">
             <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Sparkles className="h-4 w-4 text-seasonal" aria-hidden="true" /> Ce que je crée</p>
-            <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Une solution complète pour votre projet.</h2>
+            <h2 className="halloween-title mt-4 font-display text-4xl font-bold sm:text-5xl"><Cobweb />Une solution complète pour votre projet.</h2>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
               De la première maquette à la publication, je construis des produits utiles, agréables à utiliser et simples à faire évoluer.
             </p>
           </div>
           <div className="mt-14 grid gap-5 md:grid-cols-2">
             {services.map((service) => (
-              <article key={service.title} className="group rounded-md border border-border bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+              <article key={service.title} className="halloween-card group relative rounded-md border border-seasonal/25 bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-seasonal/60 hover:shadow-lg">
+                <Cobweb className="web-card" />
+                <Pumpkins className="halloween-card-pumpkin" />
                 <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
                   <service.icon className="h-6 w-6" />
                 </div>
@@ -196,7 +206,9 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="apropos" className="border-y border-border bg-secondary/55 py-24 lg:py-32">
+      <section id="apropos" className="relative border-y border-border bg-secondary/55 py-24 lg:py-32">
+        <Cobweb className="web-section-right" />
+        <Pumpkins className="pumpkins-about" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
           <div>
             <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" /> À propos de moi</p>
@@ -229,7 +241,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="methode" className="py-24 lg:py-32">
+      <section id="methode" className="relative py-24 lg:py-32">
+        <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
             <div>
@@ -256,7 +269,9 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="contact" className="border-y border-primary/15 bg-primary text-primary-foreground">
+      <section id="contact" className="halloween-contact relative border-y border-seasonal/30 text-primary-foreground">
+        <Cobweb className="web-section-right" />
+        <Pumpkins className="pumpkins-contact" />
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
@@ -264,7 +279,8 @@ function Portfolio() {
             <p className="mt-5 inline-flex items-center gap-2 rounded-md bg-seasonal-soft px-3 py-2 text-sm text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
             <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
           </div>
-          <div className="flex w-full shrink-0 flex-wrap gap-3 sm:w-auto">
+          <div className="halloween-contact-buttons relative flex w-full shrink-0 flex-wrap gap-3 sm:w-auto">
+            <Cobweb />
             <a
               href={whatsappUrl}
               target="_blank"
@@ -291,7 +307,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <footer className="bg-background">
+      <footer className="relative bg-background">
+        <Ghost className="halloween-footer-ghost h-8 w-8 text-seasonal" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <p>© 2026 Ȥrk — Création numérique sur mesure</p>
           <p>Designed by Eliza</p>

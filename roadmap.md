@@ -7,3 +7,5 @@
 - [x] Actualiser Discord et diriger les commandes vers les contacts
 - [x] Ajouter la notification −10 % et les touches Halloween
 - [x] Vérifier les liens, l’offre et le rendu
+- [x] Ajouter des toiles, citrouilles et décorations Halloween sur toute la page
+- [x] Vérifier les décorations et les contacts sur la page
