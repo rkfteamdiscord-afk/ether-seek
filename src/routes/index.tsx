@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { halloweenOffer } from "@/lib/seasonal-offer";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Ghost,
+  Sparkles,
+  X,
   BadgeCheck,
   Check,
   Bot,
@@ -15,7 +21,7 @@ import {
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 
 const avatarUrl = "/zrk-avatar.gif";
-const discordUrl = "https://discord.gg/XJRjPvYHB3";
+const discordUrl = "https://discord.gg/4qRhB4c5me";
 const emailUrl = "mailto:zrk.pro.dev@gmail.com";
 const whatsappUrl =
   "https://api.whatsapp.com/send?phone=33787444309&text=" +
@@ -86,6 +92,7 @@ const commitments = [
 ];
 
 function Portfolio() {
+  const [showOffer, setShowOffer] = useState(true);
   return (
     <main className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl">
@@ -98,22 +105,31 @@ function Portfolio() {
             <a className="transition-colors hover:text-foreground" href="#apropos">À propos</a>
             <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
           </nav>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
-          >
-            Discuter du projet <ArrowRight className="h-4 w-4" />
-          </a>
+          <Button asChild className="h-11 bg-seasonal text-seasonal-foreground hover:bg-seasonal/90">
+            <a href="#contact">Commander un site <ArrowRight className="h-4 w-4" /></a>
+          </Button>
         </div>
       </header>
+
+      {showOffer && (
+        <aside role="status" aria-label="Offre Halloween" className="border-b border-seasonal/20 bg-seasonal-soft text-foreground">
+          <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3 lg:px-10">
+            <Ghost className="h-6 w-6 shrink-0 text-seasonal" aria-hidden="true" />
+            <p className="flex-1 text-sm leading-6">
+              <strong className="text-seasonal">Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code <strong className="font-bold">{halloweenOffer.code}</strong>.
+            </p>
+            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 text-seasonal">
+              <X />
+            </Button>
+          </div>
+        </aside>
+      )}
 
       <section id="accueil" className="relative border-b border-border bg-secondary/45">
         <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-20">
           <div className="max-w-3xl">
             <div className="mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-primary" />
+              <Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" />
               Studio digital indépendant
             </div>
             <h1 className="font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
@@ -122,21 +138,15 @@ function Portfolio() {
             <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-md transition hover:bg-primary/90 hover:shadow-lg"
-              >
-                Commander un site <MessageCircle className="h-4 w-4" />
-              </a>
-              <a
-                href={emailUrl}
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-6 py-3.5 font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
-              >
-                <Mail className="h-4 w-4" /> Me contacter par e-mail
-              </a>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button asChild size="lg" className="h-auto min-h-12 py-3.5">
+                <a href="#contact">Commander un site <MessageCircle className="h-4 w-4" /></a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-auto min-h-12 whitespace-normal py-3.5">
+                <a href={discordUrl} target="_blank" rel="noopener noreferrer">
+                  <DiscordIcon /> Rejoindre le serveur Discord
+                </a>
+              </Button>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sur mesure</span>
@@ -166,7 +176,7 @@ function Portfolio() {
       <section id="services" className="py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-3xl">
-            <p className="text-sm font-bold uppercase text-primary">Ce que je crée</p>
+            <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Sparkles className="h-4 w-4 text-seasonal" aria-hidden="true" /> Ce que je crée</p>
             <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Une solution complète pour votre projet.</h2>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
               De la première maquette à la publication, je construis des produits utiles, agréables à utiliser et simples à faire évoluer.
@@ -175,7 +185,7 @@ function Portfolio() {
           <div className="mt-14 grid gap-5 md:grid-cols-2">
             {services.map((service) => (
               <article key={service.title} className="group rounded-md border border-border bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
                   <service.icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-6 font-display text-2xl font-bold">{service.title}</h3>
@@ -189,7 +199,7 @@ function Portfolio() {
       <section id="apropos" className="border-y border-border bg-secondary/55 py-24 lg:py-32">
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
           <div>
-            <p className="text-sm font-bold uppercase text-primary">À propos de moi</p>
+            <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" /> À propos de moi</p>
             <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Je suis Ȥrk.</h2>
             <div className="mt-7 overflow-hidden rounded-md border border-border bg-card p-3 shadow-sm">
               <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-sm object-cover" />
@@ -246,11 +256,12 @@ function Portfolio() {
         </div>
       </section>
 
-      <section className="border-y border-primary/15 bg-primary text-primary-foreground">
+      <section id="contact" className="border-y border-primary/15 bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
             <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Besoin d’un site, d’une app ou d’un bot ?</h2>
+            <p className="mt-5 inline-flex items-center gap-2 rounded-md bg-seasonal-soft px-3 py-2 text-sm text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
             <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
           </div>
           <div className="flex w-full shrink-0 flex-wrap gap-3 sm:w-auto">
@@ -260,7 +271,7 @@ function Portfolio() {
               rel="noopener noreferrer"
               className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
             >
-              <WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> WhatsApp
+              <WhatsAppIcon className="h-4 w-4 text-whatsapp" /> WhatsApp
             </a>
             <a
               href={discordUrl}
@@ -268,7 +279,7 @@ function Portfolio() {
               rel="noopener noreferrer"
               className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
             >
-              <DiscordIcon className="h-4 w-4 text-[#5865F2]" /> Discord
+              <DiscordIcon className="h-4 w-4 text-discord" /> Discord
             </a>
             <a
               href={emailUrl}
