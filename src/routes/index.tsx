@@ -115,7 +115,7 @@ function Portfolio() {
       {showOffer && (
         <aside role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/20 bg-seasonal text-seasonal-foreground">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3 lg:px-10">
-            <span className="text-2xl" aria-hidden="true">🎃</span>
+            <Pumpkins className="pumpkins-notice" />
             <p className="flex-1 text-sm leading-6">
               <strong>Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code <strong className="font-bold">{halloweenOffer.code}</strong>.
             </p>
@@ -194,7 +194,7 @@ function Portfolio() {
             {services.map((service) => (
               <article key={service.title} className="halloween-card group relative rounded-md border border-seasonal/25 bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-seasonal/60 hover:shadow-lg">
                 <Cobweb className="web-card" />
-                <span className="halloween-card-pumpkin" aria-hidden="true">🎃</span>
+                <Pumpkins className="halloween-card-pumpkin" />
                 <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
                   <service.icon className="h-6 w-6" />
                 </div>
@@ -308,7 +308,7 @@ function Portfolio() {
       </section>
 
       <footer className="relative bg-background">
-        <span className="halloween-footer-ghost" aria-hidden="true">👻</span>
+        <Ghost className="halloween-footer-ghost h-8 w-8 text-seasonal" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <p>© 2026 Ȥrk — Création numérique sur mesure</p>
           <p>Designed by Eliza</p>

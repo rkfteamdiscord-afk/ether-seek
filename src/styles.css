@@ -89,7 +89,8 @@
 .pumpkins-section { width: 145px; top: 12px; right: 5%; }
 .pumpkins-about { width: 130px; bottom: -12px; left: 18px; }
 .web-card { top: -1px; right: -1px; transform: rotate(90deg); width: 100px; height: 100px; opacity: .45; }
-.halloween-card-pumpkin { position: absolute; right: 24px; bottom: 18px; font-size: 30px; opacity: .9; pointer-events: none; }
+.halloween-card-pumpkin { width: 64px; right: 20px; bottom: 10px; opacity: .9; }
+.pumpkins-notice { position: relative; width: 42px; flex-shrink: 0; filter: none; }
 .halloween-card { padding-bottom: 56px; }
 .halloween-garland { position: absolute; inset: 0 5% auto; height: 48px; display: flex; justify-content: space-around; pointer-events: none; overflow: hidden; }
 .halloween-string { position: absolute; top: -42px; width: 100%; height: 62px; border-bottom: 1px solid var(--halloween-web); border-radius: 50%; opacity: .5; }
