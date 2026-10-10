@@ -31,6 +31,11 @@
   --color-ember: var(--ember);
   --color-haze: var(--haze);
   --color-matrix: var(--matrix);
+  --color-seasonal: var(--seasonal);
+  --color-seasonal-foreground: var(--seasonal-foreground);
+  --color-seasonal-soft: var(--seasonal-soft);
+  --color-whatsapp: var(--whatsapp);
+  --color-discord: var(--discord);
   --font-display: "Outfit", ui-sans-serif, sans-serif;
   --font-body: "Figtree", ui-sans-serif, sans-serif;
   --font-mono: "Figtree", ui-sans-serif, sans-serif;
@@ -60,6 +65,17 @@
   --ember: oklch(0.7 0.12 45);
   --haze: oklch(0.7 0.08 245);
   --matrix: oklch(0.52 0.16 257);
+  --seasonal: oklch(0.56 0.16 45);
+  --seasonal-foreground: oklch(0.99 0.005 60);
+  --seasonal-soft: oklch(0.96 0.03 70);
+  --whatsapp: oklch(0.5 0.14 150);
+  --discord: oklch(0.52 0.18 280);
+}
+
+html { scroll-behavior: smooth; }
+#contact { scroll-margin-top: 6rem; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 .dark {
