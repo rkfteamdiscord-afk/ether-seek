@@ -73,6 +73,13 @@
   --halloween-web: oklch(0.48 0.035 290);
   --halloween-night: oklch(0.24 0.045 295);
   --halloween-shadow: 0 8px 20px color-mix(in oklab, var(--seasonal) 20%, transparent);
+  --deco-orange: oklch(0.7 0.18 48);
+  --deco-gold: oklch(0.87 0.15 85);
+  --deco-violet: oklch(0.48 0.14 310);
+  --deco-light: oklch(0.97 0.015 85);
+  --deco-green: oklch(0.72 0.16 135);
+  --deco-stone: oklch(0.65 0.025 285);
+  --halloween-smoke: oklch(0.73 0.03 295);
 }
 
 /* Decorations never intercept a click or hide the main content. */
@@ -110,6 +117,58 @@
   .halloween-contact > div { padding-bottom: 90px; }
 }
 @media (prefers-reduced-motion: reduce) { .halloween-bat { animation: none; } }
+
+/* Twenty distinct props live in reserved edge rails, above drifting stage fog. */
+.halloween-stage { isolation: isolate; padding-bottom: 120px; }
+.halloween-stage > .mx-auto { position: relative; z-index: 5; }
+.halloween-scene { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
+.halloween-scene * { pointer-events: none; }
+.halloween-prop { position: absolute; bottom: 10px; width: 88px; height: 100px; color: var(--halloween-night); filter: drop-shadow(var(--halloween-shadow)); animation: halloween-float 6s ease-in-out infinite; transform-origin: center; }
+.halloween-prop svg, .halloween-prop img { width: 100%; height: 100%; object-fit: contain; }
+.prop-0 { left: 4%; animation-delay: -1s; }
+.prop-1 { left: 31%; animation-delay: -3s; }
+.prop-2 { right: 31%; animation-delay: -2s; }
+.prop-3 { right: 4%; animation-delay: -4s; }
+.prop-ghost { width: 125px; height: 160px; bottom: 0; }
+.prop-witch { width: 185px; height: 125px; bottom: 0; }
+.prop-spider { top: 0; bottom: auto; left: auto; right: 25%; width: 65px; height: 100px; transform-origin: top; animation: spider-dangle 7s ease-in-out infinite; }
+.prop-candle { animation: candle-shimmer 3s ease-in-out infinite; }
+.prop-bat { animation: bat-flight 7s ease-in-out infinite; }
+.prop-leaf { animation: leaf-drift 8s ease-in-out infinite; }
+.prop-eye { animation: eye-peek 9s ease-in-out infinite; }
+.deco-orange { fill: var(--deco-orange); stroke: var(--deco-orange); }
+.deco-gold { fill: var(--deco-gold); stroke: var(--deco-gold); }
+.deco-violet { fill: var(--deco-violet); stroke: var(--deco-violet); }
+.deco-light { fill: var(--deco-light); stroke: var(--deco-light); }
+.deco-green { fill: var(--deco-green); stroke: var(--deco-green); }
+.deco-stone { fill: var(--deco-stone); stroke: var(--deco-stone); }
+.halloween-fog { position: absolute; inset: auto -15% -20px; height: 155px; color: var(--halloween-smoke); opacity: .38; filter: blur(15px); }
+.halloween-fog svg { position: absolute; width: 115%; height: 100%; fill: currentColor; animation: smoke-drift 24s ease-in-out infinite alternate; }
+.halloween-fog svg:nth-child(2) { opacity: .5; transform: scaleX(-1); animation-delay: -12s; animation-duration: 31s; }
+.halloween-fog svg:nth-child(3) { opacity: .3; bottom: 18px; animation-delay: -7s; animation-duration: 19s; }
+.halloween-contact.halloween-stage { padding-bottom: 120px; }
+.halloween-contact .halloween-fog { opacity: .25; }
+.halloween-contact .pumpkins-contact { bottom: 110px; width: 90px; }
+@keyframes halloween-float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+@keyframes spider-dangle { 0%,100% { transform: translateY(-12px) rotate(-8deg); } 50% { transform: translateY(14px) rotate(8deg); } }
+@keyframes candle-shimmer { 0%,100% { transform: rotate(-2deg); opacity: .9; } 50% { transform: rotate(2deg); opacity: 1; } }
+@keyframes bat-flight { 0%,100% { transform: translate(-12px,0) rotate(-9deg); } 50% { transform: translate(12px,-24px) rotate(9deg); } }
+@keyframes leaf-drift { 0%,100% { transform: translate(-8px,0) rotate(-20deg); } 50% { transform: translate(8px,-14px) rotate(20deg); } }
+@keyframes eye-peek { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(18deg); } }
+@keyframes smoke-drift { from { translate: -7% 10px; scale: 1 1; } to { translate: 7% -12px; scale: 1.15 1.2; } }
+@media (max-width: 640px) {
+  .halloween-stage { padding-bottom: 105px; }
+  .halloween-prop { width: 60px; height: 75px; bottom: 12px; }
+  .prop-0 { left: 2%; } .prop-1 { left: 27%; } .prop-2 { right: 27%; } .prop-3 { right: 2%; }
+  .prop-ghost { width: 80px; height: 110px; bottom: 0; }
+  .prop-witch { width: 105px; height: 90px; }
+  .prop-spider { left: auto; right: 12%; top: 0; width: 40px; height: 60px; }
+  .halloween-contact.halloween-stage > .mx-auto { padding-bottom: 32px; }
+  .halloween-fog { height: 120px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .halloween-prop, .halloween-fog svg { animation: none; }
+}
 
 html { scroll-behavior: smooth; }
 #contact { scroll-margin-top: 6rem; }
