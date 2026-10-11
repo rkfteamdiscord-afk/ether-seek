@@ -183,7 +183,6 @@ function Portfolio() {
 
       <section id="services" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={1} />
-        <Pumpkins className="pumpkins-section" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-3xl">
             <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Sparkles className="h-4 w-4 text-seasonal" aria-hidden="true" /> Ce que je crée</p>
@@ -196,7 +195,6 @@ function Portfolio() {
             {services.map((service) => (
               <article key={service.title} className="halloween-card group relative rounded-md border border-seasonal/25 bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-seasonal/60 hover:shadow-lg">
                 <Cobweb className="web-card" />
-                <Pumpkins className="halloween-card-pumpkin" />
                 <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
                   <service.icon className="h-6 w-6" />
                 </div>
@@ -211,7 +209,6 @@ function Portfolio() {
       <section id="apropos" className="halloween-stage relative border-y border-border bg-secondary/55 py-24 lg:py-32">
         <HalloweenScene chapter={2} />
         <Cobweb className="web-section-right" />
-        <Pumpkins className="pumpkins-about" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
           <div>
             <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" /> À propos de moi</p>
@@ -276,7 +273,6 @@ function Portfolio() {
       <section id="contact" className="halloween-stage halloween-contact relative border-y border-seasonal/30 text-primary-foreground">
         <HalloweenScene chapter={4} />
         <Cobweb className="web-section-right" />
-        <Pumpkins className="pumpkins-contact" />
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>

@@ -1,3 +1,4 @@
+import { extraMotifs, ExtraIllustration, type ExtraMotif } from "./HalloweenExtras";
 import pumpkins from "@/assets/halloween-pumpkins.png";
 import ghost from "@/assets/halloween-ghost.png";
 import witchKit from "@/assets/halloween-witch-kit.png";
@@ -28,15 +29,17 @@ export function HalloweenGarland() {
   );
 }
 
-const motifs = ["ghost", "spider", "moon", "lantern", "witch", "candy", "cat", "potion", "candle", "skull", "broom", "owl", "bat", "bone", "leaf", "crystal", "hat", "eye", "lollipop", "gravestone"] as const;
-type Motif = (typeof motifs)[number];
+const originalMotifs = ["ghost", "spider", "moon", "lantern", "witch", "candy", "cat", "potion", "candle", "skull", "broom", "owl", "bat", "bone", "leaf", "crystal", "hat", "eye", "lollipop", "gravestone"] as const;
+type OriginalMotif = (typeof originalMotifs)[number];
+type Motif = OriginalMotif | ExtraMotif;
+const motifs: readonly Motif[] = [...originalMotifs, ...extraMotifs];
 
 /** Decorative illustrations only: never carry information or intercept input. */
 function Illustration({ kind }: { kind: Motif }) {
   if (kind === "ghost" || kind === "witch") {
     return <img src={kind === "ghost" ? ghost : witchKit} alt="" width={kind === "ghost" ? 672 : 992} height={kind === "ghost" ? 992 : 672} loading="lazy" />;
   }
-  const drawings: Record<Exclude<Motif, "ghost" | "witch">, React.ReactNode> = {
+  const drawings: Record<Exclude<OriginalMotif, "ghost" | "witch">, React.ReactNode> = {
     spider: <><path d="M50 0V35M39 43 20 30 10 43M38 50 15 48 6 61M39 59 22 69 18 83M61 43 80 30 90 43M62 50 85 48 94 61M61 59 78 69 82 83" fill="none"/><ellipse cx="50" cy="56" rx="15" ry="20"/><circle cx="45" cy="48" r="3" className="deco-light"/><circle cx="55" cy="48" r="3" className="deco-light"/></>,
     moon: <><path d="M68 12A38 38 0 1 0 86 70C48 84 27 42 68 12Z" className="deco-gold"/><path d="m79 18 3 7 8 3-8 3-3 7-3-7-8-3 8-3Z" className="deco-gold"/></>,
     lantern: <><path d="M38 25V15Q50 3 62 15V25M26 29H74L80 79H20ZM18 82H82M30 24H70"/><path d="M37 39H63V71H37Z" className="deco-gold"/><path d="M50 43Q33 62 50 68Q68 61 50 43Z" className="deco-orange"/></>,
@@ -56,16 +59,17 @@ function Illustration({ kind }: { kind: Motif }) {
     lollipop: <><path d="M50 54V95" fill="none" className="deco-light"/><circle cx="50" cy="35" r="29" className="deco-orange"/><path d="M50 35Q37 29 45 20Q61 8 71 30Q80 51 52 55Q24 58 26 31" fill="none" className="deco-light"/></>,
     gravestone: <><path d="M22 89V38Q22 10 50 10Q78 10 78 38V89Z" className="deco-stone"/><path d="M50 27V57M37 39H63M13 90H87" fill="none"/><path d="m28 75 8-8 8 8M59 70l10 6" fill="none"/></>,
   };
-  return <svg viewBox="0 0 100 100" fill="currentColor" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">{drawings[kind]}</svg>;
+  return <svg viewBox="0 0 100 100" fill="currentColor" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">{kind in drawings ? drawings[kind as keyof typeof drawings] : <ExtraIllustration kind={kind as ExtraMotif} />}</svg>;
 }
 
 export function HalloweenScene({ chapter }: { chapter: 0 | 1 | 2 | 3 | 4 }) {
   return (
     <div className={`halloween-scene scene-${chapter}`} aria-hidden="true">
-      <div className="halloween-fog">
-        {[0, 1, 2].map((n) => <svg key={n} viewBox="0 0 1400 160" preserveAspectRatio="none"><path d="M-100 140Q80 30 220 98T530 85T820 80T1120 90T1500 65L1500 200H-100Z"/><path d="M-100 120Q160 70 290 130T640 100T1000 125T1500 80" fill="none" stroke="currentColor" strokeWidth="35"/></svg>)}
+      <div className={`halloween-fog fog-chapter-${chapter}`}>
+        {[0, 1, 2, 3, 4].map((n) => <svg key={n} viewBox="0 0 1400 160" preserveAspectRatio="none"><path d="M-100 140C0 40 110 160 180 90S320 155 420 78S555 146 670 65S830 150 950 86S1130 145 1220 62S1400 115 1500 65L1500 200H-100Z"/><path d="M-100 120Q160 70 290 130T640 100T1000 125T1500 80" fill="none" stroke="currentColor" strokeWidth="35"/></svg>)}
       </div>
-      {motifs.slice(chapter * 4, chapter * 4 + 4).map((kind, i) => <div key={kind} data-decoration={kind} className={`halloween-prop prop-${i} prop-${kind}`}><Illustration kind={kind}/></div>)}
+      <div className="halloween-wisps">{[0, 1, 2].map((n) => <svg key={n} className={`wisp-${n}`} viewBox="0 0 160 220" fill="none"><path d="M80 230C-10 155 155 135 70 90S125 30 80-20" stroke="currentColor" strokeWidth="18"/><path d="M95 230C15 160 140 120 85 60" stroke="currentColor" strokeWidth="7"/></svg>)}</div>
+      {motifs.slice(chapter * 12, chapter * 12 + 12).map((kind, i) => <div key={kind} data-decoration={kind} className={`halloween-prop slot-${i} prop-${kind}`}><Illustration kind={kind}/></div>)}
     </div>
   );
 }
