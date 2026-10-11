@@ -19,7 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene } from "@/components/HalloweenDecor";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
@@ -126,7 +126,8 @@ function Portfolio() {
         </aside>
       )}
 
-      <section id="accueil" className="relative border-b border-border bg-secondary/45">
+      <section id="accueil" className="halloween-stage relative border-b border-border bg-secondary/45">
+        <HalloweenScene chapter={0} />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
@@ -180,7 +181,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="services" className="relative py-24 lg:py-32">
+      <section id="services" className="halloween-stage relative py-24 lg:py-32">
+        <HalloweenScene chapter={1} />
         <Pumpkins className="pumpkins-section" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-3xl">
@@ -206,7 +208,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="apropos" className="relative border-y border-border bg-secondary/55 py-24 lg:py-32">
+      <section id="apropos" className="halloween-stage relative border-y border-border bg-secondary/55 py-24 lg:py-32">
+        <HalloweenScene chapter={2} />
         <Cobweb className="web-section-right" />
         <Pumpkins className="pumpkins-about" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
@@ -241,7 +244,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="methode" className="relative py-24 lg:py-32">
+      <section id="methode" className="halloween-stage relative py-24 lg:py-32">
+        <HalloweenScene chapter={3} />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
@@ -269,7 +273,8 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="contact" className="halloween-contact relative border-y border-seasonal/30 text-primary-foreground">
+      <section id="contact" className="halloween-stage halloween-contact relative border-y border-seasonal/30 text-primary-foreground">
+        <HalloweenScene chapter={4} />
         <Cobweb className="web-section-right" />
         <Pumpkins className="pumpkins-contact" />
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">

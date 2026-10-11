@@ -9,3 +9,5 @@
 - [x] Vérifier les liens, l’offre et le rendu
 - [x] Ajouter des toiles, citrouilles et décorations Halloween sur toute la page
 - [x] Vérifier les décorations et les contacts sur la page
+- [x] Intégrer vingt décorations variées, les images créées et la fumée animée
+- [x] Vérifier les animations, la lisibilité et les contacts
