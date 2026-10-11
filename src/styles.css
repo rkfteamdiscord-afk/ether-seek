@@ -118,57 +118,171 @@
 }
 @media (prefers-reduced-motion: reduce) { .halloween-bat { animation: none; } }
 
-/* Twenty distinct props live in reserved edge rails, above drifting stage fog. */
-.halloween-stage { isolation: isolate; padding-bottom: 120px; }
+/* Sixty unique silhouettes, two reserved rows; all movement stays away from copy. */
+.halloween-stage { isolation: isolate; padding-bottom: 270px; }
 .halloween-stage > .mx-auto { position: relative; z-index: 5; }
 .halloween-scene { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
 .halloween-scene * { pointer-events: none; }
-.halloween-prop { position: absolute; bottom: 10px; width: 88px; height: 100px; color: var(--halloween-night); filter: drop-shadow(var(--halloween-shadow)); animation: halloween-float 6s ease-in-out infinite; transform-origin: center; }
+.halloween-prop { position: absolute; bottom: 20px; width: 76px; height: 84px; color: var(--halloween-night); filter: drop-shadow(var(--halloween-shadow)); transform-origin: center; }
 .halloween-prop svg, .halloween-prop img { width: 100%; height: 100%; object-fit: contain; }
-.prop-0 { left: 4%; animation-delay: -1s; }
-.prop-1 { left: 31%; animation-delay: -3s; }
-.prop-2 { right: 31%; animation-delay: -2s; }
-.prop-3 { right: 4%; animation-delay: -4s; }
-.prop-ghost { width: 125px; height: 160px; bottom: 0; }
-.prop-witch { width: 185px; height: 125px; bottom: 0; }
-.prop-spider { top: 0; bottom: auto; left: auto; right: 25%; width: 65px; height: 100px; transform-origin: top; animation: spider-dangle 7s ease-in-out infinite; }
-.prop-candle { animation: candle-shimmer 3s ease-in-out infinite; }
-.prop-bat { animation: bat-flight 7s ease-in-out infinite; }
-.prop-leaf { animation: leaf-drift 8s ease-in-out infinite; }
-.prop-eye { animation: eye-peek 9s ease-in-out infinite; }
+.prop-ghost { width: 98px; height: 120px; }
+.prop-witch { width: 120px; height: 90px; }
 .deco-orange { fill: var(--deco-orange); stroke: var(--deco-orange); }
 .deco-gold { fill: var(--deco-gold); stroke: var(--deco-gold); }
 .deco-violet { fill: var(--deco-violet); stroke: var(--deco-violet); }
 .deco-light { fill: var(--deco-light); stroke: var(--deco-light); }
 .deco-green { fill: var(--deco-green); stroke: var(--deco-green); }
 .deco-stone { fill: var(--deco-stone); stroke: var(--deco-stone); }
-.halloween-fog { position: absolute; inset: auto -15% -20px; height: 155px; color: var(--halloween-smoke); opacity: .38; filter: blur(15px); }
-.halloween-fog svg { position: absolute; width: 115%; height: 100%; fill: currentColor; animation: smoke-drift 24s ease-in-out infinite alternate; }
-.halloween-fog svg:nth-child(2) { opacity: .5; transform: scaleX(-1); animation-delay: -12s; animation-duration: 31s; }
-.halloween-fog svg:nth-child(3) { opacity: .3; bottom: 18px; animation-delay: -7s; animation-duration: 19s; }
-.halloween-contact.halloween-stage { padding-bottom: 120px; }
-.halloween-contact .halloween-fog { opacity: .25; }
-.halloween-contact .pumpkins-contact { bottom: 110px; width: 90px; }
-@keyframes halloween-float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
-@keyframes spider-dangle { 0%,100% { transform: translateY(-12px) rotate(-8deg); } 50% { transform: translateY(14px) rotate(8deg); } }
-@keyframes candle-shimmer { 0%,100% { transform: rotate(-2deg); opacity: .9; } 50% { transform: rotate(2deg); opacity: 1; } }
-@keyframes bat-flight { 0%,100% { transform: translate(-12px,0) rotate(-9deg); } 50% { transform: translate(12px,-24px) rotate(9deg); } }
-@keyframes leaf-drift { 0%,100% { transform: translate(-8px,0) rotate(-20deg); } 50% { transform: translate(8px,-14px) rotate(20deg); } }
-@keyframes eye-peek { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(18deg); } }
-@keyframes smoke-drift { from { translate: -7% 10px; scale: 1 1; } to { translate: 7% -12px; scale: 1.15 1.2; } }
+.halloween-fog { position: absolute; inset: auto -20% -25px; height: 260px; color: var(--halloween-smoke); opacity: .65; filter: blur(13px); }
+.halloween-fog svg { position: absolute; width: 115%; height: 100%; fill: currentColor; animation: fog-tide 23s ease-in-out infinite alternate; }
+.halloween-fog svg:nth-child(2) { opacity: .5; bottom: 28px; animation: fog-curl 29s ease-in-out infinite alternate; }
+.halloween-fog svg:nth-child(3) { opacity: .35; bottom: 65px; animation: fog-roll 19s ease-in-out infinite alternate; }
+.halloween-fog svg:nth-child(4) { opacity: .3; bottom: -35px; animation: fog-stream 32s ease-in-out infinite alternate; }
+.halloween-fog svg:nth-child(5) { opacity: .25; height: 60%; bottom: 140px; animation: fog-lift 26s ease-in-out infinite alternate; }
+.fog-chapter-1 { color: var(--deco-stone); }
+.fog-chapter-2 { color: var(--haze); }
+.fog-chapter-3 { color: var(--halloween-web); opacity: .4; }
+.fog-chapter-4 { color: var(--deco-light); opacity: .35; }
+.halloween-wisps { position: absolute; inset: auto 0 0; height: 250px; color: var(--halloween-smoke); filter: blur(9px); opacity: .45; }
+.halloween-wisps svg { position: absolute; width: 90px; height: 100%; bottom: 0; }
+.wisp-0 { left: 2%; animation: vapor-spiral 15s ease-in-out infinite; }
+.wisp-1 { right: 3%; animation: vapor-unwind 18s ease-in-out infinite; }
+.wisp-2 { left: 48%; animation: vapor-billow 21s ease-in-out infinite; }
+.halloween-contact.halloween-stage { padding-bottom: 270px; }
+.halloween-contact .halloween-wisps { color: var(--deco-light); opacity: .3; }
+@keyframes fog-tide { from { transform: translate(-8%, 10px) scale(1); } to { transform: translate(8%, -20px) scale(1.15); } }
+@keyframes fog-curl { from { transform: translate(8%, 20px) scaleX(-1); } to { transform: translate(-9%, -15px) scale(-1.2, 1.1); } }
+@keyframes fog-roll { from { transform: translate(-3%, 25px) skewX(-12deg); } to { transform: translate(10%, -30px) skewX(12deg); } }
+@keyframes fog-stream { from { transform: translate(12%, 15px) scale(1.2,.8); } to { transform: translate(-12%, 0) scale(1,1.3); } }
+@keyframes fog-lift { from { transform: translate(-5%, 30px); opacity: .12; } to { transform: translate(5%, -40px); opacity: .32; } }
+@keyframes vapor-spiral { 0%,100% { transform: skewX(-12deg) translateY(10px); opacity: .2; } 50% { transform: skewX(16deg) translateY(-20px); opacity: .65; } }
+@keyframes vapor-unwind { 0%,100% { transform: scaleX(-1) translateY(0); } 50% { transform: scaleX(-1.3) translateY(-28px); } }
+@keyframes vapor-billow { 0%,100% { transform: scale(.7, .8); opacity: .1; } 50% { transform: scale(1.3, 1.1); opacity: .5; } }
+.slot-0 { left: calc(8.333% - 38px); bottom: 25px; }
+.slot-1 { left: calc(25.000% - 38px); bottom: 25px; }
+.slot-2 { left: calc(41.667% - 38px); bottom: 25px; }
+.slot-3 { left: calc(58.333% - 38px); bottom: 25px; }
+.slot-4 { left: calc(75.000% - 38px); bottom: 25px; }
+.slot-5 { left: calc(91.667% - 38px); bottom: 25px; }
+.slot-6 { left: calc(8.333% - 38px); bottom: 150px; }
+.slot-7 { left: calc(25.000% - 38px); bottom: 150px; }
+.slot-8 { left: calc(41.667% - 38px); bottom: 150px; }
+.slot-9 { left: calc(58.333% - 38px); bottom: 150px; }
+.slot-10 { left: calc(75.000% - 38px); bottom: 150px; }
+.slot-11 { left: calc(91.667% - 38px); bottom: 150px; }
+@keyframes ghost-glide { 0%,100% { transform: translate(-8px,0) rotate(-4deg); } 50% { transform: translate(9px,-24px) rotate(5deg); } }
+@keyframes spider-swing { 0%,100% { transform: translateY(-8px) rotate(-15deg); } 50% { transform: translateY(10px) rotate(15deg); } }
+@keyframes moon-orbit { 0%,100% { transform: rotate(-8deg) scale(.96); } 50% { transform: rotate(9deg) scale(1.04); } }
+@keyframes lantern-rock { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+@keyframes witch-hover { 0%,100% { transform: translate(-12px,3px); } 50% { transform: translate(12px,-14px); } }
+@keyframes candy-twist { 0%,100% { transform: rotate(-14deg) scale(.95); } 50% { transform: rotate(14deg) scale(1.05); } }
+@keyframes cat-prowl { 0%,100% { transform: translateX(-12px) skewX(-3deg); } 50% { transform: translateX(12px) skewX(3deg); } }
+@keyframes potion-bubble { 0%,100% { transform: translateY(0) scale(1,.96); } 50% { transform: translateY(-5px) scale(.97,1.06); } }
+@keyframes candle-dance { 0%,100% { transform: rotate(-3deg) scale(.98); } 50% { transform: rotate(3deg) scale(1.04); } }
+@keyframes skull-nod { 0%,100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(6deg) translateY(5px); } }
+@keyframes broom-sweep { 0%,100% { transform: translateX(-16px) rotate(-18deg); } 50% { transform: translateX(16px) rotate(12deg); } }
+@keyframes owl-listen { 0%,100% { transform: rotate(-12deg) translateY(0); } 50% { transform: rotate(12deg) translateY(-4px); } }
+@keyframes bat-loop { 0%,100% { transform: translate(-18px,4px) rotate(-18deg); } 50% { transform: translate(18px,-24px) rotate(18deg); } }
+@keyframes bone-tumble { 0%,100% { transform: rotate(-20deg); } 50% { transform: rotate(24deg); } }
+@keyframes leaf-spiral { 0%,100% { transform: translate(-13px,-6px) rotate(-30deg); } 50% { transform: translate(13px,8px) rotate(35deg); } }
+@keyframes crystal-pulse { 0%,100% { transform: scale(.94) rotate(-2deg); } 50% { transform: scale(1.07) rotate(2deg); } }
+@keyframes hat-tip { 0%,100% { transform: rotate(-13deg) translateY(2px); } 50% { transform: rotate(5deg) translateY(-7px); } }
+@keyframes eye-scan { 0%,100% { transform: translateX(-7px) rotate(-18deg); } 50% { transform: translateX(7px) rotate(18deg); } }
+@keyframes lollipop-spin { 0%,100% { transform: rotate(-28deg) translateY(2px); } 50% { transform: rotate(28deg) translateY(-5px); } }
+@keyframes stone-rise { 0%,100% { transform: translateY(6px) scaleY(.97); } 50% { transform: translateY(-6px) scaleY(1.02); } }
+@keyframes cauldron-boil { 0%,100% { transform: rotate(-2deg) translateY(2px); } 50% { transform: rotate(2deg) translateY(-3px); } }
+@keyframes raven-swoop { 0%,100% { transform: translate(-15px,8px) rotate(-10deg); } 50% { transform: translate(15px,-20px) rotate(8deg); } }
+@keyframes book-flutter { 0%,100% { transform: perspective(300px) rotateY(-18deg) rotate(-3deg); } 50% { transform: perspective(300px) rotateY(18deg) rotate(3deg); } }
+@keyframes key-pendulum { 0%,100% { transform: rotate(-22deg); } 50% { transform: rotate(22deg); } }
+@keyframes coffin-creak { 0%,100% { transform: perspective(300px) rotateY(-12deg); } 50% { transform: perspective(300px) rotateY(8deg); } }
+@keyframes mask-waltz { 0%,100% { transform: translate(-8px,0) rotate(-12deg); } 50% { transform: translate(8px,-8px) rotate(12deg); } }
+@keyframes mushroom-sprout { 0%,100% { transform: scale(.94,.9) translateY(3px); } 50% { transform: scale(1.02,1.07) translateY(-3px); } }
+@keyframes hand-wave { 0%,100% { transform: rotate(-18deg) translateY(4px); } 50% { transform: rotate(18deg) translateY(-4px); } }
+@keyframes fence-rattle { 0%,100% { transform: translateX(-2px) rotate(-1deg); } 50% { transform: translateX(2px) rotate(1deg); } }
+@keyframes bell-chime { 0%,100% { transform: rotate(-25deg) translateY(-2px); } 50% { transform: rotate(25deg) translateY(-2px); } }
+.prop-ghost { animation: ghost-glide 5.0s ease-in-out infinite; animation-delay: -1s; }
+.prop-spider { animation: spider-swing 5.75s ease-in-out infinite; animation-delay: -2s; }
+.prop-moon { animation: moon-orbit 6.5s ease-in-out infinite; animation-delay: -3s; }
+.prop-lantern { animation: lantern-rock 7.25s ease-in-out infinite; animation-delay: -4s; }
+.prop-witch { animation: witch-hover 8.0s ease-in-out infinite; animation-delay: -5s; }
+.prop-candy { animation: candy-twist 8.75s ease-in-out infinite; animation-delay: -6s; }
+.prop-cat { animation: cat-prowl 9.5s ease-in-out infinite; animation-delay: -7s; }
+.prop-potion { animation: potion-bubble 10.25s ease-in-out infinite; animation-delay: -1s; }
+.prop-candle { animation: candle-dance 11.0s ease-in-out infinite; animation-delay: -2s; }
+.prop-skull { animation: skull-nod 5.0s ease-in-out infinite; animation-delay: -3s; }
+.prop-broom { animation: broom-sweep 5.75s ease-in-out infinite; animation-delay: -4s; }
+.prop-owl { animation: owl-listen 6.5s ease-in-out infinite; animation-delay: -5s; }
+.prop-bat { animation: bat-loop 7.25s ease-in-out infinite; animation-delay: -6s; }
+.prop-bone { animation: bone-tumble 8.0s ease-in-out infinite; animation-delay: -7s; }
+.prop-leaf { animation: leaf-spiral 8.75s ease-in-out infinite; animation-delay: -1s; }
+.prop-crystal { animation: crystal-pulse 9.5s ease-in-out infinite; animation-delay: -2s; }
+.prop-hat { animation: hat-tip 10.25s ease-in-out infinite; animation-delay: -3s; }
+.prop-eye { animation: eye-scan 11.0s ease-in-out infinite; animation-delay: -4s; }
+.prop-lollipop { animation: lollipop-spin 5.0s ease-in-out infinite; animation-delay: -5s; }
+.prop-gravestone { animation: stone-rise 5.75s ease-in-out infinite; animation-delay: -6s; }
+.prop-cauldron { animation: cauldron-boil 6.5s ease-in-out infinite; animation-delay: -7s; }
+.prop-raven { animation: raven-swoop 7.25s ease-in-out infinite; animation-delay: -1s; }
+.prop-spellbook { animation: book-flutter 8.0s ease-in-out infinite; animation-delay: -2s; }
+.prop-key { animation: key-pendulum 8.75s ease-in-out infinite; animation-delay: -3s; }
+.prop-coffin { animation: coffin-creak 9.5s ease-in-out infinite; animation-delay: -4s; }
+.prop-mask { animation: mask-waltz 10.25s ease-in-out infinite; animation-delay: -5s; }
+.prop-mushroom { animation: mushroom-sprout 11.0s ease-in-out infinite; animation-delay: -6s; }
+.prop-hand { animation: hand-wave 5.0s ease-in-out infinite; animation-delay: -7s; }
+.prop-fence { animation: fence-rattle 5.75s ease-in-out infinite; animation-delay: -1s; }
+.prop-bell { animation: bell-chime 6.5s ease-in-out infinite; animation-delay: -2s; }
+.prop-hourglass { animation: ghost-glide 7.25s ease-in-out infinite; animation-delay: -3s; }
+.prop-mirror { animation: spider-swing 8.0s ease-in-out infinite; animation-delay: -4s; }
+.prop-vampire { animation: moon-orbit 8.75s ease-in-out infinite; animation-delay: -5s; }
+.prop-mummy { animation: lantern-rock 9.5s ease-in-out infinite; animation-delay: -6s; }
+.prop-werewolf { animation: witch-hover 10.25s ease-in-out infinite; animation-delay: -7s; }
+.prop-doll { animation: candy-twist 11.0s ease-in-out infinite; animation-delay: -1s; }
+.prop-scarecrow { animation: cat-prowl 5.0s ease-in-out infinite; animation-delay: -2s; }
+.prop-tentacle { animation: potion-bubble 5.75s ease-in-out infinite; animation-delay: -3s; }
+.prop-castle { animation: candle-dance 6.5s ease-in-out infinite; animation-delay: -4s; }
+.prop-tree { animation: skull-nod 7.25s ease-in-out infinite; animation-delay: -5s; }
+.prop-carriage { animation: broom-sweep 8.0s ease-in-out infinite; animation-delay: -6s; }
+.prop-dragon { animation: owl-listen 8.75s ease-in-out infinite; animation-delay: -7s; }
+.prop-tarot { animation: bat-loop 9.5s ease-in-out infinite; animation-delay: -1s; }
+.prop-quill { animation: bone-tumble 10.25s ease-in-out infinite; animation-delay: -2s; }
+.prop-scroll { animation: leaf-spiral 11.0s ease-in-out infinite; animation-delay: -3s; }
+.prop-gem { animation: crystal-pulse 5.0s ease-in-out infinite; animation-delay: -4s; }
+.prop-chest { animation: hat-tip 5.75s ease-in-out infinite; animation-delay: -5s; }
+.prop-chain { animation: eye-scan 6.5s ease-in-out infinite; animation-delay: -6s; }
+.prop-trident { animation: lollipop-spin 7.25s ease-in-out infinite; animation-delay: -7s; }
+.prop-axe { animation: stone-rise 8.0s ease-in-out infinite; animation-delay: -1s; }
+.prop-pitchfork { animation: cauldron-boil 8.75s ease-in-out infinite; animation-delay: -2s; }
+.prop-boot { animation: raven-swoop 9.5s ease-in-out infinite; animation-delay: -3s; }
+.prop-glove { animation: book-flutter 10.25s ease-in-out infinite; animation-delay: -4s; }
+.prop-toad { animation: key-pendulum 11.0s ease-in-out infinite; animation-delay: -5s; }
+.prop-snail { animation: coffin-creak 5.0s ease-in-out infinite; animation-delay: -6s; }
+.prop-moth { animation: mask-waltz 5.75s ease-in-out infinite; animation-delay: -7s; }
+.prop-beetle { animation: mushroom-sprout 6.5s ease-in-out infinite; animation-delay: -1s; }
+.prop-corn { animation: hand-wave 7.25s ease-in-out infinite; animation-delay: -2s; }
+.prop-cupcake { animation: fence-rattle 8.0s ease-in-out infinite; animation-delay: -3s; }
+.prop-cookie { animation: bell-chime 8.75s ease-in-out infinite; animation-delay: -4s; }
+
 @media (max-width: 640px) {
-  .halloween-stage { padding-bottom: 105px; }
-  .halloween-prop { width: 60px; height: 75px; bottom: 12px; }
-  .prop-0 { left: 2%; } .prop-1 { left: 27%; } .prop-2 { right: 27%; } .prop-3 { right: 2%; }
-  .prop-ghost { width: 80px; height: 110px; bottom: 0; }
-  .prop-witch { width: 105px; height: 90px; }
-  .prop-spider { left: auto; right: 12%; top: 0; width: 40px; height: 60px; }
+  .halloween-stage, .halloween-contact.halloween-stage { padding-bottom: 300px; }
+  .halloween-prop { width: 57px; height: 65px; }
+  .prop-ghost { width: 66px; height: 85px; }
+  .prop-witch { width: 85px; height: 65px; }
+  .halloween-fog { height: 285px; }
   .halloween-contact.halloween-stage > .mx-auto { padding-bottom: 32px; }
-  .halloween-contact .pumpkins-contact { bottom: 86px; width: 72px; right: 14px; }
-  .halloween-fog { height: 120px; }
+  .slot-0 { left: calc(12.5% - 28px); bottom: 22px; }
+  .slot-1 { left: calc(37.5% - 28px); bottom: 22px; }
+  .slot-2 { left: calc(62.5% - 28px); bottom: 22px; }
+  .slot-3 { left: calc(87.5% - 28px); bottom: 22px; }
+  .slot-4 { left: calc(12.5% - 28px); bottom: 112px; }
+  .slot-5 { left: calc(37.5% - 28px); bottom: 112px; }
+  .slot-6 { left: calc(62.5% - 28px); bottom: 112px; }
+  .slot-7 { left: calc(87.5% - 28px); bottom: 112px; }
+  .slot-8 { left: calc(12.5% - 28px); bottom: 202px; }
+  .slot-9 { left: calc(37.5% - 28px); bottom: 202px; }
+  .slot-10 { left: calc(62.5% - 28px); bottom: 202px; }
+  .slot-11 { left: calc(87.5% - 28px); bottom: 202px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .halloween-prop, .halloween-fog svg { animation: none; }
+  .halloween-prop, .halloween-fog svg, .halloween-wisps svg { animation: none; }
 }
 
 html { scroll-behavior: smooth; }
