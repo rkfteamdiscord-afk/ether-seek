@@ -164,6 +164,7 @@
   .prop-witch { width: 105px; height: 90px; }
   .prop-spider { left: auto; right: 12%; top: 0; width: 40px; height: 60px; }
   .halloween-contact.halloween-stage > .mx-auto { padding-bottom: 32px; }
+  .halloween-contact .pumpkins-contact { bottom: 86px; width: 72px; right: 14px; }
   .halloween-fog { height: 120px; }
 }
 @media (prefers-reduced-motion: reduce) {
