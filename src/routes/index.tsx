@@ -19,7 +19,8 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor } from "@/components/HalloweenDecor";
+import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
@@ -94,11 +95,13 @@ const commitments = [
 
 function Portfolio() {
   const [showOffer, setShowOffer] = useState(true);
+  const [phase, setPhase] = useState<HalloweenPhase>("arrival");
   return (
-    <main className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
+    <main data-halloween-phase={phase} className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
+      <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
-          <a href="#accueil" className="font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
+          <a href="#accueil" className="zrk-identity font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
             Ȥrk<span className="text-primary">.</span>
           </a>
           <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
@@ -107,7 +110,7 @@ function Portfolio() {
             <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
           </nav>
           <Button asChild className="halloween-button h-11 bg-seasonal text-seasonal-foreground hover:bg-seasonal/90">
-            <a href="#contact"><Cobweb /> Commander un site <ArrowRight className="h-4 w-4" /></a>
+            <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> Commander un site <ArrowRight className="h-4 w-4" /></a>
           </Button>
         </div>
       </header>
@@ -127,19 +130,21 @@ function Portfolio() {
       )}
 
       <section id="accueil" className="halloween-stage relative border-b border-border bg-secondary/45">
+        <WitchDuel />
         <HalloweenScene chapter={0} />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-20">
           <div className="max-w-3xl">
-            <div className="mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
+            <div className="decor-anchor mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
+              <AttachedDecor chapter={0} index={3} />
               <Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" />
               Studio digital indépendant
             </div>
             <h1 className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
               <Cobweb />
-              Ȥrk crée vos sites et applications avec sérieux.
+              <span className="zrk-identity">Ȥrk</span> crée vos sites et applications avec sérieux.
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
@@ -148,8 +153,9 @@ function Portfolio() {
               <Button asChild size="lg" className="halloween-button h-auto min-h-12 bg-seasonal py-3.5 text-seasonal-foreground hover:bg-seasonal/90">
                 <a href="#contact"><Cobweb /> Commander un site <MessageCircle className="h-4 w-4" /></a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-auto min-h-12 whitespace-normal py-3.5">
+              <Button asChild variant="outline" size="lg" className="decor-anchor h-auto min-h-12 whitespace-normal py-3.5">
                 <a href={discordUrl} target="_blank" rel="noopener noreferrer">
+                  <AttachedDecor chapter={0} index={1} />
                   <DiscordIcon /> Rejoindre le serveur Discord
                 </a>
               </Button>
@@ -162,11 +168,12 @@ function Portfolio() {
           </div>
 
           <div className="relative mx-auto w-full max-w-md">
+            <AttachedDecor chapter={0} index={2} />
             <Cobweb className="web-avatar" />
             <Pumpkins className="pumpkins-avatar" />
             <div className="absolute -inset-5 rounded-md border border-primary/15 bg-primary/5" />
             <div className="relative overflow-hidden rounded-md border border-border bg-card p-4 shadow-xl">
-              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="aspect-square w-full rounded-sm object-cover" />
+              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="zrk-portrait aspect-square w-full rounded-sm object-cover" />
               <div className="flex items-center justify-between gap-4 px-2 pb-1 pt-5">
                 <div>
                   <p className="font-display text-2xl font-bold">Ȥrk</p>
@@ -192,8 +199,9 @@ function Portfolio() {
             </p>
           </div>
           <div className="mt-14 grid gap-5 md:grid-cols-2">
-            {services.map((service) => (
+            {services.map((service, index) => (
               <article key={service.title} className="halloween-card group relative rounded-md border border-seasonal/25 bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-seasonal/60 hover:shadow-lg">
+                <AttachedDecor chapter={1} index={index as 0 | 1 | 2 | 3} />
                 <Cobweb className="web-card" />
                 <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
                   <service.icon className="h-6 w-6" />
@@ -212,8 +220,9 @@ function Portfolio() {
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
           <div>
             <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" /> À propos de moi</p>
-            <h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Je suis Ȥrk.</h2>
-            <div className="mt-7 overflow-hidden rounded-md border border-border bg-card p-3 shadow-sm">
+            <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={2} index={0} />Je suis Ȥrk.</h2>
+            <div className="decor-anchor mt-7 rounded-md border border-border bg-card p-3 shadow-sm">
+              <AttachedDecor chapter={2} index={1} />
               <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-sm object-cover" />
             </div>
           </div>
@@ -231,8 +240,9 @@ function Portfolio() {
               Je privilégie une relation simple et transparente. Vous parlez directement avec la personne qui conçoit votre projet, vous suivez son avancement et vous recevez une solution qui vous appartient vraiment.
             </p>
             <div className="grid gap-3 pt-3 sm:grid-cols-2">
-              {commitments.map((item) => (
-                <div key={item} className="flex gap-3 rounded-md border border-border bg-background p-4 text-sm leading-6 text-foreground">
+              {commitments.map((item, index) => (
+                <div key={item} className="decor-anchor flex gap-3 rounded-md border border-border bg-background p-4 text-sm leading-6 text-foreground">
+                  {index < 2 && <AttachedDecor chapter={2} index={index === 0 ? 2 : 3} />}
                   <Check className="mt-1 h-4 w-4 shrink-0 text-primary" /> {item}
                 </div>
               ))}
@@ -248,15 +258,16 @@ function Portfolio() {
           <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
             <div>
               <p className="text-sm font-bold uppercase text-primary">Une collaboration simple</p>
-              <h2 className="mt-4 font-display text-4xl font-bold">Votre idée, accompagnée de A à Z.</h2>
+              <h2 className="decor-anchor mt-4 font-display text-4xl font-bold"><AttachedDecor chapter={3} index={0} />Votre idée, accompagnée de A à Z.</h2>
             </div>
             <div className="grid gap-8 sm:grid-cols-3">
               {[
                 { icon: MessageCircle, n: "01", t: "On échange", d: "Vous m’expliquez votre idée, vos objectifs et votre budget." },
                 { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
                 { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
-              ].map((step) => (
-                <article key={step.n}>
+              ].map((step, index) => (
+                <article key={step.n} className="decor-anchor">
+                  <AttachedDecor chapter={3} index={index === 0 ? 1 : index === 1 ? 2 : 3} />
                   <div className="flex items-center justify-between border-b border-border pb-4">
                     <step.icon className="h-6 w-6 text-primary" />
                     <span className="text-sm font-bold text-muted-foreground">{step.n}</span>
@@ -276,7 +287,7 @@ function Portfolio() {
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
           <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
-            <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Besoin d’un site, d’une app ou d’un bot ?</h2>
+            <h2 className="decor-anchor mt-3 font-display text-3xl font-bold sm:text-4xl"><AttachedDecor chapter={4} index={0} />Besoin d’un site, d’une app ou d’un bot ?</h2>
             <p className="mt-5 inline-flex items-center gap-2 rounded-md bg-seasonal-soft px-3 py-2 text-sm text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
             <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
           </div>
@@ -286,22 +297,25 @@ function Portfolio() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
+              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
             >
+              <AttachedDecor chapter={4} index={1} />
               <WhatsAppIcon className="h-4 w-4 text-whatsapp" /> WhatsApp
             </a>
             <a
               href={discordUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
+              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
             >
+              <AttachedDecor chapter={4} index={2} />
               <DiscordIcon className="h-4 w-4 text-discord" /> Discord
             </a>
             <a
               href={emailUrl}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
+              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
             >
+              <AttachedDecor chapter={4} index={3} />
               <Mail className="h-4 w-4 text-primary" /> E-mail
             </a>
           </div>

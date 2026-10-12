@@ -118,12 +118,12 @@
 }
 @media (prefers-reduced-motion: reduce) { .halloween-bat { animation: none; } }
 
-/* Sixty unique silhouettes, two reserved rows; all movement stays away from copy. */
-.halloween-stage { isolation: isolate; padding-bottom: 270px; }
+/* Unique motifs occupy staggered edges and attached element corners. */
+.halloween-stage { isolation: isolate; padding-bottom: 145px; }
 .halloween-stage > .mx-auto { position: relative; z-index: 5; }
 .halloween-scene { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
 .halloween-scene * { pointer-events: none; }
-.halloween-prop { position: absolute; bottom: 20px; width: 76px; height: 84px; color: var(--halloween-night); filter: drop-shadow(var(--halloween-shadow)); transform-origin: center; }
+.halloween-prop { position: absolute; bottom: 20px; width: 64px; height: 72px; color: var(--halloween-night); filter: drop-shadow(var(--halloween-shadow)); transform-origin: center; }
 .halloween-prop svg, .halloween-prop img { width: 100%; height: 100%; object-fit: contain; }
 .prop-ghost { width: 98px; height: 120px; }
 .prop-witch { width: 120px; height: 90px; }
@@ -133,7 +133,7 @@
 .deco-light { fill: var(--deco-light); stroke: var(--deco-light); }
 .deco-green { fill: var(--deco-green); stroke: var(--deco-green); }
 .deco-stone { fill: var(--deco-stone); stroke: var(--deco-stone); }
-.halloween-fog { position: absolute; inset: auto -20% -25px; height: 260px; color: var(--halloween-smoke); opacity: .65; filter: blur(13px); }
+.halloween-fog { position: absolute; inset: auto -20% -25px; height: 150px; color: var(--halloween-smoke); opacity: .5; filter: blur(13px); }
 .halloween-fog svg { position: absolute; width: 115%; height: 100%; fill: currentColor; animation: fog-tide 23s ease-in-out infinite alternate; }
 .halloween-fog svg:nth-child(2) { opacity: .5; bottom: 28px; animation: fog-curl 29s ease-in-out infinite alternate; }
 .halloween-fog svg:nth-child(3) { opacity: .35; bottom: 65px; animation: fog-roll 19s ease-in-out infinite alternate; }
@@ -148,7 +148,7 @@
 .wisp-0 { left: 2%; animation: vapor-spiral 15s ease-in-out infinite; }
 .wisp-1 { right: 3%; animation: vapor-unwind 18s ease-in-out infinite; }
 .wisp-2 { left: 48%; animation: vapor-billow 21s ease-in-out infinite; }
-.halloween-contact.halloween-stage { padding-bottom: 270px; }
+.halloween-contact.halloween-stage { padding-bottom: 145px; }
 .halloween-contact .halloween-wisps { color: var(--deco-light); opacity: .3; }
 @keyframes fog-tide { from { transform: translate(-8%, 10px) scale(1); } to { transform: translate(8%, -20px) scale(1.15); } }
 @keyframes fog-curl { from { transform: translate(8%, 20px) scaleX(-1); } to { transform: translate(-9%, -15px) scale(-1.2, 1.1); } }
@@ -158,18 +158,24 @@
 @keyframes vapor-spiral { 0%,100% { transform: skewX(-12deg) translateY(10px); opacity: .2; } 50% { transform: skewX(16deg) translateY(-20px); opacity: .65; } }
 @keyframes vapor-unwind { 0%,100% { transform: scaleX(-1) translateY(0); } 50% { transform: scaleX(-1.3) translateY(-28px); } }
 @keyframes vapor-billow { 0%,100% { transform: scale(.7, .8); opacity: .1; } 50% { transform: scale(1.3, 1.1); opacity: .5; } }
-.slot-0 { left: calc(8.333% - 38px); bottom: 25px; }
-.slot-1 { left: calc(25.000% - 38px); bottom: 25px; }
-.slot-2 { left: calc(41.667% - 38px); bottom: 25px; }
-.slot-3 { left: calc(58.333% - 38px); bottom: 25px; }
-.slot-4 { left: calc(75.000% - 38px); bottom: 25px; }
-.slot-5 { left: calc(91.667% - 38px); bottom: 25px; }
-.slot-6 { left: calc(8.333% - 38px); bottom: 150px; }
-.slot-7 { left: calc(25.000% - 38px); bottom: 150px; }
-.slot-8 { left: calc(41.667% - 38px); bottom: 150px; }
-.slot-9 { left: calc(58.333% - 38px); bottom: 150px; }
-.slot-10 { left: calc(75.000% - 38px); bottom: 150px; }
-.slot-11 { left: calc(91.667% - 38px); bottom: 150px; }
+.slot-0 { left: 1%; top: 38px; bottom: auto; }
+.slot-1 { left: auto; right: 1%; top: 19%; bottom: auto; }
+.slot-2 { left: .5%; top: 44%; bottom: auto; }
+.slot-3 { left: auto; right: .5%; top: 63%; bottom: auto; }
+.slot-4 { left: 6%; bottom: 18px; }
+.slot-5 { left: 29%; bottom: 49px; }
+.slot-6 { left: auto; right: 30%; bottom: 13px; }
+.slot-7 { left: auto; right: 6%; bottom: 42px; }
+.scene-1 .slot-0, .scene-3 .slot-0 { left: auto; right: 8%; }
+.scene-2 .slot-1 { top: 10%; }
+.scene-4 .slot-2, .scene-4 .slot-3 { top: 20px; width: 42px; height: 48px; }
+.decor-anchor { position: relative; overflow: visible; }
+.attached-decor { pointer-events: none; z-index: 7; width: 36px; height: 40px; left: auto; right: -9px; bottom: -22px; }
+.attached-1 { right: -7px; top: -24px; bottom: auto; }
+.attached-2 { right: auto; left: -10px; bottom: -20px; }
+.attached-3 { right: 8px; bottom: -24px; }
+.halloween-card .attached-decor { width: 54px; height: 60px; top: auto; right: 18px; left: auto; bottom: -22px; }
+.halloween-contact-buttons .attached-decor { width: 32px; height: 36px; }
 @keyframes ghost-glide { 0%,100% { transform: translate(-8px,0) rotate(-4deg); } 50% { transform: translate(9px,-24px) rotate(5deg); } }
 @keyframes spider-swing { 0%,100% { transform: translateY(-8px) rotate(-15deg); } 50% { transform: translateY(10px) rotate(15deg); } }
 @keyframes moon-orbit { 0%,100% { transform: rotate(-8deg) scale(.96); } 50% { transform: rotate(9deg) scale(1.04); } }
@@ -262,24 +268,21 @@
 .prop-cookie { animation: bell-chime 8.75s ease-in-out infinite; animation-delay: -4s; }
 
 @media (max-width: 640px) {
-  .halloween-stage, .halloween-contact.halloween-stage { padding-bottom: 300px; }
-  .halloween-prop { width: 57px; height: 65px; }
-  .prop-ghost { width: 66px; height: 85px; }
-  .prop-witch { width: 85px; height: 65px; }
-  .halloween-fog { height: 285px; }
+  .halloween-stage, .halloween-contact.halloween-stage { padding-bottom: 125px; }
+  .halloween-prop { width: 37px; height: 44px; }
+  .prop-ghost { width: 45px; height: 58px; }
+  .prop-witch { width: 56px; height: 44px; }
+  .halloween-fog { height: 140px; }
   .halloween-contact.halloween-stage > .mx-auto { padding-bottom: 32px; }
-  .slot-0 { left: calc(12.5% - 28px); bottom: 22px; }
-  .slot-1 { left: calc(37.5% - 28px); bottom: 22px; }
-  .slot-2 { left: calc(62.5% - 28px); bottom: 22px; }
-  .slot-3 { left: calc(87.5% - 28px); bottom: 22px; }
-  .slot-4 { left: calc(12.5% - 28px); bottom: 112px; }
-  .slot-5 { left: calc(37.5% - 28px); bottom: 112px; }
-  .slot-6 { left: calc(62.5% - 28px); bottom: 112px; }
-  .slot-7 { left: calc(87.5% - 28px); bottom: 112px; }
-  .slot-8 { left: calc(12.5% - 28px); bottom: 202px; }
-  .slot-9 { left: calc(37.5% - 28px); bottom: 202px; }
-  .slot-10 { left: calc(62.5% - 28px); bottom: 202px; }
-  .slot-11 { left: calc(87.5% - 28px); bottom: 202px; }
+  .slot-0 { left: 1%; top: 12px; }
+  .slot-1 { right: 1%; top: 8%; }
+  .slot-2 { left: -10px; top: 40%; opacity: .5; }
+  .slot-3 { right: -10px; top: 70%; opacity: .5; }
+  .slot-4 { left: 5%; bottom: 22px; }
+  .slot-5 { left: 28%; bottom: 59px; }
+  .slot-6 { right: 28%; bottom: 14px; }
+  .slot-7 { right: 5%; bottom: 56px; }
+  .attached-decor { width: 28px; height: 32px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .halloween-prop, .halloween-fog svg, .halloween-wisps svg { animation: none; }
