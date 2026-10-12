@@ -288,6 +288,87 @@
   .halloween-prop, .halloween-fog svg, .halloween-wisps svg { animation: none; }
 }
 
+/* The arrival never captures input; only skip, pumpkin and the offer dialog do. */
+[data-halloween-phase]:not([data-halloween-phase="revealed"]) :is(.halloween-scene, .halloween-web, .halloween-pumpkins, .halloween-garland, .attached-decor, .halloween-footer-ghost) { visibility: hidden; }
+[data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: decorations-reveal .9s ease-out both; }
+.halloween-arrival { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; color: var(--halloween-night); }
+.arrival-flight { position: absolute; width: 230px; height: 190px; left: 0; top: 0; animation: witch-arrival 8.5s linear both; }
+.arrival-flight > svg { width: 100%; height: 100%; }
+.stolen-zrk { position: absolute; left: 70%; top: 69%; font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--halloween-night); animation: bag-logo 8.5s linear both; }
+.arrival-logo { position: absolute; left: 50%; top: 40%; font-family: var(--font-display); font-size: 76px; font-weight: 800; color: var(--primary); animation: logo-abduction 8.5s ease-in-out both; }
+.arrival-skip { position: absolute; right: 20px; bottom: 20px; pointer-events: auto; background: var(--background); }
+.arrival-mist { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: arrival-fog 8.5s linear both; }
+.arrival-mist span { position: absolute; inset: -15%; background: radial-gradient(ellipse at 20% 60%, var(--deco-light), transparent 60%), radial-gradient(ellipse at 70% 30%, var(--halloween-smoke), transparent 65%), linear-gradient(120deg, var(--deco-light), var(--halloween-smoke)); filter: blur(25px); animation: mist-sweep 3s ease-in-out infinite alternate; }
+.arrival-mist span:nth-child(2) { opacity: .5; transform: scaleX(-1); animation-delay: -1s; }
+.arrival-mist span:nth-child(3) { opacity: .4; animation-delay: -2s; }
+[data-halloween-phase="arrival"] .zrk-identity { animation: identity-abduction 8.5s linear both; }
+[data-halloween-phase="arrival"] .zrk-portrait { animation: portrait-abduction 8.5s linear both; }
+.pumpkin-surprise { position: fixed; z-index: 55; right: 20px; bottom: 16px; animation: decorations-reveal .7s ease-out; }
+.pumpkin-trigger { display: flex; flex-direction: column; gap: 0; width: 150px; height: 132px; padding: 0; background: transparent; filter: drop-shadow(var(--halloween-shadow)); }
+.pumpkin-trigger:hover { background: transparent; }
+.pumpkin-trigger img { width: 140px; height: 96px; object-fit: contain; animation: pumpkin-beckon 2.5s ease-in-out infinite; }
+.pumpkin-trigger span { padding: 4px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 700; color: var(--seasonal-foreground); background: var(--seasonal); }
+.witch-duel { position: absolute; inset: 0 0 auto; height: 210px; overflow: hidden; pointer-events: none; z-index: 1; opacity: .4; }
+.duelist { position: absolute; top: 24px; width: 125px; height: 105px; color: var(--halloween-night); }
+.duelist svg { width: 100%; height: 100%; }
+.duelist-left { left: 5%; animation: duel-dodge 7s ease-in-out infinite; }
+.duelist-right { right: 5%; scale: -1 1; animation: duel-dodge 7s ease-in-out -3.5s infinite; }
+.duel-spells { position: absolute; inset: 15px 14%; width: 72%; height: 160px; overflow: visible; }
+.spell { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 35 1000; stroke-dashoffset: 1000; }
+.spell-a { stroke: var(--deco-violet); animation: spell-cast 5s linear infinite; }
+.spell-b { stroke: var(--deco-green); animation: spell-cast 5s linear -2.5s infinite; }
+.spell-c { stroke: var(--deco-orange); animation: spell-cast 7s linear -4s infinite; }
+.duel-spark { position: absolute; top: 100px; left: 50%; font-size: 38px; color: var(--deco-gold); animation: spell-impact 2.5s ease-out infinite; }
+.candy-burst { position: fixed; inset: 0; z-index: 65; pointer-events: none; overflow: hidden; }
+.burst-candy { position: absolute; top: -60px; font-size: 30px; animation: candy-rain 3.5s ease-in both; }
+.candy-0, .candy-8 { left: 4%; animation-delay: .1s; }
+.candy-1, .candy-9 { left: 16%; animation-delay: .6s; }
+.candy-2, .candy-10 { left: 28%; animation-delay: .3s; }
+.candy-3, .candy-11 { left: 40%; animation-delay: .9s; }
+.candy-4, .candy-12 { left: 52%; animation-delay: .4s; }
+.candy-5, .candy-13 { left: 64%; animation-delay: .7s; }
+.candy-6, .candy-14 { left: 76%; animation-delay: .2s; }
+.candy-7, .candy-15 { left: 88%; animation-delay: .8s; }
+.burst-candy:nth-child(n+9) { animation-duration: 4.8s; }
+@keyframes witch-arrival {
+  0% { transform: translate(-250px, 25vh) rotate(-15deg); }
+  15% { transform: translate(28vw, 12vh) rotate(15deg); }
+  26% { transform: translate(42vw, 4vh) rotate(170deg); }
+  38% { transform: translate(55vw, 23vh) rotate(360deg); }
+  45% { transform: translate(calc(50vw - 160px), 32vh) rotate(360deg); }
+  60% { transform: translate(80vw, 8vh) rotate(375deg); }
+  69% { transform: translate(110vw, 15vh) rotate(370deg); }
+  78% { transform: translate(calc(50vw - 160px), 32vh) rotate(360deg); }
+  100% { transform: translate(110vw, -160px) rotate(345deg); }
+}
+@keyframes logo-abduction { 0%,35% { opacity: 0; transform: translate(-50%, -50%) scale(.7); } 39%,42% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 48%,75% { opacity: 0; transform: translate(20px, 20px) scale(.1); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
+@keyframes bag-logo { 0%,44% { opacity: 0; } 49%,75% { opacity: 1; } 81%,100% { opacity: 0; } }
+@keyframes arrival-fog { 0%,47% { opacity: 0; } 58%,70% { opacity: .94; } 90%,100% { opacity: 0; } }
+@keyframes mist-sweep { from { translate: -4% 2%; } to { translate: 4% -2%; } }
+@keyframes identity-abduction { 0%,43% { opacity: 1; } 48%,78% { opacity: 0; } 90%,100% { opacity: 1; } }
+@keyframes portrait-abduction { 0%,43% { opacity: 1; transform: scale(1); } 49%,76% { opacity: 0; transform: scale(.8); } 90%,100% { opacity: 1; transform: scale(1); } }
+@keyframes decorations-reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pumpkin-beckon { 0%,100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(4deg) translateY(-7px); } }
+@keyframes duel-dodge { 0%,100% { translate: 0 0; rotate: -7deg; } 50% { translate: 8px 28px; rotate: 7deg; } }
+@keyframes spell-cast { 0% { stroke-dashoffset: 1000; opacity: 0; } 10%,75% { opacity: 1; } 95%,100% { stroke-dashoffset: -1000; opacity: 0; } }
+@keyframes spell-impact { 0%,55%,100% { opacity: 0; transform: scale(.2) rotate(0); } 65% { opacity: 1; transform: scale(1) rotate(90deg); } 85% { opacity: 0; transform: scale(1.7) rotate(180deg); } }
+@keyframes candy-rain { from { transform: translateY(-80px) rotate(0); opacity: 1; } to { transform: translateY(110vh) rotate(480deg); opacity: 0; } }
+@media (max-width: 640px) {
+  .arrival-flight { width: 170px; height: 140px; }
+  .arrival-logo { font-size: 58px; }
+  .stolen-zrk { font-size: 18px; }
+  .witch-duel { height: 155px; opacity: .28; }
+  .duelist { width: 85px; height: 78px; }
+  .pumpkin-surprise { right: 10px; bottom: 12px; }
+  .pumpkin-trigger { width: 120px; height: 110px; }
+  .pumpkin-trigger img { width: 110px; height: 78px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .halloween-arrival, .candy-burst { display: none; }
+  .arrival-flight, .arrival-logo, .arrival-mist, .arrival-mist span, .stolen-zrk, .zrk-identity, .zrk-portrait, .pumpkin-surprise, .pumpkin-trigger img, .duelist, .spell, .duel-spark, [data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: none; }
+  .duel-spark { display: none; }
+}
+
 html { scroll-behavior: smooth; }
 #contact { scroll-margin-top: 6rem; }
 @media (prefers-reduced-motion: reduce) {
