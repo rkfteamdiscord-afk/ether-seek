@@ -365,6 +365,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .halloween-arrival, .candy-burst { display: none; }
+  .halloween-fog svg:nth-child(n), .halloween-wisps svg { animation: none; }
   .arrival-flight, .arrival-logo, .arrival-mist, .arrival-mist span, .stolen-zrk, .zrk-identity, .zrk-portrait, .pumpkin-surprise, .pumpkin-trigger img, .duelist, .spell, .duel-spark, [data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: none; }
   .duel-spark { display: none; }
 }
