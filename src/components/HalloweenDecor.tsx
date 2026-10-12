@@ -69,7 +69,13 @@ export function HalloweenScene({ chapter }: { chapter: 0 | 1 | 2 | 3 | 4 }) {
         {[0, 1, 2, 3, 4].map((n) => <svg key={n} viewBox="0 0 1400 160" preserveAspectRatio="none"><path d="M-100 140C0 40 110 160 180 90S320 155 420 78S555 146 670 65S830 150 950 86S1130 145 1220 62S1400 115 1500 65L1500 200H-100Z"/><path d="M-100 120Q160 70 290 130T640 100T1000 125T1500 80" fill="none" stroke="currentColor" strokeWidth="35"/></svg>)}
       </div>
       <div className="halloween-wisps">{[0, 1, 2].map((n) => <svg key={n} className={`wisp-${n}`} viewBox="0 0 160 220" fill="none"><path d="M80 230C-10 155 155 135 70 90S125 30 80-20" stroke="currentColor" strokeWidth="18"/><path d="M95 230C15 160 140 120 85 60" stroke="currentColor" strokeWidth="7"/></svg>)}</div>
-      {motifs.slice(chapter * 12, chapter * 12 + 12).map((kind, i) => <div key={kind} data-decoration={kind} className={`halloween-prop slot-${i} prop-${kind}`}><Illustration kind={kind}/></div>)}
+      {motifs.slice(chapter * 12, chapter * 12 + 8).map((kind, i) => <div key={kind} data-decoration={kind} className={`halloween-prop slot-${i} prop-${kind}`}><Illustration kind={kind}/></div>)}
     </div>
   );
+}
+
+export function AttachedDecor({ chapter, index }: { chapter: 0 | 1 | 2 | 3 | 4; index: 0 | 1 | 2 | 3 }) {
+  const kind = motifs[chapter * 12 + 8 + index];
+  if (!kind) return null;
+  return <span aria-hidden="true" data-decoration={kind} className={`halloween-prop attached-decor attached-${index} prop-${kind}`}><Illustration kind={kind} /></span>;
 }

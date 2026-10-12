@@ -11,4 +11,5 @@
 
 - Keep seasonal offer terms in a browser-safe shared module, tested separately from presentation; this avoids conflicting promotion details across the page.
 - Keep Halloween decorations in a reusable, aria-hidden presentation module with pointer-events disabled; decorations must not interfere with reading or contacting the studio.
-- Distribute seasonal motifs once per page across chapter-specific reserved multi-row edge rails, with a separate illustration catalog and reduced-motion-safe layered fog; this avoids repetitive scenery and protects readable content and clickable contacts.
+- Distribute seasonal motifs once per page between chapter-specific edge spaces and small attached element corners, with a separate illustration catalog and reduced-motion-safe layered fog; this avoids repetitive scenery and protects readable content and clickable contacts.
+- Keep the Halloween arrival, pumpkin reveal and witch duel in a browser-safe presentation module driven by an explicit page phase; this synchronizes decoration visibility without blocking access to the studio or storing visitor data.
