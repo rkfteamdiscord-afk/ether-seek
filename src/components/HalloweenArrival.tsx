@@ -61,7 +61,7 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
         <img src={pumpkins} alt="" /><span>Clique dessus !</span>
       </Button>
     </div>}
-    {phase === "revealed" && <div className="candy-burst" aria-hidden="true">{Array.from({ length: 16 }, (_, i) => <span key={i} className={`burst-candy candy-${i}`}>🍬</span>)}</div>}
+    {phase === "revealed" && <div className="candy-burst" aria-hidden="true">{Array.from({ length: 16 }, (_, i) => <span key={i} className={`burst-candy candy-${i}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-md border-seasonal/30 text-center">
         <img src={pumpkins} alt="" className="mx-auto h-32 w-48 object-contain" />
