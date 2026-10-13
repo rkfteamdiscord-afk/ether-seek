@@ -15,3 +15,6 @@
 - [x] Ajouter l’arrivée de la sorcière, le vol et retour de Ȥrk et la brume
 - [x] Ajouter la citrouille surprise, les bonbons et le duel de sorcières
 - [x] Vérifier le parcours, les contacts et la réduction des animations
+- [x] Corriger le démarrage en haut et voler uniquement le logo du menu
+- [x] Renforcer la brume et la pluie, afficher la version Halloween et lancer les décors
+- [x] Vérifier le nouveau parcours et préserver la photo

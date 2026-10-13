@@ -13,3 +13,4 @@
 - Keep Halloween decorations in a reusable, aria-hidden presentation module with pointer-events disabled; decorations must not interfere with reading or contacting the studio.
 - Distribute seasonal motifs once per page between chapter-specific edge spaces and small attached element corners, with a separate illustration catalog and reduced-motion-safe layered fog; this avoids repetitive scenery and protects readable content and clickable contacts.
 - Keep the Halloween arrival, pumpkin reveal and witch duel in a browser-safe presentation module driven by an explicit page phase; this synchronizes decoration visibility without blocking access to the studio or storing visitor data.
+- Measure the header logo for the witch pickup and animate only that element; render procedural weather in a separate browser-only canvas effect to preserve the portrait and avoid viewport-dependent pickup coordinates.

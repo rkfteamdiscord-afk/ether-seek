@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { halloweenOffer } from "@/lib/seasonal-offer";
 import pumpkins from "@/assets/halloween-pumpkins.png";
 import { ArrowRight, Check, X } from "lucide-react";
+import { HalloweenWeather } from "./HalloweenWeather";
 
 export type HalloweenPhase = "arrival" | "ready" | "revealed";
 
@@ -39,29 +40,94 @@ export function WitchDuel() {
 
 export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPhase; onPhaseChange: (phase: HalloweenPhase) => void }) {
   const [open, setOpen] = useState(false);
+  const flightRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (revealTimer.current) clearTimeout(revealTimer.current); }, []);
+  useEffect(() => {
+    // Clear a remembered contact anchor only on entry, not after an intentional CTA click.
+    if (window.location.hash === "#contact") window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo({ top: 0, behavior: "instant" });
+    const frame = requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    return () => { cancelAnimationFrame(frame); window.history.scrollRestoration = previous; };
+  }, []);
   useEffect(() => {
     if (phase !== "arrival") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       onPhaseChange("ready");
       return;
     }
-    const timer = window.setTimeout(() => onPhaseChange("ready"), 8500);
-    return () => window.clearTimeout(timer);
+    const headerLogo = document.querySelector<HTMLElement>("[data-header-logo]");
+    const flight = flightRef.current;
+    const logo = logoRef.current;
+    if (!headerLogo || !flight || !logo) { onPhaseChange("ready"); return; }
+    const rect = headerLogo.getBoundingClientRect();
+    const size = window.innerWidth < 640 ? 170 : 230;
+    const bagX = size * .76, bagY = size * .57;
+    const pickupX = rect.left - bagX + rect.width / 2;
+    const pickupY = rect.top - bagY + rect.height / 2;
+    const duration = 12000;
+    const animations = [flight.animate([
+      { transform: `translate(-260px, 220px) rotate(-15deg)`, offset: 0 },
+      { transform: `translate(${window.innerWidth * .45}px, 180px) rotate(0deg)`, offset: .12 },
+      { transform: `translate(${window.innerWidth * .48}px, 60px) rotate(180deg)`, offset: .19 },
+      { transform: `translate(${window.innerWidth * .3}px, 210px) rotate(360deg)`, offset: .26 },
+      { transform: `translate(${pickupX}px, ${pickupY}px) rotate(360deg)`, offset: .32 },
+      { transform: `translate(${pickupX}px, ${pickupY}px) rotate(360deg)`, offset: .38 },
+      { transform: `translate(${window.innerWidth * .65}px, 160px) rotate(370deg)`, offset: .47 },
+      { transform: `translate(${window.innerWidth + 260}px, 100px) rotate(360deg)`, offset: .55 },
+      { transform: `translate(${window.innerWidth * .65}px, 180px) rotate(355deg)`, offset: .75 },
+      { transform: `translate(${pickupX}px, ${pickupY}px) rotate(360deg)`, offset: .86 },
+      { transform: `translate(${pickupX}px, ${pickupY}px) rotate(360deg)`, offset: .9 },
+      { transform: `translate(${window.innerWidth + 260}px, -180px) rotate(340deg)`, offset: 1 },
+    ], { duration, fill: "both", easing: "linear" }),
+    headerLogo.animate([{ opacity: 1, offset: 0 }, { opacity: 1, offset: .33 }, { opacity: 0, offset: .34 }, { opacity: 0, offset: .89 }, { opacity: 1, offset: .9 }, { opacity: 1 }], { duration, fill: "both" }),
+    logo.animate([
+      { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: 0 },
+      { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: .33 },
+      { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 1, offset: .34 },
+      { transform: `translate(${rect.left + 8}px, ${rect.top + 20}px) scale(.15)`, opacity: 0, offset: .38 },
+      { transform: `translate(${rect.left + 8}px, ${rect.top + 20}px) scale(.15)`, opacity: 0, offset: .86 },
+      { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 1, offset: .89 },
+      { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: .9 },
+      { opacity: 0, offset: 1 },
+    ], { duration, fill: "both" })];
+    const timer = window.setTimeout(() => onPhaseChange("ready"), duration);
+    return () => { window.clearTimeout(timer); animations.forEach(animation => animation.cancel()); };
   }, [phase, onPhaseChange]);
+
+  useEffect(() => {
+    if (phase !== "revealed" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const originX = window.innerWidth - 85, originY = window.innerHeight - 70;
+    const animations = Array.from(document.querySelectorAll<HTMLElement>("[data-decoration]")).map((element, index) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.top > window.innerHeight || rect.bottom < 0) return null;
+      const x = originX - rect.left, y = originY - rect.top;
+      return element.animate([
+        { translate: `${x}px ${y}px`, rotate: "-160deg", scale: ".2", opacity: 0 },
+        { translate: `${x * .45}px ${Math.min(y - 180, -120)}px`, rotate: "80deg", scale: ".85", opacity: 1, offset: .5 },
+        { translate: "0px 0px", rotate: "0deg", scale: "1", opacity: 1 },
+      ], { duration: 1500, delay: index * 18, easing: "cubic-bezier(.2,.65,.3,1)" });
+    });
+    return () => animations.forEach(animation => animation?.cancel());
+  }, [phase]);
 
   return <>
     {phase === "arrival" && <div className="halloween-arrival">
-      <div className="arrival-flight" aria-hidden="true"><FlyingWitch /><span className="stolen-zrk">Ȥrk</span></div>
-      <div className="arrival-logo" aria-hidden="true">Ȥrk</div>
-      <div className="arrival-mist" aria-hidden="true"><span /><span /><span /></div>
+      <div ref={flightRef} className="arrival-flight" aria-hidden="true"><FlyingWitch /><span className="stolen-zrk">Ȥrk</span></div>
+      <div ref={logoRef} className="arrival-logo" aria-hidden="true">Ȥrk<span>.</span></div>
+      <div className="arrival-mist" aria-hidden="true"><HalloweenWeather /></div>
+      <div className="arrival-version" aria-hidden="true"><img src={pumpkins} alt="" /><strong>Ȥrk Halloween</strong><span>version 11.3.2</span><img src={pumpkins} alt="" /></div>
       <Button variant="outline" size="sm" className="arrival-skip" onClick={() => onPhaseChange("ready")}><X className="h-4 w-4" /> Passer l’animation</Button>
     </div>}
     {phase === "ready" && <div className="pumpkin-surprise">
-      <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); setOpen(true); }}>
+      <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); revealTimer.current = setTimeout(() => setOpen(true), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 2000); }}>
         <img src={pumpkins} alt="" /><span>Clique dessus !</span>
       </Button>
     </div>}
-    {phase === "revealed" && <div className="candy-burst" aria-hidden="true">{Array.from({ length: 16 }, (_, i) => <span key={i} className={`burst-candy candy-${i}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
+    {phase === "revealed" && <div className="candy-burst" aria-hidden="true"><div className="reveal-witch"><FlyingWitch /></div>{Array.from({ length: 32 }, (_, i) => <span key={i} className={`burst-candy candy-${i % 16}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-md border-seasonal/30 text-center">
         <img src={pumpkins} alt="" className="mx-auto h-32 w-48 object-contain" />
