@@ -797,3 +797,33 @@ html { scroll-behavior: smooth; }
   .shooting-star, .sky-bats { display: none; }
   .halloween-prop::before, .halloween-prop::after { animation: none; }
 }
+
+/* ───────── Sorcière dans le ciel, lucioles et feuilles qui tombent ───────── */
+.sky-witch { position: absolute; top: 12vh; left: 0; width: 110px; height: auto; filter: brightness(0) drop-shadow(0 0 1px oklch(0.85 0.06 300 / .6)); opacity: .85; animation: sky-witch-pass 38s linear infinite 6s; transform: translateX(-140px); }
+@keyframes sky-witch-pass { 0% { transform: translate(-140px, 60px) rotate(-6deg); } 30% { transform: translate(52vw, -4px) rotate(4deg); } 32%,100% { transform: translate(115vw, -40px) rotate(-8deg); } }
+.fireflies { position: absolute; inset: 0; }
+.fireflies span { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: oklch(0.92 0.17 110); box-shadow: 0 0 8px 3px oklch(0.85 0.18 110 / .55), 0 0 22px 6px oklch(0.8 0.17 90 / .25); animation: firefly-wander 9s ease-in-out infinite alternate, firefly-pulse 3s ease-in-out infinite; }
+.fireflies span:nth-child(3n) { background: oklch(0.85 0.15 55); box-shadow: 0 0 8px 3px oklch(0.78 0.17 55 / .55), 0 0 22px 6px oklch(0.75 0.17 50 / .25); }
+@keyframes firefly-wander { 0% { translate: 0 0; } 33% { translate: 40px -30px; } 66% { translate: -25px -55px; } 100% { translate: 30px 20px; } }
+@keyframes firefly-pulse { 0%,100% { opacity: .15; scale: .7; } 50% { opacity: 1; scale: 1.1; } }
+.falling-leaves { position: absolute; inset: 0; overflow: hidden; }
+.falling-leaf { position: absolute; top: -40px; width: 22px; height: 22px; fill: url(#deco-fill-orange); opacity: .75; animation: leaf-fall 19s linear infinite; }
+.leaf-1 { width: 16px; height: 16px; fill: url(#deco-fill-gold); animation-duration: 24s; }
+.leaf-2 { width: 26px; height: 26px; fill: url(#deco-fill-violet); opacity: .55; animation-duration: 28s; }
+@keyframes leaf-fall { 0% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(40px, 27vh) rotate(120deg); } 50% { transform: translate(-30px, 54vh) rotate(220deg); } 75% { transform: translate(35px, 81vh) rotate(330deg); } 100% { transform: translate(-10px, 110vh) rotate(420deg); } }
+@media (max-width: 640px) { .fireflies span:nth-child(n+8), .falling-leaf:nth-child(n+5) { display: none; } .sky-witch { width: 70px; } }
+@media (prefers-reduced-motion: reduce) { .sky-witch, .falling-leaves { display: none; } .fireflies span { animation: none; opacity: .6; } }
+
+/* ───────── Fantômes qui traversent les sections ───────── */
+.drifting-ghost { position: absolute; left: 0; z-index: 2; width: 90px; pointer-events: none; opacity: .4; filter: drop-shadow(0 0 18px oklch(0.9 0.04 290 / .6)); animation: ghost-cross 46s linear infinite; }
+.drifting-ghost img { width: 100%; height: auto; animation: ghost-bob 3.4s ease-in-out infinite alternate; }
+.ghost-high { top: 18%; }
+.ghost-low { top: 55%; animation-delay: -20s; }
+.ghost-reverse { animation-name: ghost-cross-back; }
+.ghost-reverse img { transform: scaleX(-1); }
+@keyframes ghost-cross { 0% { transform: translateX(-120px); opacity: 0; } 8% { opacity: .4; } 92% { opacity: .4; } 100% { transform: translateX(100vw); opacity: 0; } }
+@keyframes ghost-cross-back { 0% { transform: translateX(100vw); opacity: 0; } 8% { opacity: .4; } 92% { opacity: .4; } 100% { transform: translateX(-120px); opacity: 0; } }
+@keyframes ghost-bob { from { translate: 0 -10px; rotate: -5deg; } to { translate: 0 12px; rotate: 5deg; } }
+[data-halloween-phase="arrival"] .drifting-ghost { visibility: hidden; }
+@media (max-width: 640px) { .drifting-ghost { width: 60px; } }
+@media (prefers-reduced-motion: reduce) { .drifting-ghost { display: none; } }

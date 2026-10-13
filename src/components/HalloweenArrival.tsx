@@ -44,7 +44,7 @@ export function WitchDuel() {
   </div>;
 }
 
-type Waypoint = { t: number; x: number; y: number };
+type Waypoint = { t: number; x: number; y: number; loop?: boolean };
 
 /** Smooth Catmull-Rom flight through each group of waypoints, banking with the direction of travel. */
 function flightKeyframes(flights: Waypoint[][]): Keyframe[] {
@@ -53,25 +53,40 @@ function flightKeyframes(flights: Waypoint[][]): Keyframe[] {
     frames.push({ offset, opacity, transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${bank.toFixed(1)}deg)` });
   flights.forEach((points, flightIndex) => {
     const first = points[0]!, last = points[points.length - 1]!;
+    // Turns already completed in this flight, so a loop-the-loop never unwinds afterwards.
+    let turns = 0, previousAngle = 0;
     if (flightIndex > 0) frame(Math.max(first.t - .001, frames.at(-1)?.offset as number ?? 0), first.x, first.y, 0, 0);
     for (let i = 0; i < points.length - 1; i++) {
       const p0 = points[Math.max(i - 1, 0)]!, p1 = points[i]!, p2 = points[i + 1]!, p3 = points[Math.min(i + 2, points.length - 1)]!;
       const hold = p1.x === p2.x && p1.y === p2.y;
-      const samples = hold ? 1 : 14;
+      const samples = hold ? 8 : p1.loop ? 22 : 14;
       for (let step = 0; step < samples; step++) {
         const u = step / samples, u2 = u * u, u3 = u2 * u;
         const at = (a: number, b: number, c: number, d: number) => .5 * (2 * b + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u2 + (-a + 3 * b - 3 * c + d) * u3);
         const slope = (a: number, b: number, c: number, d: number) => .5 * ((-a + c) + 2 * (2 * a - 5 * b + 4 * c - d) * u + 3 * (-a + 3 * b - 3 * c + d) * u2);
         const x = at(p0.x, p1.x, p2.x, p3.x), y = at(p0.y, p1.y, p2.y, p3.y);
         const dx = slope(p0.x, p1.x, p2.x, p3.x), dy = slope(p0.y, p1.y, p2.y, p3.y);
-        const bank = hold ? 0 : Math.max(-24, Math.min(24, Math.atan2(dy, Math.max(Math.abs(dx), 1)) * 180 / Math.PI * .6));
         const offset = p1.t + (p2.t - p1.t) * u;
-        const bob = hold ? Math.sin(offset * 300) * 3 : Math.sin(offset * 90) * 7;
+        let bank: number;
+        if (p1.loop) {
+          // Follow the full direction of travel, unwrapped, so she rolls right round.
+          let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+          while (angle - previousAngle > 180) angle -= 360;
+          while (angle - previousAngle < -180) angle += 360;
+          previousAngle = angle;
+          bank = angle;
+          turns = Math.round(angle / 360);
+        } else {
+          // Hovering wobbles on the broom; cruising banks into the turn.
+          bank = (hold ? Math.sin(offset * 420) * 6 : Math.max(-24, Math.min(24, Math.atan2(dy, Math.max(Math.abs(dx), 1)) * 180 / Math.PI * .6))) + turns * 360;
+          previousAngle = bank;
+        }
+        const bob = hold ? Math.sin(offset * 260) * 5 : Math.sin(offset * 90) * 7;
         frame(offset, x, y + bob, bank, 1);
       }
     }
-    frame(last.t, last.x, last.y, 0, 1);
-    if (flightIndex < flights.length - 1) frame(Math.min(last.t + .001, 1), last.x, last.y, 0, 0);
+    frame(last.t, last.x, last.y, turns * 360, 1);
+    if (flightIndex < flights.length - 1) frame(Math.min(last.t + .001, 1), last.x, last.y, turns * 360, 0);
   });
   return frames;
 }
@@ -166,12 +181,17 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
     const flights: Waypoint[][] = [
       [
         { t: 0, x: -size, y: height * .5 },
-        { t: .06, x: width * .22, y: height * .28 },
-        { t: .12, x: width * .5, y: height * .46 },
-        { t: .18, x: width + size * .4, y: height * .12 },
+        { t: .05, x: width * .24, y: height * .38 },
+        // Loop-the-loop in the middle of the screen.
+        { t: .085, x: width * .44, y: height * .5, loop: true },
+        { t: .11, x: width * .56, y: height * .32, loop: true },
+        { t: .135, x: width * .46, y: height * .12, loop: true },
+        { t: .16, x: width * .35, y: height * .3, loop: true },
+        { t: .175, x: width * .46, y: height * .48 },
+        { t: .195, x: width + size * .4, y: height * .14 },
       ],
       [
-        { t: .2, x: -size * 1.1, y: -size * .6 },
+        { t: .205, x: -size * 1.1, y: -size * .6 },
         { t: .26, x: pickupX - width * .12, y: pickupY + height * .12 },
         { t: grab, ...pickup },
         { t: .36, ...pickup },

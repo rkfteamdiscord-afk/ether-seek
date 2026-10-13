@@ -158,3 +158,12 @@ export function SwingingLantern({ className = "" }: { className?: string }) {
     </div>
   );
 }
+
+/** Translucent ghost drifting slowly across a section, behind the content. Decorative only. */
+export function DriftingGhost({ className = "" }: { className?: string }) {
+  return (
+    <div className={`drifting-ghost ${className}`} aria-hidden="true">
+      <img src={ghost} alt="" width={672} height={992} loading="lazy" />
+    </div>
+  );
+}

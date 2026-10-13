@@ -19,7 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost } from "@/components/HalloweenDecor";
 import { SpiderWalkers } from "@/components/SpiderWalkers";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
@@ -199,6 +199,7 @@ function Portfolio() {
       <section id="services" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={1} />
         <SwingingLantern className="lantern-right" />
+        <DriftingGhost className="ghost-high" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-3xl">
             <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> Ce que je crée</p>
@@ -266,6 +267,7 @@ function Portfolio() {
       <section id="methode" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={3} />
         <SwingingLantern className="lantern-left" />
+        <DriftingGhost className="ghost-low ghost-reverse" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">

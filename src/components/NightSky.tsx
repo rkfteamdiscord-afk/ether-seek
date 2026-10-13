@@ -1,3 +1,5 @@
+import flyingWitch from "@/assets/halloween-flying-witch.png";
+
 /* Fixed Halloween night behind the page: glows, moon, drifting clouds, shooting stars,
    bats crossing the moon, stars and grain. Purely decorative, hidden from assistive tech
    and never clickable. */
@@ -10,6 +12,10 @@ function SkyBat({ className }: { className: string }) {
     </svg>
   );
 }
+
+// Fixed positions keep server and browser renders identical.
+const fireflies = [[6, 62], [13, 30], [21, 78], [29, 48], [38, 86], [47, 70], [55, 40], [63, 82], [71, 58], [79, 26], [86, 74], [93, 44], [17, 54], [67, 34]] as const;
+const leaves = [[4, 0], [16, 6], [31, 3], [46, 9], [58, 2], [72, 7], [84, 4], [95, 10]] as const;
 
 export function NightSky() {
   return (
@@ -30,9 +36,20 @@ export function NightSky() {
         <SkyBat className="sky-bat-2" />
         <SkyBat className="sky-bat-3" />
       </div>
+      <img src={flyingWitch} alt="" className="sky-witch" />
       <div className="night-cloud night-cloud-a" />
       <div className="night-cloud night-cloud-b" />
       <div className="night-cloud night-cloud-c" />
+      <div className="fireflies">
+        {fireflies.map(([x, y], i) => <span key={i} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${-(i * 1.7) % 9}s, ${-(i * 0.9) % 3}s` }} />)}
+      </div>
+      <div className="falling-leaves">
+        {leaves.map(([x, delay], i) => (
+          <svg key={i} viewBox="0 0 100 100" style={{ left: `${x}%`, animationDelay: `${-delay * 2.3}s` }} className={`falling-leaf leaf-${i % 3}`}>
+            <path d="m50 10 9 24 19-12-3 27 17 5-20 17-22 5-22-5L8 54l17-5-3-27 19 12Z" />
+          </svg>
+        ))}
+      </div>
       <div className="ground-fog">
         <span /><span /><span />
       </div>
