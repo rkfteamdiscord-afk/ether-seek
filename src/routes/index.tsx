@@ -21,6 +21,7 @@ import {
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor } from "@/components/HalloweenDecor";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
+import { NightSky } from "@/components/NightSky";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
@@ -97,89 +98,93 @@ function Portfolio() {
   const [showOffer, setShowOffer] = useState(true);
   const [phase, setPhase] = useState<HalloweenPhase>("arrival");
   return (
-    <main data-halloween-phase={phase} className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
+    <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
+      <NightSky />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
-      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/60 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
-          <a href="#accueil" data-header-logo className="font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
-            Ȥrk<span className="text-primary">.</span>
+          <a href="#accueil" data-header-logo className="font-brand text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
+            Ȥrk<span className="text-seasonal">.</span>
           </a>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
-            <a className="transition-colors hover:text-foreground" href="#services">Services</a>
-            <a className="transition-colors hover:text-foreground" href="#apropos">À propos</a>
-            <a className="transition-colors hover:text-foreground" href="#methode">Méthode</a>
+          <nav className="hidden items-center gap-9 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
+            <a className="transition-colors hover:text-seasonal" href="#services">Services</a>
+            <a className="transition-colors hover:text-seasonal" href="#apropos">À propos</a>
+            <a className="transition-colors hover:text-seasonal" href="#methode">Méthode</a>
           </nav>
-          <Button asChild className="halloween-button h-11 bg-seasonal text-seasonal-foreground hover:bg-seasonal/90">
+          <Button asChild className="halloween-button ember-button h-11 rounded-full bg-seasonal px-5 font-semibold text-seasonal-foreground hover:bg-seasonal/90">
             <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> Commander un site <ArrowRight className="h-4 w-4" /></a>
           </Button>
         </div>
       </header>
 
       {showOffer && (
-        <aside role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/20 bg-seasonal text-seasonal-foreground">
-          <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3 lg:px-10">
+        <aside role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
+          <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-2.5 lg:px-10">
             <Pumpkins className="pumpkins-notice" />
             <p className="flex-1 text-sm leading-6">
-              <strong>Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code <strong className="font-bold">{halloweenOffer.code}</strong>.
+              <strong className="text-seasonal">Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code{" "}
+              <strong className="rounded-md border border-seasonal/40 bg-background/40 px-2 py-0.5 font-bold tracking-wide">{halloweenOffer.code}</strong>
             </p>
-            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 text-seasonal-foreground hover:bg-seasonal-foreground/10 hover:text-seasonal-foreground">
+            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 rounded-full text-foreground hover:bg-foreground/10 hover:text-foreground">
               <X />
             </Button>
           </div>
         </aside>
       )}
 
-      <section id="accueil" className="halloween-stage relative border-b border-border bg-secondary/45">
+      <section id="accueil" className="halloween-stage relative">
         <WitchDuel />
         <HalloweenScene chapter={0} />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
-        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-20">
+        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-16 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-24">
           <div className="max-w-3xl">
-            <div className="decor-anchor mb-7 inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-primary shadow-sm">
+            <div className="decor-anchor glass mb-8 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide text-foreground/90">
               <AttachedDecor chapter={0} index={3} />
               <Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" />
               Studio digital indépendant
+              <span className="mx-1 hidden h-1 w-1 rounded-full bg-seasonal sm:inline-block" aria-hidden="true" />
+              <span className="hidden text-seasonal sm:inline">Édition Halloween</span>
             </div>
             <h1 className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
               <Cobweb />
-              <span className="zrk-identity">Ȥrk</span> crée vos sites et applications avec sérieux.
+              <span className="zrk-identity">Ȥrk</span> crée vos <span className="ember-text pr-2">sites et applications</span> avec sérieux.
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9">
               Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button asChild size="lg" className="halloween-button h-auto min-h-12 bg-seasonal py-3.5 text-seasonal-foreground hover:bg-seasonal/90">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <Button asChild size="lg" className="halloween-button ember-button h-auto min-h-13 rounded-full bg-seasonal px-7 py-3.5 text-base font-semibold text-seasonal-foreground hover:bg-seasonal/90">
                 <a href="#contact"><Cobweb /> Commander un site <MessageCircle className="h-4 w-4" /></a>
               </Button>
-              <Button asChild variant="outline" size="lg" className="decor-anchor h-auto min-h-12 whitespace-normal py-3.5">
+              <Button asChild variant="outline" size="lg" className="decor-anchor glass h-auto min-h-13 whitespace-normal rounded-full px-7 py-3.5 text-base hover:bg-card/80">
                 <a href={discordUrl} target="_blank" rel="noopener noreferrer">
                   <AttachedDecor chapter={0} index={1} />
                   <DiscordIcon /> Rejoindre le serveur Discord
                 </a>
               </Button>
             </div>
-            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sur mesure</span>
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sécurisé</span>
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Accompagnement direct</span>
+            <div className="mt-11 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sur mesure</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sécurisé</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Accompagnement direct</span>
             </div>
           </div>
 
           <div className="relative mx-auto w-full max-w-md">
+            <div className="portrait-halo" aria-hidden="true" />
             <AttachedDecor chapter={0} index={2} />
             <Cobweb className="web-avatar" />
             <Pumpkins className="pumpkins-avatar" />
-            <div className="absolute -inset-5 rounded-md border border-primary/15 bg-primary/5" />
-            <div className="relative overflow-hidden rounded-md border border-border bg-card p-4 shadow-xl">
-              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="zrk-portrait aspect-square w-full rounded-sm object-cover" />
-              <div className="flex items-center justify-between gap-4 px-2 pb-1 pt-5">
+            <div className="glass relative overflow-hidden rounded-[1.75rem] p-3 shadow-2xl">
+              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="zrk-portrait aspect-square w-full rounded-[1.25rem] object-cover" />
+              <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-5">
                 <div>
-                  <p className="font-display text-2xl font-bold">Ȥrk</p>
+                  <p className="font-brand text-2xl font-bold">Ȥrk</p>
                   <p className="mt-1 text-sm text-muted-foreground">Créateur de produits numériques</p>
                 </div>
-                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <div className="spell-icon flex h-11 w-11 items-center justify-center rounded-full bg-seasonal-soft text-seasonal">
                   <BadgeCheck className="h-6 w-6" />
                 </div>
               </div>
@@ -191,22 +196,25 @@ function Portfolio() {
       <section id="services" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={1} />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="max-w-3xl">
-            <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Sparkles className="h-4 w-4 text-seasonal" aria-hidden="true" /> Ce que je crée</p>
-            <h2 className="halloween-title mt-4 font-display text-4xl font-bold sm:text-5xl"><Cobweb />Une solution complète pour votre projet.</h2>
-            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+          <div className="rise-in max-w-3xl">
+            <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> Ce que je crée</p>
+            <h2 className="halloween-title moon-text mt-5 font-display text-4xl leading-tight font-bold sm:text-6xl"><Cobweb />Une solution complète pour votre projet.</h2>
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">
               De la première maquette à la publication, je construis des produits utiles, agréables à utiliser et simples à faire évoluer.
             </p>
           </div>
-          <div className="mt-14 grid gap-5 md:grid-cols-2">
+          <div className="mt-16 grid gap-6 md:grid-cols-2">
             {services.map((service, index) => (
-              <article key={service.title} className="halloween-card group relative rounded-md border border-seasonal/25 bg-card p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-seasonal/60 hover:shadow-lg">
+              <article key={service.title} className="halloween-card spell-card glass rise-in group p-8">
                 <AttachedDecor chapter={1} index={index as 0 | 1 | 2 | 3} />
                 <Cobweb className="web-card" />
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-seasonal-soft text-seasonal">
-                  <service.icon className="h-6 w-6" />
+                <div className="flex items-center justify-between">
+                  <div className="spell-icon flex h-13 w-13 items-center justify-center rounded-2xl bg-seasonal-soft text-seasonal">
+                    <service.icon className="h-6 w-6" />
+                  </div>
+                  <span className="font-display text-sm text-muted-foreground">0{index + 1}</span>
                 </div>
-                <h3 className="mt-6 font-display text-2xl font-bold">{service.title}</h3>
+                <h3 className="mt-7 font-display text-2xl font-bold sm:text-3xl">{service.title}</h3>
                 <p className="mt-3 max-w-xl leading-7 text-muted-foreground">{service.text}</p>
               </article>
             ))}
@@ -214,19 +222,19 @@ function Portfolio() {
         </div>
       </section>
 
-      <section id="apropos" className="halloween-stage relative border-y border-border bg-secondary/55 py-24 lg:py-32">
+      <section id="apropos" className="halloween-stage relative border-y border-border/40 bg-secondary/55 py-24 lg:py-32">
         <HalloweenScene chapter={2} />
         <Cobweb className="web-section-right" />
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-10">
-          <div>
-            <p className="flex items-center gap-2 text-sm font-bold uppercase text-primary"><Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" /> À propos de moi</p>
-            <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={2} index={0} />Je suis Ȥrk.</h2>
-            <div className="decor-anchor mt-7 rounded-md border border-border bg-card p-3 shadow-sm">
+        <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-10">
+          <div className="rise-in">
+            <p className="eyebrow"><Ghost className="h-4 w-4" aria-hidden="true" /> À propos de moi</p>
+            <h2 className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />Je suis <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
+            <div className="decor-anchor glass mt-9 rounded-[1.5rem] p-2.5 shadow-2xl">
               <AttachedDecor chapter={2} index={1} />
-              <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-sm object-cover" />
+              <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
             </div>
           </div>
-          <div className="space-y-6 text-base leading-8 text-muted-foreground sm:text-lg">
+          <div className="rise-in space-y-6 text-base leading-8 text-muted-foreground sm:text-lg">
             <p>
               Je suis développeur indépendant et fondateur de <strong className="font-semibold text-foreground">Ȥrk</strong>. J’accompagne les particuliers, créateurs, communautés et entreprises qui veulent donner vie à une idée numérique sans devoir coordonner plusieurs prestataires.
             </p>
@@ -239,11 +247,11 @@ function Portfolio() {
             <p>
               Je privilégie une relation simple et transparente. Vous parlez directement avec la personne qui conçoit votre projet, vous suivez son avancement et vous recevez une solution qui vous appartient vraiment.
             </p>
-            <div className="grid gap-3 pt-3 sm:grid-cols-2">
+            <div className="grid gap-3 pt-4 sm:grid-cols-2">
               {commitments.map((item, index) => (
-                <div key={item} className="decor-anchor flex gap-3 rounded-md border border-border bg-background p-4 text-sm leading-6 text-foreground">
+                <div key={item} className="decor-anchor glass flex gap-3 rounded-2xl p-4 text-sm leading-6 text-foreground">
                   {index < 2 && <AttachedDecor chapter={2} index={index === 0 ? 2 : 3} />}
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-primary" /> {item}
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-seasonal" /> {item}
                 </div>
               ))}
             </div>
@@ -255,77 +263,77 @@ function Portfolio() {
         <HalloweenScene chapter={3} />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
-            <div>
-              <p className="text-sm font-bold uppercase text-primary">Une collaboration simple</p>
-              <h2 className="decor-anchor mt-4 font-display text-4xl font-bold"><AttachedDecor chapter={3} index={0} />Votre idée, accompagnée de A à Z.</h2>
-            </div>
-            <div className="grid gap-8 sm:grid-cols-3">
-              {[
-                { icon: MessageCircle, n: "01", t: "On échange", d: "Vous m’expliquez votre idée, vos objectifs et votre budget." },
-                { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
-                { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
-              ].map((step, index) => (
-                <article key={step.n} className="decor-anchor">
-                  <AttachedDecor chapter={3} index={index === 0 ? 1 : index === 1 ? 2 : 3} />
-                  <div className="flex items-center justify-between border-b border-border pb-4">
-                    <step.icon className="h-6 w-6 text-primary" />
-                    <span className="text-sm font-bold text-muted-foreground">{step.n}</span>
-                  </div>
-                  <h3 className="mt-5 font-display text-xl font-bold">{step.t}</h3>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{step.d}</p>
-                </article>
-              ))}
-            </div>
+          <div className="rise-in max-w-2xl">
+            <p className="eyebrow">Une collaboration simple</p>
+            <h2 className="decor-anchor moon-text mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={3} index={0} />Votre idée, accompagnée de A à Z.</h2>
+          </div>
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {[
+              { icon: MessageCircle, n: "01", t: "On échange", d: "Vous m’expliquez votre idée, vos objectifs et votre budget." },
+              { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
+              { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
+            ].map((step, index) => (
+              <article key={step.n} className="decor-anchor spell-card glass rise-in p-8">
+                <AttachedDecor chapter={3} index={index === 0 ? 1 : index === 1 ? 2 : 3} />
+                <div className="flex items-start justify-between">
+                  <span className="step-number ember-text">{step.n}</span>
+                  <step.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mt-8 font-display text-2xl font-bold">{step.t}</h3>
+                <p className="mt-3 leading-7 text-muted-foreground">{step.d}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="contact" className="halloween-stage halloween-contact relative border-y border-seasonal/30 text-primary-foreground">
+      <section id="contact" className="halloween-stage halloween-contact relative text-foreground">
         <HalloweenScene chapter={4} />
         <Cobweb className="web-section-right" />
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
-          <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase text-primary-foreground/70">Parlons de votre idée</p>
-            <h2 className="decor-anchor mt-3 font-display text-3xl font-bold sm:text-4xl"><AttachedDecor chapter={4} index={0} />Besoin d’un site, d’une app ou d’un bot ?</h2>
-            <p className="mt-5 inline-flex items-center gap-2 rounded-md bg-seasonal-soft px-3 py-2 text-sm text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
-            <p className="mt-4 leading-7 text-primary-foreground/80">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
-          </div>
-          <div className="halloween-contact-buttons relative flex w-full shrink-0 flex-wrap gap-3 sm:w-auto">
-            <Cobweb />
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
-            >
-              <AttachedDecor chapter={4} index={1} />
-              <WhatsAppIcon className="h-4 w-4 text-whatsapp" /> WhatsApp
-            </a>
-            <a
-              href={discordUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
-            >
-              <AttachedDecor chapter={4} index={2} />
-              <DiscordIcon className="h-4 w-4 text-discord" /> Discord
-            </a>
-            <a
-              href={emailUrl}
-              className="decor-anchor inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-background px-5 py-3.5 font-semibold text-foreground shadow-md transition hover:bg-secondary sm:flex-none"
-            >
-              <AttachedDecor chapter={4} index={3} />
-              <Mail className="h-4 w-4 text-primary" /> E-mail
-            </a>
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+          <div className="cauldron-panel rise-in flex flex-col items-start justify-between gap-10 px-7 py-12 sm:px-12 lg:flex-row lg:items-center lg:py-16">
+            <div className="max-w-2xl">
+              <p className="eyebrow">Parlons de votre idée</p>
+              <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={4} index={0} />Besoin d’un site, d’une app ou d’un bot ?</h2>
+              <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-seasonal/40 bg-seasonal-soft px-4 py-2 text-sm font-medium text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
+              <p className="mt-5 leading-7 text-muted-foreground">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
+            </div>
+            <div className="halloween-contact-buttons relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-64">
+              <Cobweb />
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="decor-anchor ember-button inline-flex items-center justify-center gap-2 rounded-full bg-seasonal px-6 py-4 font-semibold text-seasonal-foreground"
+              >
+                <AttachedDecor chapter={4} index={1} />
+                <WhatsAppIcon className="h-5 w-5" /> WhatsApp
+              </a>
+              <a
+                href={discordUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="decor-anchor glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 font-semibold text-foreground transition hover:bg-card"
+              >
+                <AttachedDecor chapter={4} index={2} />
+                <DiscordIcon className="h-5 w-5 text-discord" /> Discord
+              </a>
+              <a
+                href={emailUrl}
+                className="decor-anchor glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 font-semibold text-foreground transition hover:bg-card"
+              >
+                <AttachedDecor chapter={4} index={3} />
+                <Mail className="h-5 w-5 text-primary" /> E-mail
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      <footer className="relative bg-background">
+      <footer className="relative border-t border-border/40 bg-background/70 backdrop-blur">
         <Ghost className="halloween-footer-ghost h-8 w-8 text-seasonal" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
-          <p>© 2026 Ȥrk — Création numérique sur mesure</p>
+          <p>© 2026 <span className="font-brand font-semibold text-foreground">Ȥrk</span> — Création numérique sur mesure</p>
           <p>Designed by Eliza</p>
         </div>
       </footer>

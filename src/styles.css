@@ -37,49 +37,54 @@
   --color-whatsapp: var(--whatsapp);
   --color-discord: var(--discord);
   --font-display: "Outfit", ui-sans-serif, sans-serif;
+  --font-brand: "Outfit", ui-sans-serif, sans-serif;
   --font-body: "Figtree", ui-sans-serif, sans-serif;
   --font-mono: "Figtree", ui-sans-serif, sans-serif;
 }
 
 :root {
-  --radius: 0.375rem;
-  --background: oklch(0.985 0.004 255);
-  --foreground: oklch(0.22 0.025 258);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.025 258);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.025 258);
-  --primary: oklch(0.52 0.16 257);
-  --primary-foreground: oklch(0.99 0.003 255);
-  --secondary: oklch(0.955 0.012 250);
-  --secondary-foreground: oklch(0.26 0.03 258);
-  --muted: oklch(0.95 0.01 250);
-  --muted-foreground: oklch(0.49 0.025 258);
-  --accent: oklch(0.93 0.025 250);
-  --accent-foreground: oklch(0.34 0.09 257);
-  --destructive: oklch(0.58 0.2 27);
+  /* Halloween night: deep violet sky, pumpkin light and moon glow. */
+  color-scheme: dark;
+  --radius: 0.75rem;
+  --background: oklch(0.15 0.03 290);
+  --foreground: oklch(0.95 0.015 80);
+  --card: oklch(0.2 0.035 290);
+  --card-foreground: oklch(0.95 0.015 80);
+  --popover: oklch(0.2 0.035 290);
+  --popover-foreground: oklch(0.95 0.015 80);
+  --primary: oklch(0.8 0.11 300);
+  --primary-foreground: oklch(0.17 0.03 290);
+  --secondary: oklch(0.19 0.035 290);
+  --secondary-foreground: oklch(0.93 0.015 80);
+  --muted: oklch(0.23 0.035 290);
+  --muted-foreground: oklch(0.76 0.03 290);
+  --accent: oklch(0.27 0.05 295);
+  --accent-foreground: oklch(0.95 0.015 80);
+  --destructive: oklch(0.64 0.2 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.88 0.015 250);
-  --input: oklch(0.88 0.015 250);
-  --ring: oklch(0.52 0.16 257);
-  --ember: oklch(0.7 0.12 45);
-  --haze: oklch(0.7 0.08 245);
-  --matrix: oklch(0.52 0.16 257);
-  --seasonal: oklch(0.56 0.16 45);
-  --seasonal-foreground: oklch(0.99 0.005 60);
-  --seasonal-soft: oklch(0.96 0.03 70);
-  --whatsapp: oklch(0.5 0.14 150);
-  --discord: oklch(0.52 0.18 280);
-  --halloween-web: oklch(0.48 0.035 290);
-  --halloween-night: oklch(0.24 0.045 295);
-  --halloween-shadow: 0 8px 20px color-mix(in oklab, var(--seasonal) 20%, transparent);
-  --deco-orange: oklch(0.7 0.18 48);
+  --border: oklch(0.32 0.04 295);
+  --input: oklch(0.32 0.04 295);
+  --ring: oklch(0.74 0.17 55);
+  --ember: oklch(0.74 0.16 50);
+  --haze: oklch(0.55 0.06 290);
+  --matrix: oklch(0.8 0.11 300);
+  --seasonal: oklch(0.74 0.17 55);
+  --seasonal-foreground: oklch(0.17 0.03 290);
+  --seasonal-soft: oklch(0.29 0.07 50);
+  --whatsapp: oklch(0.6 0.15 150);
+  --discord: oklch(0.6 0.17 280);
+  --halloween-web: oklch(0.72 0.03 290);
+  --halloween-night: oklch(0.66 0.06 295);
+  --halloween-shadow: 0 8px 22px color-mix(in oklab, var(--seasonal) 35%, transparent);
+  --deco-orange: oklch(0.74 0.18 50);
   --deco-gold: oklch(0.87 0.15 85);
-  --deco-violet: oklch(0.48 0.14 310);
+  --deco-violet: oklch(0.6 0.16 310);
   --deco-light: oklch(0.97 0.015 85);
-  --deco-green: oklch(0.72 0.16 135);
-  --deco-stone: oklch(0.65 0.025 285);
-  --halloween-smoke: oklch(0.73 0.03 295);
+  --deco-green: oklch(0.74 0.16 135);
+  --deco-stone: oklch(0.6 0.03 285);
+  --halloween-smoke: oklch(0.5 0.045 295);
+  --night-deep: oklch(0.12 0.03 288);
+  --moon: oklch(0.96 0.04 90);
 }
 
 /* Decorations never intercept a click or hide the main content. */
@@ -295,8 +300,8 @@
 .halloween-arrival { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; color: var(--halloween-night); }
 .arrival-flight { position: absolute; width: 230px; height: 190px; left: 0; top: 0;  }
 .flying-witch-image { width: 100%; height: 100%; object-fit: contain; }
-.stolen-zrk { position: absolute; left: 49%; top: 48%; font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--seasonal-foreground); animation: bag-logo 12s linear both; }
-.arrival-logo { position: absolute; left: 0; top: 0; font-family: var(--font-display); font-size: 24px; line-height: 32px; font-weight: 800; color: var(--foreground); opacity: 0; transform-origin: center; }
+.stolen-zrk { position: absolute; left: 49%; top: 48%; font-family: var(--font-brand); font-weight: 800; font-size: 20px; color: var(--seasonal-foreground); animation: bag-logo 12s linear both; }
+.arrival-logo { position: absolute; left: 0; top: 0; font-family: var(--font-brand); font-size: 24px; line-height: 32px; font-weight: 800; color: var(--foreground); opacity: 0; transform-origin: center; }
 .arrival-logo span { color: var(--primary); }
 .arrival-skip { position: absolute; right: 20px; bottom: 20px; pointer-events: auto; background: var(--background); }
 .arrival-mist { position: absolute; inset: 0; overflow: hidden; backdrop-filter: blur(12px); opacity: 0; animation: arrival-fog 12s linear both; }
@@ -383,8 +388,8 @@ html { scroll-behavior: smooth; }
 }
 
 .dark {
-  --background: oklch(0.985 0.004 255);
-  --foreground: oklch(0.22 0.025 258);
+  --background: oklch(0.15 0.03 290);
+  --foreground: oklch(0.95 0.015 80);
 }
 
 @layer base {
@@ -589,3 +594,78 @@ html { scroll-behavior: smooth; }
     color: var(--matrix);
   }
 }
+
+/* ───────── Nuit d'Halloween : ciel, lumière et matières ───────── */
+.night-sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background: linear-gradient(180deg, var(--night-deep) 0%, var(--background) 45%, oklch(0.17 0.04 300) 100%); }
+.night-glow { position: absolute; border-radius: 50%; filter: blur(90px); }
+.night-glow-violet { width: 60vw; height: 60vw; left: -18vw; top: -22vw; background: oklch(0.42 0.16 300 / 0.35); }
+.night-glow-ember { width: 55vw; height: 40vw; right: -15vw; bottom: -18vw; background: oklch(0.6 0.17 50 / 0.18); }
+.night-stars { position: absolute; inset: 0; opacity: .7; background-image:
+  radial-gradient(1.2px 1.2px at 12% 18%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1px 1px at 28% 62%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1.4px 1.4px at 44% 12%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1px 1px at 57% 41%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1.3px 1.3px at 69% 8%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1px 1px at 83% 54%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1.2px 1.2px at 92% 22%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1px 1px at 6% 78%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1px 1px at 36% 88%, var(--moon) 50%, transparent 51%),
+  radial-gradient(1.2px 1.2px at 75% 82%, var(--moon) 50%, transparent 51%);
+  background-size: 520px 520px; animation: star-twinkle 6s ease-in-out infinite alternate; }
+.night-stars-far { opacity: .35; background-size: 310px 310px; background-position: 140px 90px; animation-duration: 9s; animation-delay: -4s; }
+.night-moon { position: absolute; top: 16vh; left: 50vw; width: clamp(70px, 8vw, 120px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, oklch(0.99 0.02 95), var(--moon) 55%, oklch(0.84 0.06 80));
+  box-shadow: 0 0 40px 8px oklch(0.95 0.06 90 / 0.35), 0 0 140px 40px oklch(0.85 0.08 80 / 0.14); opacity: .92; }
+.night-moon-crater { position: absolute; border-radius: 50%; background: oklch(0.82 0.05 80 / 0.55); }
+.night-moon-crater:nth-child(1) { width: 22%; height: 22%; top: 28%; left: 52%; }
+.night-moon-crater:nth-child(2) { width: 14%; height: 14%; top: 58%; left: 30%; }
+.night-moon-crater:nth-child(3) { width: 10%; height: 10%; top: 66%; left: 62%; }
+.night-grain { position: absolute; inset: -50%; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+@keyframes star-twinkle { from { opacity: .35; } to { opacity: .8; } }
+
+/* Les sections deviennent des voiles translucides au-dessus du ciel. */
+.night-page { background: var(--night-deep); }
+.night-page > :is(header, aside, section, footer) { position: relative; z-index: 1; }
+.night-page > header.sticky { position: sticky; z-index: 50; }
+.night-page .bg-secondary\/45, .night-page .bg-secondary\/55 { background-color: color-mix(in oklab, var(--secondary) 35%, transparent); }
+.font-brand { font-family: var(--font-brand); }
+.zrk-identity { font-family: var(--font-brand); }
+
+.glass { background: color-mix(in oklab, var(--card) 62%, transparent); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent); }
+.ember-text { background: linear-gradient(100deg, oklch(0.86 0.14 75), var(--seasonal) 45%, oklch(0.64 0.2 35)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.moon-text { background: linear-gradient(180deg, var(--foreground), oklch(0.8 0.06 300)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ember-button { box-shadow: 0 0 0 1px oklch(0.85 0.14 70 / 0.5) inset, 0 10px 30px -6px color-mix(in oklab, var(--seasonal) 70%, transparent); transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
+.ember-button:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px oklch(0.9 0.14 75 / 0.7) inset, 0 16px 44px -6px color-mix(in oklab, var(--seasonal) 90%, transparent); }
+.eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--seasonal); }
+
+.portrait-halo { position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, color-mix(in oklab, var(--seasonal) 38%, transparent), transparent 62%); filter: blur(30px); animation: halo-breathe 6s ease-in-out infinite alternate; }
+@keyframes halo-breathe { from { opacity: .6; transform: scale(.95); } to { opacity: 1; transform: scale(1.05); } }
+
+.spell-card { position: relative; border-radius: 1.25rem; transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s ease, box-shadow .4s ease; }
+.spell-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .4s ease;
+  background: radial-gradient(500px circle at 20% 0%, color-mix(in oklab, var(--seasonal) 16%, transparent), transparent 55%); }
+.spell-card:hover { transform: translateY(-4px); border-color: color-mix(in oklab, var(--seasonal) 55%, transparent); box-shadow: 0 24px 60px -24px color-mix(in oklab, var(--seasonal) 55%, transparent); }
+.spell-card:hover::before { opacity: 1; }
+.spell-icon { box-shadow: 0 0 24px -4px color-mix(in oklab, var(--seasonal) 70%, transparent); }
+.step-number { font-family: var(--font-display); font-weight: 800; font-size: 3.5rem; line-height: 1; }
+
+.cauldron-panel { position: relative; border-radius: 2rem; overflow: hidden; background:
+  radial-gradient(120% 140% at 0% 0%, oklch(0.36 0.14 300 / 0.55), transparent 55%),
+  radial-gradient(90% 120% at 100% 100%, oklch(0.55 0.17 50 / 0.35), transparent 60%),
+  color-mix(in oklab, var(--card) 75%, transparent);
+  border: 1px solid color-mix(in oklab, var(--seasonal) 30%, transparent); box-shadow: 0 40px 120px -40px color-mix(in oklab, var(--seasonal) 50%, transparent); }
+.halloween-contact { background: transparent; }
+
+/* Apparition douce au défilement, seulement si le navigateur sait le faire. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rise-in { animation: rise-in linear both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
+  }
+}
+@keyframes rise-in { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .night-stars, .portrait-halo { animation: none; }
+  .spell-card, .ember-button { transition: none; }
+}
+@media (max-width: 1023px) { .night-moon { top: 12vh; left: auto; right: 8vw; opacity: .7; } }
