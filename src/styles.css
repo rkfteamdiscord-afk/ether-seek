@@ -289,12 +289,13 @@
 }
 
 /* The arrival never captures input; only skip, pumpkin and the offer dialog do. */
-[data-halloween-phase]:not([data-halloween-phase="revealed"]) :is(.halloween-scene, .halloween-web, .halloween-pumpkins, .halloween-garland, .attached-decor, .halloween-footer-ghost) { visibility: hidden; }
-[data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: decorations-reveal .9s ease-out both; }
+[data-halloween-phase="arrival"] :is(.halloween-scene, .halloween-web, .halloween-pumpkins, .halloween-garland, .attached-decor, .halloween-footer-ghost) { visibility: hidden; }
+[data-header-logo][data-stolen="true"] { visibility: hidden; }
+[data-halloween-phase="releasing"] :is(.halloween-scene, .halloween-garland) { animation: decorations-reveal 1.8s ease-out both; }
 .halloween-arrival { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; color: var(--halloween-night); }
 .arrival-flight { position: absolute; width: 230px; height: 190px; left: 0; top: 0;  }
-.arrival-flight > svg { width: 100%; height: 100%; }
-.stolen-zrk { position: absolute; left: 70%; top: 69%; font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--halloween-night); animation: bag-logo 12s linear both; }
+.flying-witch-image { width: 100%; height: 100%; object-fit: contain; }
+.stolen-zrk { position: absolute; left: 49%; top: 48%; font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--seasonal-foreground); animation: bag-logo 12s linear both; }
 .arrival-logo { position: absolute; left: 0; top: 0; font-family: var(--font-display); font-size: 24px; line-height: 32px; font-weight: 800; color: var(--foreground); opacity: 0; transform-origin: center; }
 .arrival-logo span { color: var(--primary); }
 .arrival-skip { position: absolute; right: 20px; bottom: 20px; pointer-events: auto; background: var(--background); }
@@ -315,7 +316,7 @@
 .pumpkin-trigger span { padding: 4px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 700; color: var(--seasonal-foreground); background: var(--seasonal); }
 .witch-duel { position: absolute; inset: 0 0 auto; height: 210px; overflow: hidden; pointer-events: none; z-index: 1; opacity: .4; }
 .duelist { position: absolute; top: 24px; width: 125px; height: 105px; color: var(--halloween-night); }
-.duelist svg { width: 100%; height: 100%; }
+.duelist svg, .duelist img { width: 100%; height: 100%; object-fit: contain; }
 .duelist-left { left: 5%; animation: duel-dodge 7s ease-in-out infinite; }
 .duelist-right { right: 5%; scale: -1 1; animation: duel-dodge 7s ease-in-out -3.5s infinite; }
 .duel-spells { position: absolute; inset: 15px 14%; width: 72%; height: 160px; overflow: visible; }
