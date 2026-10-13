@@ -5,10 +5,15 @@ import { halloweenOffer } from "@/lib/seasonal-offer";
 import pumpkins from "@/assets/halloween-pumpkins.png";
 import { ArrowRight, Check, X } from "lucide-react";
 import { HalloweenWeather } from "./HalloweenWeather";
+import flyingWitch from "@/assets/halloween-flying-witch.png";
 
-export type HalloweenPhase = "arrival" | "ready" | "revealed";
+export type HalloweenPhase = "arrival" | "releasing" | "ready" | "revealed";
 
 export function FlyingWitch() {
+  return <img src={flyingWitch} width={1024} height={768} alt="" aria-hidden="true" className="flying-witch-image" />;
+}
+
+function LegacyWitch() {
   return <svg viewBox="0 0 240 180" fill="none" aria-hidden="true">
     <path d="M19 136 215 108M19 126 7 141 30 153 47 133" className="deco-gold" strokeWidth="8" strokeLinecap="round" />
     <path d="M95 65Q60 74 69 110L120 124 147 94 116 73Z" className="deco-violet" />
@@ -65,9 +70,11 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
     if (!headerLogo || !flight || !logo) { onPhaseChange("ready"); return; }
     const rect = headerLogo.getBoundingClientRect();
     const size = window.innerWidth < 640 ? 170 : 230;
-    const bagX = size * .76, bagY = size * .57;
-    const pickupX = rect.left - bagX + rect.width / 2;
-    const pickupY = rect.top - bagY + rect.height / 2;
+    // Reach with the left hand, so the character stays inside the screen.
+    const pickupX = rect.left + rect.width - size * .04;
+    const pickupY = rect.top + rect.height / 2 - size * .29;
+    const bagX = pickupX + size * .56;
+    const bagY = pickupY + size * .5;
     const duration = 12000;
     const animations = [flight.animate([
       { transform: `translate(-260px, 220px) rotate(-15deg)`, offset: 0 },
@@ -88,18 +95,22 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
       { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: 0 },
       { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: .33 },
       { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 1, offset: .34 },
-      { transform: `translate(${rect.left + 8}px, ${rect.top + 20}px) scale(.15)`, opacity: 0, offset: .38 },
-      { transform: `translate(${rect.left + 8}px, ${rect.top + 20}px) scale(.15)`, opacity: 0, offset: .86 },
+      { transform: `translate(${bagX}px, ${bagY}px) scale(.55) rotate(20deg)`, opacity: 1, offset: .375 },
+      { transform: `translate(${bagX}px, ${bagY + 15}px) scale(.1)`, opacity: 0, offset: .39 },
+      { transform: `translate(${bagX}px, ${bagY}px) scale(.15)`, opacity: 0, offset: .86 },
       { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 1, offset: .89 },
       { transform: `translate(${rect.left}px, ${rect.top}px) scale(1)`, opacity: 0, offset: .9 },
       { opacity: 0, offset: 1 },
     ], { duration, fill: "both" })];
-    const timer = window.setTimeout(() => onPhaseChange("ready"), duration);
-    return () => { window.clearTimeout(timer); animations.forEach(animation => animation.cancel()); };
+    const take = window.setTimeout(() => headerLogo.setAttribute("data-stolen", "true"), duration * .34);
+    const restore = window.setTimeout(() => headerLogo.removeAttribute("data-stolen"), duration * .9);
+    const timer = window.setTimeout(() => onPhaseChange("releasing"), duration);
+    return () => { window.clearTimeout(take); window.clearTimeout(restore); window.clearTimeout(timer); headerLogo.removeAttribute("data-stolen"); animations.forEach(animation => animation.cancel()); };
   }, [phase, onPhaseChange]);
 
   useEffect(() => {
-    if (phase !== "revealed" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (phase !== "releasing") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { onPhaseChange("ready"); return; }
     const originX = window.innerWidth - 85, originY = window.innerHeight - 70;
     const animations = Array.from(document.querySelectorAll<HTMLElement>("[data-decoration]")).map((element, index) => {
       const rect = element.getBoundingClientRect();
@@ -109,10 +120,11 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
         { translate: `${x}px ${y}px`, rotate: "-160deg", scale: ".2", opacity: 0 },
         { translate: `${x * .45}px ${Math.min(y - 180, -120)}px`, rotate: "80deg", scale: ".85", opacity: 1, offset: .5 },
         { translate: "0px 0px", rotate: "0deg", scale: "1", opacity: 1 },
-      ], { duration: 1500, delay: index * 18, easing: "cubic-bezier(.2,.65,.3,1)" });
+      ], { duration: 1500, delay: 650 + index * 18, easing: "cubic-bezier(.2,.65,.3,1)", fill: "backwards" });
     });
-    return () => animations.forEach(animation => animation?.cancel());
-  }, [phase]);
+    const timer = window.setTimeout(() => onPhaseChange("ready"), 3000);
+    return () => { clearTimeout(timer); animations.forEach(animation => animation?.cancel()); };
+  }, [phase, onPhaseChange]);
 
   return <>
     {phase === "arrival" && <div className="halloween-arrival">
@@ -123,11 +135,11 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
       <Button variant="outline" size="sm" className="arrival-skip" onClick={() => onPhaseChange("ready")}><X className="h-4 w-4" /> Passer l’animation</Button>
     </div>}
     {phase === "ready" && <div className="pumpkin-surprise">
-      <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); revealTimer.current = setTimeout(() => setOpen(true), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 2000); }}>
+      <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); setOpen(true); }}>
         <img src={pumpkins} alt="" /><span>Clique dessus !</span>
       </Button>
     </div>}
-    {phase === "revealed" && <div className="candy-burst" aria-hidden="true"><div className="reveal-witch"><FlyingWitch /></div>{Array.from({ length: 32 }, (_, i) => <span key={i} className={`burst-candy candy-${i % 16}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
+    {phase === "releasing" && <div className="candy-burst" aria-hidden="true"><div className="reveal-witch"><FlyingWitch /></div>{Array.from({ length: 32 }, (_, i) => <span key={i} className={`burst-candy candy-${i % 16}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-md border-seasonal/30 text-center">
         <img src={pumpkins} alt="" className="mx-auto h-32 w-48 object-contain" />

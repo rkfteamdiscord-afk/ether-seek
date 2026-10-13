@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import fogTexture from "@/assets/halloween-fog-texture.jpg";
 
 /** Procedural cloud texture and multi-depth rainfall, entirely browser-side. */
 export function HalloweenWeather() {
@@ -14,6 +15,8 @@ export function HalloweenWeather() {
     texture.width = 640; texture.height = 360;
     const paint = texture.getContext("2d");
     if (!paint) return;
+    const photograph = new Image();
+    photograph.src = fogTexture;
     for (let i = 0; i < 160; i++) {
       const x = Math.random() * 640, y = Math.random() * 360;
       const radius = 30 + Math.random() * 100;
@@ -37,12 +40,13 @@ export function HalloweenWeather() {
     const draw = (now: number) => {
       const time = (now - start) / 1000;
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = cloud; ctx.globalAlpha = .94;
+      ctx.fillStyle = cloud; ctx.globalAlpha = .82;
       ctx.fillRect(0, 0, width, height);
       for (let layer = 0; layer < 5; layer++) {
         const offset = Math.sin(time * .17 + layer * 1.9) * width * .18;
-        ctx.globalAlpha = .65 - layer * .07;
-        ctx.drawImage(texture, -width * .3 + offset, -height * .25 + Math.cos(time * .15 + layer) * 45, width * 1.6, height * 1.5);
+        ctx.globalAlpha = layer === 0 ? .85 : .16;
+        const source = photograph.complete && photograph.naturalWidth > 0 ? photograph : texture;
+        ctx.drawImage(source, -width * .3 + offset, -height * .25 + Math.cos(time * .15 + layer) * 65, width * 1.6, height * 1.5);
       }
       ctx.strokeStyle = light;
       for (const drop of drops) {
