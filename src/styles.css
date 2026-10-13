@@ -298,7 +298,7 @@
 .arrival-logo { position: absolute; left: 0; top: 0; font-family: var(--font-display); font-size: 24px; line-height: 32px; font-weight: 800; color: var(--foreground); opacity: 0; transform-origin: center; }
 .arrival-logo span { color: var(--primary); }
 .arrival-skip { position: absolute; right: 20px; bottom: 20px; pointer-events: auto; background: var(--background); }
-.arrival-mist { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: arrival-fog 12s linear both; }
+.arrival-mist { position: absolute; inset: 0; overflow: hidden; backdrop-filter: blur(12px); opacity: 0; animation: arrival-fog 12s linear both; }
 .arrival-weather { width: 100%; height: 100%; }
 .arrival-version { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--halloween-night); opacity: 0; animation: fog-title 12s linear both; text-align: center; }
 .arrival-version strong { font-family: var(--font-display); font-size: 48px; font-weight: 800; max-width: 90%; }

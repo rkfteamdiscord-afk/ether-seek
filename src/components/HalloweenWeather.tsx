@@ -37,7 +37,7 @@ export function HalloweenWeather() {
     const draw = (now: number) => {
       const time = (now - start) / 1000;
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = cloud; ctx.globalAlpha = .55;
+      ctx.fillStyle = cloud; ctx.globalAlpha = .94;
       ctx.fillRect(0, 0, width, height);
       for (let layer = 0; layer < 5; layer++) {
         const offset = Math.sin(time * .17 + layer * 1.9) * width * .18;
