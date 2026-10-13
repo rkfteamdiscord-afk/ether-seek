@@ -101,7 +101,7 @@ function Portfolio() {
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
-          <a href="#accueil" className="zrk-identity font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
+          <a href="#accueil" data-header-logo className="font-display text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
             Ȥrk<span className="text-primary">.</span>
           </a>
           <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
