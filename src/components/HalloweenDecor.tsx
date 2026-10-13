@@ -141,3 +141,20 @@ export function AttachedDecor({ chapter, index }: { chapter: 0 | 1 | 2 | 3 | 4; 
   if (!kind) return null;
   return <span aria-hidden="true" data-decoration={kind} className={`halloween-prop attached-decor attached-${index} prop-${kind}`}><Illustration kind={kind} /></span>;
 }
+/** Jack-o'-lantern hanging on a string, swinging with a flickering glow. Decorative only. */
+export function SwingingLantern({ className = "" }: { className?: string }) {
+  return (
+    <div className={`swinging-lantern ${className}`} aria-hidden="true">
+      <span className="swinging-lantern-string" />
+      <svg viewBox="0 0 100 90" className="swinging-lantern-pumpkin">
+        <ellipse cx="50" cy="52" rx="44" ry="34" fill="url(#deco-fill-orange)" />
+        <path d="M30 22Q20 52 30 84M70 22Q80 52 70 84M50 18V86" fill="none" stroke="oklch(0.5 0.17 35)" strokeWidth="2.5" opacity=".6" />
+        <path d="M46 20Q44 8 52 4L56 7Q51 11 53 20Z" fill="url(#deco-fill-green)" />
+        <g className="lantern-face" fill="oklch(0.95 0.15 90)">
+          <path d="M26 44 36 34 42 46Z" /><path d="M74 44 64 34 58 46Z" /><path d="M46 54 50 47 54 54Z" />
+          <path d="M24 60Q50 82 76 60L70 62 66 68 60 63 54 70 48 64 42 70 36 63 31 67Z" />
+        </g>
+      </svg>
+    </div>
+  );
+}
