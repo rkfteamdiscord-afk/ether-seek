@@ -292,17 +292,22 @@
 [data-halloween-phase]:not([data-halloween-phase="revealed"]) :is(.halloween-scene, .halloween-web, .halloween-pumpkins, .halloween-garland, .attached-decor, .halloween-footer-ghost) { visibility: hidden; }
 [data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: decorations-reveal .9s ease-out both; }
 .halloween-arrival { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; color: var(--halloween-night); }
-.arrival-flight { position: absolute; width: 230px; height: 190px; left: 0; top: 0; animation: witch-arrival 8.5s linear both; }
+.arrival-flight { position: absolute; width: 230px; height: 190px; left: 0; top: 0;  }
 .arrival-flight > svg { width: 100%; height: 100%; }
-.stolen-zrk { position: absolute; left: 70%; top: 69%; font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--halloween-night); animation: bag-logo 8.5s linear both; }
-.arrival-logo { position: absolute; left: 50%; top: 40%; font-family: var(--font-display); font-size: 76px; font-weight: 800; color: var(--primary); animation: logo-abduction 8.5s ease-in-out both; }
+.stolen-zrk { position: absolute; left: 70%; top: 69%; font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--halloween-night); animation: bag-logo 12s linear both; }
+.arrival-logo { position: absolute; left: 0; top: 0; font-family: var(--font-display); font-size: 24px; line-height: 32px; font-weight: 800; color: var(--foreground); opacity: 0; transform-origin: center; }
+.arrival-logo span { color: var(--primary); }
 .arrival-skip { position: absolute; right: 20px; bottom: 20px; pointer-events: auto; background: var(--background); }
-.arrival-mist { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: arrival-fog 8.5s linear both; }
-.arrival-mist span { position: absolute; inset: -15%; background: radial-gradient(ellipse at 20% 60%, var(--deco-light), transparent 60%), radial-gradient(ellipse at 70% 30%, var(--halloween-smoke), transparent 65%), linear-gradient(120deg, var(--deco-light), var(--halloween-smoke)); filter: blur(25px); animation: mist-sweep 3s ease-in-out infinite alternate; }
-.arrival-mist span:nth-child(2) { opacity: .5; transform: scaleX(-1); animation-delay: -1s; }
-.arrival-mist span:nth-child(3) { opacity: .4; animation-delay: -2s; }
-[data-halloween-phase="arrival"] .zrk-identity { animation: identity-abduction 8.5s linear both; }
-[data-halloween-phase="arrival"] .zrk-portrait { animation: portrait-abduction 8.5s linear both; }
+.arrival-mist { position: absolute; inset: 0; overflow: hidden; opacity: 0; animation: arrival-fog 12s linear both; }
+.arrival-weather { width: 100%; height: 100%; }
+.arrival-version { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--halloween-night); opacity: 0; animation: fog-title 12s linear both; text-align: center; }
+.arrival-version strong { font-family: var(--font-display); font-size: 48px; font-weight: 800; max-width: 90%; }
+.arrival-version span { font-size: 20px; font-weight: 600; }
+.arrival-version img { width: 180px; height: 110px; object-fit: contain; }
+@keyframes fog-title { 0%,48% { opacity: 0; translate: 0 20px; } 55%,72% { opacity: 1; translate: 0 0; } 82%,100% { opacity: 0; translate: 0 -15px; } }
+.reveal-witch { position: absolute; right: -220px; bottom: 40px; width: 200px; height: 165px; animation: witch-throw 2.4s ease-in-out both; color: var(--halloween-night); }
+.reveal-witch svg { width: 100%; height: 100%; }
+@keyframes witch-throw { 0% { translate: 0 0; rotate: -12deg; } 25%,55% { translate: -230px -60px; rotate: -20deg; } 70% { translate: -260px -80px; rotate: 15deg; } 100% { translate: -130vw -300px; rotate: -15deg; } }
 .pumpkin-surprise { position: fixed; z-index: 55; right: 20px; bottom: 16px; animation: decorations-reveal .7s ease-out; }
 .pumpkin-trigger { display: flex; flex-direction: column; gap: 0; width: 150px; height: 132px; padding: 0; background: transparent; filter: drop-shadow(var(--halloween-shadow)); }
 .pumpkin-trigger:hover { background: transparent; }
@@ -320,7 +325,7 @@
 .spell-c { stroke: var(--deco-orange); animation: spell-cast 7s linear -4s infinite; }
 .duel-spark { position: absolute; top: 100px; left: 50%; font-size: 38px; color: var(--deco-gold); animation: spell-impact 2.5s ease-out infinite; }
 .candy-burst { position: fixed; inset: 0; z-index: 65; pointer-events: none; overflow: hidden; }
-.burst-candy { position: absolute; top: -60px; font-size: 30px; animation: candy-rain 3.5s ease-in both; }
+.burst-candy { position: absolute; top: auto; bottom: 60px; font-size: 30px; animation: candy-rain 3.5s ease-in both; }
 .candy-0, .candy-8 { left: 4%; animation-delay: .1s; }
 .candy-1, .candy-9 { left: 16%; animation-delay: .6s; }
 .candy-2, .candy-10 { left: 28%; animation-delay: .3s; }
@@ -342,8 +347,8 @@
   100% { transform: translate(110vw, -160px) rotate(345deg); }
 }
 @keyframes logo-abduction { 0%,35% { opacity: 0; transform: translate(-50%, -50%) scale(.7); } 39%,42% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 48%,75% { opacity: 0; transform: translate(20px, 20px) scale(.1); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
-@keyframes bag-logo { 0%,44% { opacity: 0; } 49%,75% { opacity: 1; } 81%,100% { opacity: 0; } }
-@keyframes arrival-fog { 0%,47% { opacity: 0; } 58%,70% { opacity: .94; } 90%,100% { opacity: 0; } }
+@keyframes bag-logo { 0%,37% { opacity: 0; } 39%,85% { opacity: 1; } 87%,100% { opacity: 0; } }
+@keyframes arrival-fog { 0%,40% { opacity: 0; } 52%,74% { opacity: 1; } 91%,100% { opacity: 0; } }
 @keyframes mist-sweep { from { translate: -4% 2%; } to { translate: 4% -2%; } }
 @keyframes identity-abduction { 0%,43% { opacity: 1; } 48%,78% { opacity: 0; } 90%,100% { opacity: 1; } }
 @keyframes portrait-abduction { 0%,43% { opacity: 1; transform: scale(1); } 49%,76% { opacity: 0; transform: scale(.8); } 90%,100% { opacity: 1; transform: scale(1); } }
@@ -352,10 +357,10 @@
 @keyframes duel-dodge { 0%,100% { translate: 0 0; rotate: -7deg; } 50% { translate: 8px 28px; rotate: 7deg; } }
 @keyframes spell-cast { 0% { stroke-dashoffset: 1000; opacity: 0; } 10%,75% { opacity: 1; } 95%,100% { stroke-dashoffset: -1000; opacity: 0; } }
 @keyframes spell-impact { 0%,55%,100% { opacity: 0; transform: scale(.2) rotate(0); } 65% { opacity: 1; transform: scale(1) rotate(90deg); } 85% { opacity: 0; transform: scale(1.7) rotate(180deg); } }
-@keyframes candy-rain { from { transform: translateY(-80px) rotate(0); opacity: 1; } to { transform: translateY(110vh) rotate(480deg); opacity: 0; } }
+@keyframes candy-rain { 0% { transform: translate(70vw, 0) rotate(0) scale(.3); opacity: 0; } 15% { opacity: 1; } 45% { transform: translate(0, -65vh) rotate(200deg) scale(1); opacity: 1; } 100% { transform: translate(-10vw, 150px) rotate(480deg); opacity: 0; } }
 @media (max-width: 640px) {
   .arrival-flight { width: 170px; height: 140px; }
-  .arrival-logo { font-size: 58px; }
+  .arrival-version strong { font-size: 32px; }
   .stolen-zrk { font-size: 18px; }
   .witch-duel { height: 155px; opacity: .28; }
   .duelist { width: 85px; height: 78px; }
