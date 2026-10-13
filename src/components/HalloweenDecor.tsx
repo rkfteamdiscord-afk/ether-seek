@@ -3,11 +3,73 @@ import pumpkins from "@/assets/halloween-pumpkins.png";
 import ghost from "@/assets/halloween-ghost.png";
 import witchKit from "@/assets/halloween-witch-kit.png";
 
+type WebDrawing = { radials: string; spiral: string; loose: string; dew: Array<[number, number]> };
+
+/** Corner orb web: radials from the corner, sagging capture spiral, a few broken threads and dew. */
+function weaveWeb(seed: number): WebDrawing {
+  let state = seed;
+  const random = () => ((state = (state * 16807) % 2147483647) - 1) / 2147483646;
+  const corner = 1;
+  const angles = Array.from({ length: 9 }, (_, i) => (i / 8) * (Math.PI / 2) + (i > 0 && i < 8 ? (random() - 0.5) * 0.12 : 0));
+  const reach = (angle: number) => Math.min(118 / Math.max(Math.cos(angle), 0.0001), 118 / Math.max(Math.sin(angle), 0.0001));
+  const point = (angle: number, radius: number) => [corner + Math.cos(angle) * radius, corner + Math.sin(angle) * radius] as const;
+  const radials = angles.map((angle) => { const [x, y] = point(angle, reach(angle)); return `M${corner} ${corner}L${x.toFixed(1)} ${y.toFixed(1)}`; }).join("");
+  const rings = [11, 19, 28, 38, 49, 61, 74, 88, 103];
+  const dew: Array<[number, number]> = [];
+  let spiral = "";
+  rings.forEach((ring, r) => {
+    for (let i = 0; i < angles.length - 1; i++) {
+      if (random() < 0.07) continue;
+      const r1 = ring * (1 + (random() - 0.5) * 0.08), r2 = ring * (1 + (random() - 0.5) * 0.08);
+      if (r1 > reach(angles[i]!) - 2 || r2 > reach(angles[i + 1]!) - 2) continue;
+      const [x1, y1] = point(angles[i]!, r1), [x2, y2] = point(angles[i + 1]!, r2);
+      const sag = 0.84 - r * 0.004;
+      const cx = corner + ((x1 + x2) / 2 - corner) * sag, cy = corner + ((y1 + y2) / 2 - corner) * sag;
+      spiral += `M${x1.toFixed(1)} ${y1.toFixed(1)}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+      if (random() < 0.16) dew.push([+x1.toFixed(1), +y1.toFixed(1)]);
+    }
+  });
+  const [lx, ly] = point(angles[5]!, rings[6]!);
+  const loose = `M${lx.toFixed(1)} ${ly.toFixed(1)}q${(4 + random() * 6).toFixed(1)} 12 ${(-2 + random() * 4).toFixed(1)} 24`;
+  return { radials, spiral, loose, dew };
+}
+
+const webs = [weaveWeb(11), weaveWeb(47), weaveWeb(83)];
+
 export function Cobweb({ className = "" }: { className?: string }) {
+  const web = webs[[...className].reduce((sum, char) => sum + char.charCodeAt(0), 0) % webs.length]!;
   return (
-    <svg viewBox="0 0 120 120" className={`halloween-web ${className}`} fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
-      <path d="M2 2H118M2 2V118M2 2L112 48M2 2L87 87M2 2L48 112" />
-      <path d="M25 2Q22 11 24 11Q21 19 19 19Q11 21 11 24Q11 22 2 25M49 2Q43 20 46 20Q41 36 36 36Q20 41 20 46Q20 43 2 49M74 2Q64 29 69 29Q60 53 53 53Q29 60 29 69Q29 64 2 74M99 2Q86 39 92 39Q80 71 71 71Q39 80 39 92Q39 86 2 99M118 2Q107 48 112 48Q100 85 87 87Q48 100 48 112Q48 107 2 118" />
+    <svg viewBox="0 0 120 120" className={`halloween-web ${className}`} fill="none" stroke="currentColor" strokeLinecap="round" aria-hidden="true">
+      <path d={web.radials} className="web-radial" vectorEffect="non-scaling-stroke" />
+      <path d={web.spiral} className="web-spiral" vectorEffect="non-scaling-stroke" />
+      <path d={web.loose} className="web-loose" vectorEffect="non-scaling-stroke" />
+      {web.dew.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.3" className="web-dew" style={{ animationDelay: `${(i * 0.7) % 4}s` }} />)}
+    </svg>
+  );
+}
+
+const decoShades = {
+  orange: ["oklch(0.86 0.15 70)", "oklch(0.72 0.19 48)", "oklch(0.5 0.17 35)"],
+  gold: ["oklch(0.97 0.1 95)", "oklch(0.86 0.15 85)", "oklch(0.64 0.13 70)"],
+  violet: ["oklch(0.72 0.14 310)", "oklch(0.55 0.17 305)", "oklch(0.34 0.13 295)"],
+  light: ["oklch(1 0 0)", "oklch(0.95 0.02 85)", "oklch(0.78 0.03 285)"],
+  green: ["oklch(0.88 0.16 135)", "oklch(0.72 0.17 140)", "oklch(0.48 0.13 150)"],
+  stone: ["oklch(0.78 0.02 285)", "oklch(0.6 0.03 285)", "oklch(0.42 0.03 285)"],
+} as const;
+
+/** Shared light-to-shadow gradients that give every flat motif some volume. Rendered once. */
+export function DecorDefs() {
+  return (
+    <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
+      <defs>
+        {Object.entries(decoShades).map(([name, [light, mid, shade]]) => (
+          <linearGradient key={name} id={`deco-fill-${name}`} x1="0.15" y1="0" x2="0.85" y2="1">
+            <stop offset="0" stopColor={light} />
+            <stop offset=".5" stopColor={mid} />
+            <stop offset="1" stopColor={shade} />
+          </linearGradient>
+        ))}
+      </defs>
     </svg>
   );
 }

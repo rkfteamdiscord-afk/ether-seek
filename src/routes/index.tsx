@@ -19,7 +19,8 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs } from "@/components/HalloweenDecor";
+import { SpiderWalkers } from "@/components/SpiderWalkers";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 
@@ -100,6 +101,8 @@ function Portfolio() {
   return (
     <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
       <NightSky />
+      <DecorDefs />
+      <SpiderWalkers />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/60 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
