@@ -21,6 +21,8 @@ import {
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
 import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost, CandleCluster } from "@/components/HalloweenDecor";
 import { SpiderWalkers } from "@/components/SpiderWalkers";
+import { GhostSwarm, GhostGuide } from "@/components/HalloweenGhosts";
+import { CursorSparkles } from "@/components/CursorSparkles";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 
@@ -102,7 +104,10 @@ function Portfolio() {
     <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
       <NightSky />
       <DecorDefs />
+      <GhostSwarm />
       <SpiderWalkers />
+      <GhostGuide phase={phase} />
+      <CursorSparkles />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/60 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
