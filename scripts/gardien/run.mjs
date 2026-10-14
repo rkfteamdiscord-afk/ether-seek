@@ -12,7 +12,7 @@ import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 
 const env = process.env;
-const SITE_URL = env.SITE_URL || "https://ether-seek.vercel.app";
+const SITE_URL = env.SITE_URL || "https://www.zrk.lol";
 const REPO = env.GITHUB_REPOSITORY;
 const TOKEN = env.GITHUB_TOKEN;
 const GROQ_KEY = env.GROQ_API_KEY || "";
