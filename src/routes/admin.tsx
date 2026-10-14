@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { adminData, adminLogin, adminLogout, type AdminData, type GuardianEntry } from "@/lib/admin";
+import { codeMatches, loadJournal, type GuardianEntry, type Journal } from "@/lib/guardian-journal";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -12,7 +12,9 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const REFRESH_MS = 15000;
+// The public GitHub API allows about 60 requests an hour per visitor: refresh once a minute.
+const REFRESH_MS = 60000;
+const UNLOCK_KEY = "zrk-admin-unlocked";
 
 function ago(iso: string | undefined, now: number) {
   if (!iso) return "jamais";
@@ -27,27 +29,28 @@ function when(iso: string) {
 }
 
 function AdminPage() {
-  const [data, setData] = useState<AdminData | null>(null);
+  const [unlocked, setUnlocked] = useState(false);
+  const [data, setData] = useState<Journal | null>(null);
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
   const refresh = useCallback(async () => {
-    try { setData(await adminData()); } catch { setMessage("Impossible de joindre le serveur."); }
+    try { setData(await loadJournal()); }
+    catch (error) { setData((current) => ({ ...(current ?? { repo: "", journalUrl: null, status: null, entries: [], runs: [], fixes: [] }), fetchedAt: new Date().toISOString(), error: `Impossible de lire le journal : ${error instanceof Error ? error.message : "erreur"}.` })); }
   }, []);
 
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => { try { if (sessionStorage.getItem(UNLOCK_KEY) === "1") setUnlocked(true); } catch { /* storage unavailable */ } }, []);
   useEffect(() => {
-    if (!data?.authorized) return;
+    if (!unlocked) return;
+    void refresh();
     const poll = window.setInterval(() => void refresh(), REFRESH_MS);
     const tick = window.setInterval(() => setNow(Date.now()), 1000);
     return () => { window.clearInterval(poll); window.clearInterval(tick); };
-  }, [data?.authorized, refresh]);
+  }, [unlocked, refresh]);
 
-  if (!data) return <main className="grid min-h-screen place-items-center bg-background text-muted-foreground">Chargement…</main>;
-
-  if (!data.authorized) {
+  if (!unlocked) {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 font-body text-foreground">
         <form
@@ -55,9 +58,11 @@ function AdminPage() {
           onSubmit={async (event) => {
             event.preventDefault();
             setBusy(true); setMessage("");
-            const result = await adminLogin({ data: { code } }).catch(() => ({ ok: false, message: "Impossible de joindre le serveur." }));
+            const ok = await codeMatches(code);
+            if (!ok) await new Promise((resolve) => setTimeout(resolve, 900));
             setBusy(false); setCode("");
-            if (result.ok) await refresh(); else setMessage(result.message);
+            if (ok) { try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch { /* storage unavailable */ } setUnlocked(true); }
+            else setMessage("Code incorrect.");
           }}
         >
           <p className="eyebrow">Accès réservé</p>
@@ -66,10 +71,13 @@ function AdminPage() {
           <input id="admin-code" type="password" inputMode="numeric" autoComplete="current-password" value={code} onChange={(event) => setCode(event.target.value)} className="mt-2 h-12 w-full rounded-full border border-border bg-background/70 px-5 text-lg tracking-[.4em] focus-visible:outline-2 focus-visible:outline-seasonal" />
           <button type="submit" disabled={busy || !code} className="ember-button mt-5 h-12 w-full rounded-full bg-seasonal font-semibold text-seasonal-foreground disabled:opacity-50">{busy ? "Vérification…" : "Entrer"}</button>
           <p role="alert" className="mt-4 min-h-5 text-sm text-destructive">{message}</p>
+          <a href="/" className="mt-2 inline-block text-sm text-muted-foreground hover:text-seasonal">← Retour au site</a>
         </form>
       </main>
     );
   }
+
+  if (!data) return <main className="grid min-h-screen place-items-center bg-background text-muted-foreground">Chargement du journal…</main>;
 
   const status = data.status;
   const last = status?.checks.at(-1);
@@ -84,7 +92,8 @@ function AdminPage() {
           </div>
           <div className="flex gap-2">
             {data.journalUrl && <a href={data.journalUrl} target="_blank" rel="noopener noreferrer" className="glass rounded-full px-4 py-2 text-sm">Journal sur GitHub</a>}
-            <button type="button" onClick={async () => { await adminLogout(); setData({ authorized: false }); }} className="glass rounded-full px-4 py-2 text-sm">Se déconnecter</button>
+            <button type="button" onClick={() => void refresh()} className="glass rounded-full px-4 py-2 text-sm">Actualiser</button>
+            <button type="button" onClick={() => { try { sessionStorage.removeItem(UNLOCK_KEY); } catch { /* storage unavailable */ } setUnlocked(false); }} className="glass rounded-full px-4 py-2 text-sm">Fermer</button>
           </div>
         </header>
         {data.error && <p className="mt-4 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm">{data.error}</p>}
