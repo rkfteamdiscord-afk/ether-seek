@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { HalloweenPhase } from "./HalloweenArrival";
 import { askGhost, type GhostReply, type GhostTarget } from "@/lib/ghost-ai";
+import { askGhostInBrowser } from "@/lib/ghost-browser-ai";
 import { askStep, fallback, faq, guide, tours, type Pointing } from "@/lib/ghost-knowledge";
 
 /** Little sheet ghost with a wavy hem; purely decorative. */
@@ -255,6 +256,8 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
     setThinking(true);
     let result: GhostReply = null;
     try { result = await askGhost({ data: { question, history } }); } catch { result = null; }
+    // No server or no Groq key (static hosting): ask the keyless AI straight from the browser.
+    if (!result) result = await askGhostInBrowser(question, history);
     setThinking(false);
     reply(result ? { text: result.answer, target: targetSelectors[result.target] } : answerFor(question));
   };
@@ -285,7 +288,7 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
             <input ref={input} id="ghost-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Écris ta question…" autoComplete="off" maxLength={300} />
             <button type="submit" disabled={thinking}>Demander</button>
           </form>
-          <p className="ghost-chat-note">Les questions écrites sont envoyées à un service d’IA (Groq) pour te répondre. Rien n’est enregistré sur le site.</p>
+          <p className="ghost-chat-note">Les questions écrites sont envoyées à un service d’IA (Groq ou Pollinations) pour te répondre. Rien n’est enregistré sur le site.</p>
         </section>
       </div>
       <ZombieWand origin={button} target={target} />
