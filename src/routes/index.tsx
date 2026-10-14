@@ -23,6 +23,8 @@ import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, Deco
 import { SpiderWalkers } from "@/components/SpiderWalkers";
 import { GhostSwarm, GhostGuide } from "@/components/HalloweenGhosts";
 import { CursorSparkles } from "@/components/CursorSparkles";
+import { PumpkinDefs, RealPumpkin } from "@/components/RealPumpkin";
+import { ZombieHand } from "@/components/Zombies";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 
@@ -104,6 +106,7 @@ function Portfolio() {
     <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
       <NightSky />
       <DecorDefs />
+      <PumpkinDefs />
       <GhostSwarm />
       <SpiderWalkers />
       <GhostGuide phase={phase} />
@@ -144,6 +147,9 @@ function Portfolio() {
         <WitchDuel />
         <HalloweenScene chapter={0} />
         <CandleCluster className="candles-hero" />
+        <RealPumpkin carved className="ground-pumpkin gp-hero-a" />
+        <RealPumpkin skin="deep" className="ground-pumpkin gp-hero-b" />
+        <ZombieHand className="zh-hero" />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
@@ -206,6 +212,9 @@ function Portfolio() {
         <HalloweenScene chapter={1} />
         <SwingingLantern className="lantern-right" />
         <DriftingGhost className="ghost-high" />
+        <RealPumpkin carved className="ground-pumpkin gp-services-a" />
+        <RealPumpkin skin="ghost" carved className="ground-pumpkin gp-services-b" />
+        <ZombieHand className="zh-services" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-3xl">
             <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> Ce que je crée</p>
@@ -235,6 +244,8 @@ function Portfolio() {
 
       <section id="apropos" className="halloween-stage relative border-y border-border/40 bg-secondary/55 py-24 lg:py-32">
         <HalloweenScene chapter={2} />
+        <RealPumpkin skin="deep" carved className="ground-pumpkin gp-about-a" />
+        <RealPumpkin className="ground-pumpkin gp-about-b" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-10">
           <div className="rise-in">
@@ -274,6 +285,8 @@ function Portfolio() {
         <HalloweenScene chapter={3} />
         <SwingingLantern className="lantern-left" />
         <DriftingGhost className="ghost-low ghost-reverse" />
+        <RealPumpkin carved className="ground-pumpkin gp-method-a" />
+        <ZombieHand className="zh-method" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
@@ -303,6 +316,8 @@ function Portfolio() {
       <section id="contact" className="halloween-stage halloween-contact relative text-foreground">
         <HalloweenScene chapter={4} />
         <CandleCluster className="candles-contact" />
+        <RealPumpkin carved className="ground-pumpkin gp-contact-a" />
+        <RealPumpkin skin="ghost" className="ground-pumpkin gp-contact-b" />
         <SwingingLantern className="lantern-right lantern-short" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">

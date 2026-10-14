@@ -323,7 +323,7 @@
 .pumpkin-surprise { position: fixed; z-index: 55; right: 20px; bottom: 16px; animation: decorations-reveal .7s ease-out; }
 .pumpkin-trigger { display: flex; flex-direction: column; gap: 0; width: 150px; height: 132px; padding: 0; background: transparent; filter: drop-shadow(var(--halloween-shadow)); }
 .pumpkin-trigger:hover { background: transparent; }
-.pumpkin-trigger img { width: 140px; height: 96px; object-fit: contain; animation: pumpkin-beckon 2.5s ease-in-out infinite; }
+.pumpkin-trigger .real-pumpkin { width: 140px; height: 96px; animation: pumpkin-beckon 2.5s ease-in-out infinite; }
 .pumpkin-trigger span { padding: 4px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 700; color: var(--seasonal-foreground); background: var(--seasonal); }
 .witch-duel { position: absolute; inset: 0 0 auto; height: 210px; overflow: hidden; pointer-events: none; z-index: 1; opacity: .4; }
 .duelist { position: absolute; top: 24px; width: 125px; height: 105px; color: var(--halloween-night); }
@@ -378,12 +378,12 @@
   .duelist { width: 85px; height: 78px; }
   .pumpkin-surprise { right: 10px; bottom: 12px; }
   .pumpkin-trigger { width: 120px; height: 110px; }
-  .pumpkin-trigger img { width: 110px; height: 78px; }
+  .pumpkin-trigger .real-pumpkin { width: 110px; height: 78px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .halloween-arrival, .candy-burst { display: none; }
   .halloween-fog svg:nth-child(n), .halloween-wisps svg { animation: none; }
-  .arrival-flight, .arrival-logo, .arrival-mist, .arrival-mist span, .stolen-zrk, .zrk-identity, .zrk-portrait, .pumpkin-surprise, .pumpkin-trigger img, .duelist, .spell, .duel-spark, [data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: none; }
+  .arrival-flight, .arrival-logo, .arrival-mist, .arrival-mist span, .stolen-zrk, .zrk-identity, .zrk-portrait, .pumpkin-surprise, .pumpkin-trigger .real-pumpkin, .duelist, .spell, .duel-spark, [data-halloween-phase="revealed"] :is(.halloween-scene, .attached-decor, .halloween-garland) { animation: none; }
   .duel-spark { display: none; }
 }
 
@@ -911,4 +911,89 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   .ghost-guide-sprite, .ghost-guide-bubble { transition: none; }
   .ghost-guide-sprite .ghost-sprite, .ghost-sheet, .ghost-mouth { animation: none; }
+}
+
+/* ───────── Citrouilles réalistes ───────── */
+.real-pumpkin { display: block; overflow: visible; }
+.real-pumpkin.is-carved { filter: drop-shadow(0 0 18px oklch(0.75 0.18 55 / .45)); }
+.pk-fire { animation: pk-flicker 1.9s ease-in-out infinite; }
+.pk-fire-glow { animation: pk-flicker 1.9s ease-in-out infinite reverse; }
+@keyframes pk-flicker { 0%,100% { opacity: 1; } 18% { opacity: .82; } 34% { opacity: .95; } 52% { opacity: .7; } 70% { opacity: .92; } 86% { opacity: .78; } }
+.halloween-pumpkins.real-pumpkin { height: auto; }
+.pumpkin-trigger .real-pumpkin { animation: pumpkin-beckon 2.5s ease-in-out infinite; }
+.ground-pumpkin { position: absolute; z-index: 3; pointer-events: none; bottom: 18px; width: 88px; filter: drop-shadow(0 10px 14px oklch(0.08 0.03 290 / .6)); }
+.ground-pumpkin.is-carved { filter: drop-shadow(0 0 22px oklch(0.75 0.18 55 / .5)) drop-shadow(0 10px 14px oklch(0.08 0.03 290 / .6)); }
+.gp-hero-a { left: 9%; bottom: 40px; width: 96px; } .gp-hero-b { left: 16%; bottom: 30px; width: 64px; }
+.gp-services-a { right: 12%; width: 104px; } .gp-services-b { right: 20%; width: 70px; bottom: 12px; }
+.gp-about-a { left: 30%; width: 92px; } .gp-about-b { left: 37%; width: 60px; bottom: 10px; }
+.gp-method-a { right: 30%; width: 84px; }
+.gp-contact-a { right: 9%; bottom: 112px; width: 90px; } .gp-contact-b { right: 15%; bottom: 104px; width: 58px; }
+[data-halloween-phase="arrival"] :is(.ground-pumpkin, .zombie-hand) { visibility: hidden; }
+@media (max-width: 640px) { .ground-pumpkin { width: 62px !important; } .gp-hero-b, .gp-services-b, .gp-about-b, .gp-contact-b { display: none; } }
+
+/* ───────── Zombies ───────── */
+.zombie-hand { position: absolute; z-index: 3; bottom: 4px; width: 92px; pointer-events: none; filter: drop-shadow(0 6px 10px oklch(0.08 0.03 290 / .6)); }
+.zombie-hand svg { display: block; width: 100%; height: auto; overflow: visible; }
+.zh-arm { animation: zombie-rise 9s ease-in-out infinite; }
+.zh-fingers { transform-box: fill-box; transform-origin: 50% 100%; animation: zombie-claw 9s ease-in-out infinite; }
+.zh-hero { left: 42%; } .zh-services { left: 6%; animation-delay: -3s; } .zh-method { right: 14%; }
+.zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }
+.zh-method .zh-arm, .zh-method .zh-fingers { animation-delay: -6s; }
+@keyframes zombie-rise { 0%,12% { transform: translateY(105px); } 30% { transform: translateY(8px) rotate(-3deg); } 40% { transform: translateY(0) rotate(4deg); } 62% { transform: translateY(2px) rotate(-5deg); } 74% { transform: translateY(12px); } 88%,100% { transform: translateY(105px); } }
+@keyframes zombie-claw { 0%,32% { transform: scale(1); } 40%,46% { transform: scaleY(.82) skewX(-6deg); } 52% { transform: scale(1); } 58%,62% { transform: scaleY(.8) skewX(5deg); } 70%,100% { transform: scale(1); } }
+.zombie-walker { position: absolute; left: 0; bottom: 2vh; width: 120px; opacity: .85; filter: brightness(.85) drop-shadow(0 0 12px oklch(0.1 0.03 290)); animation: zombie-cross 70s linear infinite 12s; transform: translateX(-160px); }
+.zombie-walker-body { display: block; width: 100%; height: auto; overflow: visible; animation: zombie-shamble 1.6s ease-in-out infinite; }
+.zw-leg { transform-box: fill-box; transform-origin: 50% 0; }
+.zw-leg-a { animation: zombie-step 1.6s ease-in-out infinite; }
+.zw-leg-b { animation: zombie-step 1.6s ease-in-out infinite -.8s; }
+.zw-arm { transform-box: fill-box; transform-origin: 0 50%; animation: zombie-reach 1.6s ease-in-out infinite; }
+.zw-arm-back { animation-delay: -.5s; }
+.zw-head { transform-box: fill-box; transform-origin: 50% 100%; animation: zombie-loll 3.2s ease-in-out infinite; }
+.zw-eye { animation: pk-flicker 2.4s ease-in-out infinite; }
+@keyframes zombie-cross { 0% { transform: translateX(-160px); } 55%,100% { transform: translateX(calc(100vw + 40px)); } }
+@keyframes zombie-shamble { 0%,100% { transform: translateY(0) rotate(4deg); } 50% { transform: translateY(5px) rotate(8deg); } }
+@keyframes zombie-step { 0%,100% { transform: rotate(-14deg); } 50% { transform: rotate(12deg); } }
+@keyframes zombie-reach { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(6deg); } }
+@keyframes zombie-loll { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(10deg); } }
+@media (max-width: 640px) { .zombie-walker { width: 80px; } .zombie-hand { width: 64px; } .zh-hero { left: 60%; } }
+
+/* ───────── Le fantôme guide interactif ───────── */
+.ghost-guide .ghost-guide-sprite { position: relative; opacity: .95; transform: none; pointer-events: auto; cursor: pointer; padding: 0; border: 0; background: none; border-radius: 50%; }
+.ghost-guide .ghost-guide-sprite:focus-visible { outline: 2px solid var(--seasonal); outline-offset: 4px; }
+.ghost-guide-badge { position: absolute; top: -2px; right: -4px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; font-weight: 800; color: var(--seasonal-foreground); background: var(--seasonal); box-shadow: 0 0 12px var(--seasonal); animation: badge-pulse 2s ease-in-out infinite; }
+@keyframes badge-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+.ghost-guide[data-visible="false"] .ghost-guide-bubble { visibility: hidden; }
+.ghost-chat { position: fixed; left: 16px; bottom: 108px; z-index: 57; width: min(380px, calc(100vw - 32px)); max-height: min(70vh, 560px); display: flex; flex-direction: column; gap: 10px; padding: 14px; pointer-events: auto; border-radius: 20px; color: var(--foreground); background: color-mix(in oklab, var(--card) 92%, transparent); border: 1px solid color-mix(in oklab, var(--seasonal) 40%, transparent); box-shadow: 0 30px 80px -30px color-mix(in oklab, var(--seasonal) 70%, transparent); backdrop-filter: blur(14px); animation: chat-pop .35s cubic-bezier(.2,.9,.25,1.2); }
+.ghost-chat[hidden] { display: none; }
+@keyframes chat-pop { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: none; } }
+.ghost-chat-head { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-display); font-size: 16px; }
+.ghost-chat-close { width: 32px; height: 32px; border-radius: 50%; font-size: 22px; line-height: 1; color: var(--muted-foreground); }
+.ghost-chat-close:hover { color: var(--foreground); background: color-mix(in oklab, var(--foreground) 10%, transparent); }
+.ghost-chat-log { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 60px; }
+.ghost-chat-msg { margin: 0; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border-radius: 14px; }
+.ghost-chat-msg.from-ghost { align-self: flex-start; background: color-mix(in oklab, var(--primary) 16%, transparent); border-bottom-left-radius: 4px; }
+.ghost-chat-msg.from-you { align-self: flex-end; color: var(--seasonal-foreground); background: var(--seasonal); border-bottom-right-radius: 4px; }
+.ghost-chat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ghost-chat-chips button { padding: 6px 10px; font-size: 12.5px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--seasonal) 40%, transparent); background: color-mix(in oklab, var(--seasonal) 10%, transparent); color: var(--foreground); transition: background .2s ease; }
+.ghost-chat-chips button:hover, .ghost-chat-chips button:focus-visible { background: color-mix(in oklab, var(--seasonal) 28%, transparent); outline: none; }
+.ghost-chat-form { display: flex; gap: 6px; }
+.ghost-chat-form input { flex: 1; min-width: 0; height: 40px; padding: 0 12px; font-size: 14px; border-radius: 999px; color: var(--foreground); background: color-mix(in oklab, var(--background) 70%, transparent); border: 1px solid var(--border); }
+.ghost-chat-form input:focus-visible { outline: 2px solid var(--seasonal); outline-offset: 1px; }
+.ghost-chat-form button { height: 40px; padding: 0 14px; font-size: 14px; font-weight: 700; border-radius: 999px; color: var(--seasonal-foreground); background: var(--seasonal); }
+@media (max-width: 640px) { .ghost-chat { left: 8px; bottom: 84px; width: calc(100vw - 16px); max-height: 62vh; } }
+
+/* ───────── Baguette tenue par un doigt de zombie ───────── */
+.zombie-wand { position: fixed; left: 0; top: 0; z-index: 58; height: 26px; margin-top: -13px; pointer-events: none; transform-origin: 0 50%; opacity: 0; transition: opacity .25s ease; }
+.zombie-wand[data-active="true"] { opacity: 1; }
+.zombie-wand-grow { display: flex; align-items: center; width: 100%; height: 100%; transform-origin: 0 50%; animation: wand-grow .55s cubic-bezier(.2,.9,.25,1) both; }
+.zombie-finger { width: 46px; height: 22px; flex-shrink: 0; filter: drop-shadow(0 2px 4px oklch(0.1 0.03 290 / .6)); }
+.wand-stick { flex: 1; height: 4px; margin-left: -6px; border-radius: 3px; background: linear-gradient(180deg, oklch(0.55 0.08 60), oklch(0.32 0.06 50)); box-shadow: 0 0 8px oklch(0.85 0.15 85 / .45); }
+.wand-star { margin-left: -4px; font-size: 20px; line-height: 1; color: oklch(0.95 0.13 90); text-shadow: 0 0 8px oklch(0.9 0.16 85), 0 0 18px oklch(0.8 0.17 70); animation: wand-star 1.2s ease-in-out infinite; }
+@keyframes wand-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes wand-star { 0%,100% { transform: rotate(0) scale(1); } 50% { transform: rotate(45deg) scale(1.3); } }
+.guide-highlight { outline: 2px solid color-mix(in oklab, var(--seasonal) 80%, transparent); outline-offset: 6px; border-radius: 16px; animation: guide-glow 1.4s ease-in-out infinite; }
+@keyframes guide-glow { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--seasonal) 0%, transparent); } 50% { box-shadow: 0 0 34px 6px color-mix(in oklab, var(--seasonal) 45%, transparent); } }
+@media (prefers-reduced-motion: reduce) {
+  .pk-fire, .pk-fire-glow, .zh-arm, .zh-fingers, .zombie-walker-body, .zw-leg, .zw-arm, .zw-head, .zw-eye, .ghost-guide-badge, .ghost-chat, .zombie-wand-grow, .wand-star, .guide-highlight { animation: none; }
+  .zombie-walker { display: none; }
 }
