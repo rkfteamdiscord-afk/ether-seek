@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EquiMarge — film</title>
+<style>
+@font-face { font-family: "Fraunces"; font-weight: 700; font-style: normal; src: url(data:font/woff2;base64,__FRAUNCES__) format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 200 900; font-style: normal; src: url(data:font/woff2;base64,__SOURCESANS__) format("woff2"); }
+:root { --bg: #0f120d; --fg: #f6f1e7; --muted: #a8a293; --line: #2c3227; --accent: #F26A21; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: "Source Sans 3", system-ui, sans-serif; }
+body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; }
+canvas { display: block; width: min(100%, calc((100dvh - 110px) * 16 / 9)); aspect-ratio: 16 / 9; height: auto; background: #F6F1E7; border-radius: 6px; }
+#ui { width: min(100%, calc((100dvh - 110px) * 16 / 9)); display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+#ui[hidden] { display: none; }
+button { font: 600 15px "Source Sans 3", system-ui, sans-serif; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 999px; min-height: 40px; padding: 0 16px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#play { background: var(--fg); color: var(--bg); border-color: var(--fg); min-width: 96px; }
+input[type=range] { flex: 1 1 240px; accent-color: var(--accent); min-height: 40px; }
+#readout { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; min-width: 260px; }
+body.capture { padding: 0; display: block; background: #000; }
+body.capture canvas { width: 1920px; height: 1080px; border-radius: 0; }
+</style>
+</head>
+<body>
+<canvas id="film" width="1920" height="1080" aria-label="Film EquiMarge : le point orange relie l'interrupteur, le graphique, la forme, la typo et la carte finale"></canvas>
+<div id="ui" hidden>
+  <button id="play" type="button" aria-pressed="true">Pause</button>
+  <button id="prevBeat" type="button">◀ Temps</button>
+  <button id="nextBeat" type="button">Temps ▶</button>
+  <input id="scrub" type="range" min="0" max="899" step="1" value="0" aria-label="Position dans le film">
+  <span id="readout" aria-live="off"></span>
+</div>
+<script>
+__FILMJS__
+</script>
+</body>
+</html>
