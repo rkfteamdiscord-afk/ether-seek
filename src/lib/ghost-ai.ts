@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { halloweenOffer } from "./seasonal-offer";
+import { siteFacts } from "./ghost-knowledge";
 
 /**
  * The guide ghost's small AI. Runs only on the server so the Groq key never reaches
@@ -13,27 +13,6 @@ export const ghostTargets = ["services", "prix", "promo", "contact", "discord", 
 export type GhostTarget = (typeof ghostTargets)[number];
 export type GhostTurn = { role: "user" | "assistant"; content: string };
 export type GhostReply = { answer: string; target: GhostTarget } | null;
-
-const offer = `−${halloweenOffer.discountPercent} %`;
-
-// Everything the ghost may say comes from here, which mirrors the page itself.
-const siteFacts = `
-Studio : Ȥrk, studio digital indépendant. Ȥrk est un développeur indépendant et le fondateur du studio.
-Ce qu'il crée :
-- Sites web : sites vitrines, portfolios, boutiques et plateformes rapides, élégants et pensés pour convertir les visiteurs.
-- Applications mobiles iOS et Android, prêtes à être publiées sur l'App Store et le Play Store.
-- Bots et automatisations : bots Telegram, WhatsApp et Discord, et outils d'automatisation adaptés à l'activité.
-- Cybersécurité : audit, protection des accès et bonnes pratiques intégrés pour livrer des produits solides et fiables.
-Il s'occupe de l'apparence, du fonctionnement, des données, de la mise en ligne et du suivi.
-Il accompagne particuliers, créateurs, communautés et entreprises, sans qu'ils aient à coordonner plusieurs prestataires.
-La cybersécurité sert à concevoir des projets plus fiables : accès, données et hébergement réfléchis dès le départ.
-Engagements : un interlocuteur unique du premier échange à la livraison ; une solution sur mesure, sans modèle générique ; un suivi clair et régulier ; la sécurité prise en compte dès le début.
-Le client parle directement avec la personne qui conçoit son projet, suit son avancement et reçoit une solution qui lui appartient vraiment.
-Méthode en 3 étapes : 1) on échange (idée, objectifs, budget) ; 2) Ȥrk conçoit, développe et teste la solution avec le client ; 3) il met le projet en ligne et reste disponible après la livraison.
-Contact : WhatsApp, Discord ou e-mail, avec les boutons de la section contact. Il y a aussi un serveur Discord à rejoindre.
-Offre Halloween : ${offer} sur toutes les prestations avec le code ${halloweenOffer.code}.
-Le site ne donne aucun prix ni aucun délai : chaque projet est sur mesure, il faut demander à Ȥrk.
-`.trim();
 
 const systemPrompt = `Tu es « Bouh », le petit fantôme guide du site du studio Ȥrk, en pleine nuit d'Halloween.
 Tu réponds aux visiteurs en français, en 1 à 3 phrases courtes, avec une touche espiègle d'Halloween, en les tutoyant.
