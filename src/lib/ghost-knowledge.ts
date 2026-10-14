@@ -1,0 +1,80 @@
+import { halloweenOffer } from "./seasonal-offer";
+
+/**
+ * Everything the guide ghost knows and says: the guided tour of each section, the
+ * ready-made questions and the fact sheet given to its AI. Data only, all drawn from
+ * what the page itself says; the guardian may add details here (see scripts/gardien).
+ * Targets are CSS selectors of data-guide anchors on the page.
+ */
+export type Pointing = { text: string; target: string };
+
+export const offer = `−${halloweenOffer.discountPercent} %`;
+export const guide = (name: string) => `[data-guide="${name}"]`;
+export const askStep: Pointing = { text: "Tu as des questions ? Clique sur moi, je te réponds !", target: "" };
+
+/** A short guided tour for each part of the page, each step pointing at what it describes. */
+export const tours: Record<string, Pointing[]> = {
+  accueil: [
+    { text: "Bouh ! Bienvenue chez Ȥrk, un studio digital indépendant. Suis-moi, je te fais la visite !", target: guide("accueil-titre") },
+    { text: "Ȥrk transforme ton idée en site web, appli mobile, bot ou outil sur mesure.", target: guide("accueil-texte") },
+    { text: "Pour commander, c’est ce bouton orange… et à côté, tu peux rejoindre le Discord !", target: guide("accueil-boutons") },
+    { text: "La promesse : sur mesure, sécurisé, et tu parles directement avec Ȥrk.", target: guide("accueil-promesse") },
+  ],
+  services: [
+    { text: "Les sites web : vitrines, portfolios, boutiques… rapides, élégants et faits pour convertir.", target: guide("service-0") },
+    { text: "Les applis iOS et Android, prêtes à être publiées sur l’App Store et le Play Store.", target: guide("service-1") },
+    { text: "Les bots Telegram, WhatsApp et Discord, pensés pour ta communauté ou ton activité.", target: guide("service-2") },
+    { text: "Et la cybersécurité : audit et protection des accès intégrés dès le départ.", target: guide("service-3") },
+  ],
+  apropos: [
+    { text: "Voici Ȥrk : développeur indépendant et fondateur du studio.", target: guide("apropos-titre") },
+    { text: "Il s’occupe de tout : apparence, fonctionnement, données, mise en ligne et suivi.", target: guide("apropos-metier") },
+    { text: "Ses engagements : un seul interlocuteur, du sur mesure, un suivi clair et la sécurité dès le début.", target: guide("apropos-engagements") },
+    { text: "Et la solution qu’il te livre t’appartient vraiment !", target: guide("apropos-propriete") },
+  ],
+  methode: [
+    { text: "Étape 1 : vous échangez sur ton idée, tes objectifs et ton budget.", target: guide("etape-0") },
+    { text: "Étape 2 : Ȥrk conçoit, développe et teste la solution avec toi.", target: guide("etape-1") },
+    { text: "Étape 3 : il met ton projet en ligne et reste disponible après la livraison.", target: guide("etape-2") },
+  ],
+  contact: [
+    { text: "Pour lancer ton projet, écris à Ȥrk ici : WhatsApp, Discord ou e-mail.", target: guide("contact-boutons") },
+    { text: `N’oublie pas le code ${halloweenOffer.code} : ${offer} sur toute prestation !`, target: guide("contact-promo") },
+  ],
+};
+
+/** Ready-made questions, answered instantly from what the page says. */
+export const faq: Array<{ question: string; keys: string[]; answer: Pointing }> = [
+  { question: "Tu crées quoi ?", keys: ["cree", "creer", "fais", "faire", "service", "site", "app", "bot", "propose"], answer: { text: "Des sites web, des applis iOS et Android, des bots Telegram, WhatsApp et Discord, et de la cybersécurité. Regarde ici !", target: guide("service-0") } },
+  { question: "Combien ça coûte ?", keys: ["prix", "cout", "coute", "tarif", "combien", "devis", "budget", "cher"], answer: { text: "Chaque projet est sur mesure, donc le prix dépend de ton idée. Écris à Ȥrk : il te répondra directement.", target: guide("whatsapp") } },
+  { question: "Il y a une promo ?", keys: ["promo", "code", "reduc", "remise", "offre", "halloween", "pourcent"], answer: { text: `Oui ! ${offer} sur toutes les prestations avec le code ${halloweenOffer.code}.`, target: `${guide("promo-bandeau")}, ${guide("contact-promo")}` } },
+  { question: "Comment contacter Ȥrk ?", keys: ["contact", "whatsapp", "mail", "joindre", "ecrire", "parler", "appeler", "message"], answer: { text: "Par WhatsApp, Discord ou e-mail : les boutons sont juste là !", target: guide("contact-boutons") } },
+  { question: "Qui est Ȥrk ?", keys: ["qui", "zrk", "ȥrk", "developpeur", "fondateur"], answer: { text: "Un développeur indépendant : il s’occupe de ton projet de A à Z, du premier échange à la mise en ligne.", target: guide("apropos-titre") } },
+  { question: "Comment ça se passe ?", keys: ["etape", "comment", "deroule", "passe", "methode", "process"], answer: { text: "3 étapes : on échange, Ȥrk construit et teste avec toi, puis il t’accompagne après la livraison.", target: guide("etape-0") } },
+  { question: "Quels délais ?", keys: ["delai", "temps", "quand", "rapide", "duree", "semaine"], answer: { text: "Ça dépend de ton projet : demande-le à Ȥrk dès le premier échange, il te suit clairement tout du long.", target: guide("whatsapp") } },
+  { question: "Le site m’appartient ?", keys: ["appartient", "proprie", "mien", "a moi", "droits"], answer: { text: "Oui : tu reçois une solution qui t’appartient vraiment.", target: guide("apropos-propriete") } },
+  { question: "C’est sécurisé ?", keys: ["secur", "cyber", "hack", "protection", "donnees", "fiable"], answer: { text: "La sécurité est pensée dès le début : accès, données et hébergement.", target: guide("service-3") } },
+  { question: "Tu as un Discord ?", keys: ["discord", "serveur", "communaute"], answer: { text: "Oui ! Rejoins le serveur Discord de Ȥrk, le bouton est là.", target: guide("discord") } },
+];
+
+export const fallback: Pointing = { text: "Hmm… mes pouvoirs de fantôme ont des limites ! Pose ta question directement à Ȥrk sur WhatsApp.", target: guide("whatsapp") };
+
+// Everything the ghost may say comes from here, which mirrors the page itself.
+export const siteFacts = `
+Studio : Ȥrk, studio digital indépendant. Ȥrk est un développeur indépendant et le fondateur du studio.
+Ce qu'il crée :
+- Sites web : sites vitrines, portfolios, boutiques et plateformes rapides, élégants et pensés pour convertir les visiteurs.
+- Applications mobiles iOS et Android, prêtes à être publiées sur l'App Store et le Play Store.
+- Bots et automatisations : bots Telegram, WhatsApp et Discord, et outils d'automatisation adaptés à l'activité.
+- Cybersécurité : audit, protection des accès et bonnes pratiques intégrés pour livrer des produits solides et fiables.
+Il s'occupe de l'apparence, du fonctionnement, des données, de la mise en ligne et du suivi.
+Il accompagne particuliers, créateurs, communautés et entreprises, sans qu'ils aient à coordonner plusieurs prestataires.
+La cybersécurité sert à concevoir des projets plus fiables : accès, données et hébergement réfléchis dès le départ.
+Engagements : un interlocuteur unique du premier échange à la livraison ; une solution sur mesure, sans modèle générique ; un suivi clair et régulier ; la sécurité prise en compte dès le début.
+Le client parle directement avec la personne qui conçoit son projet, suit son avancement et reçoit une solution qui lui appartient vraiment.
+Méthode en 3 étapes : 1) on échange (idée, objectifs, budget) ; 2) Ȥrk conçoit, développe et teste la solution avec le client ; 3) il met le projet en ligne et reste disponible après la livraison.
+Contact : WhatsApp, Discord ou e-mail, avec les boutons de la section contact. Il y a aussi un serveur Discord à rejoindre.
+Offre Halloween : ${offer} sur toutes les prestations avec le code ${halloweenOffer.code}.
+Le site ne donne aucun prix ni aucun délai : chaque projet est sur mesure, il faut demander à Ȥrk.
+`.trim();
+

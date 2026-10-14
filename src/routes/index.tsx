@@ -129,7 +129,7 @@ function Portfolio() {
       </header>
 
       {showOffer && (
-        <aside role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
+        <aside data-guide="promo-bandeau" role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-2.5 lg:px-10">
             <Pumpkins className="pumpkins-notice" />
             <p className="flex-1 text-sm leading-6">
@@ -162,25 +162,25 @@ function Portfolio() {
               <span className="mx-1 hidden h-1 w-1 rounded-full bg-seasonal sm:inline-block" aria-hidden="true" />
               <span className="hidden text-seasonal sm:inline">Édition Halloween</span>
             </div>
-            <h1 className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
+            <h1 data-guide="accueil-titre" className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
               <Cobweb />
               <span className="zrk-identity">Ȥrk</span> crée vos <span className="ember-text pr-2">sites et applications</span> avec sérieux.
             </h1>
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9">
+            <p data-guide="accueil-texte" className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9">
               Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+            <div data-guide="accueil-boutons" className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg" className="halloween-button ember-button h-auto min-h-13 rounded-full bg-seasonal px-7 py-3.5 text-base font-semibold text-seasonal-foreground hover:bg-seasonal/90">
                 <a href="#contact"><Cobweb /> Commander un site <MessageCircle className="h-4 w-4" /></a>
               </Button>
               <Button asChild variant="outline" size="lg" className="decor-anchor glass h-auto min-h-13 whitespace-normal rounded-full px-7 py-3.5 text-base hover:bg-card/80">
-                <a href={discordUrl} target="_blank" rel="noopener noreferrer">
+                <a data-guide="discord" href={discordUrl} target="_blank" rel="noopener noreferrer">
                   <AttachedDecor chapter={0} index={1} />
                   <DiscordIcon /> Rejoindre le serveur Discord
                 </a>
               </Button>
             </div>
-            <div className="mt-11 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
+            <div data-guide="accueil-promesse" className="mt-11 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sur mesure</span>
               <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sécurisé</span>
               <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Accompagnement direct</span>
@@ -225,7 +225,7 @@ function Portfolio() {
           </div>
           <div className="mt-16 grid gap-6 md:grid-cols-2">
             {services.map((service, index) => (
-              <article key={service.title} className="halloween-card spell-card glass rise-in group p-8">
+              <article key={service.title} data-guide={`service-${index}`} className="halloween-card spell-card glass rise-in group p-8">
                 <AttachedDecor chapter={1} index={index as 0 | 1 | 2 | 3} />
                 <Cobweb className="web-card" />
                 <div className="flex items-center justify-between">
@@ -250,7 +250,7 @@ function Portfolio() {
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-10">
           <div className="rise-in">
             <p className="eyebrow"><Ghost className="h-4 w-4" aria-hidden="true" /> À propos de moi</p>
-            <h2 className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />Je suis <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
+            <h2 data-guide="apropos-titre" className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />Je suis <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
             <div className="decor-anchor glass mt-9 rounded-[1.5rem] p-2.5 shadow-2xl">
               <AttachedDecor chapter={2} index={1} />
               <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
@@ -260,16 +260,16 @@ function Portfolio() {
             <p>
               Je suis développeur indépendant et fondateur de <strong className="font-semibold text-foreground">Ȥrk</strong>. J’accompagne les particuliers, créateurs, communautés et entreprises qui veulent donner vie à une idée numérique sans devoir coordonner plusieurs prestataires.
             </p>
-            <p>
+            <p data-guide="apropos-metier">
               Mon cœur de métier est la <strong className="font-semibold text-foreground">création de sites web et d’applications mobiles</strong>. Je m’occupe de l’apparence, du fonctionnement, des données, de la mise en ligne et du suivi. Je développe aussi des bots Telegram, WhatsApp et Discord ainsi que des outils d’automatisation adaptés à votre activité.
             </p>
             <p>
               Ma spécialisation en cybersécurité n’est pas là pour donner une image inquiétante : elle me permet surtout de concevoir des projets plus fiables. Les accès, les données et l’hébergement sont réfléchis avec sérieux dès le départ.
             </p>
-            <p>
+            <p data-guide="apropos-propriete">
               Je privilégie une relation simple et transparente. Vous parlez directement avec la personne qui conçoit votre projet, vous suivez son avancement et vous recevez une solution qui vous appartient vraiment.
             </p>
-            <div className="grid gap-3 pt-4 sm:grid-cols-2">
+            <div data-guide="apropos-engagements" className="grid gap-3 pt-4 sm:grid-cols-2">
               {commitments.map((item, index) => (
                 <div key={item} className="decor-anchor glass flex gap-3 rounded-2xl p-4 text-sm leading-6 text-foreground">
                   {index < 2 && <AttachedDecor chapter={2} index={index === 0 ? 2 : 3} />}
@@ -299,7 +299,7 @@ function Portfolio() {
               { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
               { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
             ].map((step, index) => (
-              <article key={step.n} className="decor-anchor spell-card glass rise-in p-8">
+              <article key={step.n} data-guide={`etape-${index}`} className="decor-anchor spell-card glass rise-in p-8">
                 <AttachedDecor chapter={3} index={index === 0 ? 1 : index === 1 ? 2 : 3} />
                 <div className="flex items-start justify-between">
                   <span className="step-number ember-text">{step.n}</span>
@@ -325,12 +325,13 @@ function Portfolio() {
             <div className="max-w-2xl">
               <p className="eyebrow">Parlons de votre idée</p>
               <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={4} index={0} />Besoin d’un site, d’une app ou d’un bot ?</h2>
-              <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-seasonal/40 bg-seasonal-soft px-4 py-2 text-sm font-medium text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
+              <p data-guide="contact-promo" className="mt-6 inline-flex items-center gap-2 rounded-full border border-seasonal/40 bg-seasonal-soft px-4 py-2 text-sm font-medium text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
               <p className="mt-5 leading-7 text-muted-foreground">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
             </div>
-            <div className="halloween-contact-buttons relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-64">
+            <div data-guide="contact-boutons" className="halloween-contact-buttons relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-64">
               <Cobweb />
               <a
+                data-guide="whatsapp"
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"

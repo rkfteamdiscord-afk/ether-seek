@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { halloweenOffer } from "@/lib/seasonal-offer";
 import type { HalloweenPhase } from "./HalloweenArrival";
+import { askGhost, type GhostReply, type GhostTarget } from "@/lib/ghost-ai";
+import { askStep, fallback, faq, guide, tours, type Pointing } from "@/lib/ghost-knowledge";
 
 /** Little sheet ghost with a wavy hem; purely decorative. */
 export function GhostSprite({ className = "" }: { className?: string }) {
@@ -78,38 +79,24 @@ export function GhostSwarm() {
   );
 }
 
-type Pointing = { text: string; target: string };
-
-const offer = `−${halloweenOffer.discountPercent} %`;
-const whatsapp = '#contact a[href*="whatsapp"]';
-
-/** Tips shown when a part of the page reaches the middle of the screen. */
-const tips: Record<string, Pointing> = {
-  accueil: { text: "Bouh ! Bienvenue chez Ȥrk. Clique sur moi si tu as une question, je connais tous ses secrets…", target: "#accueil h1" },
-  services: { text: "Ici : sites web, applis mobiles, bots et cybersécurité. Tout est fait sur mesure.", target: "#services article" },
-  apropos: { text: "Avec Ȥrk, tu parles directement à la personne qui crée ton projet.", target: "#apropos h2" },
-  methode: { text: "3 étapes : on échange, Ȥrk construit, puis il t’accompagne après la mise en ligne.", target: "#methode article" },
-  contact: { text: `Psst… avec le code ${halloweenOffer.code}, tu as ${offer} sur ta commande !`, target: whatsapp },
+/** Where the wand points for each target the AI can choose. */
+const targetSelectors: Record<GhostTarget, string> = {
+  services: guide("service-0"),
+  prix: guide("whatsapp"),
+  promo: `${guide("promo-bandeau")}, ${guide("contact-promo")}`,
+  contact: guide("contact-boutons"),
+  discord: guide("discord"),
+  apropos: guide("apropos-titre"),
+  methode: guide("etape-0"),
+  propriete: guide("apropos-propriete"),
+  securite: guide("service-3"),
+  accueil: guide("accueil-titre"),
+  aucun: "",
 };
-
-/** Questions the ghost can answer, only from what the page itself says. */
-const faq: Array<{ question: string; keys: string[]; answer: Pointing }> = [
-  { question: "Tu crées quoi ?", keys: ["cree", "creer", "fais", "faire", "service", "site", "app", "bot", "propose"], answer: { text: "Des sites web, des applis iOS et Android, des bots Telegram, WhatsApp et Discord, et de la cybersécurité. Regarde ici !", target: "#services article" } },
-  { question: "Combien ça coûte ?", keys: ["prix", "cout", "coute", "tarif", "combien", "devis", "budget", "cher"], answer: { text: "Chaque projet est sur mesure, donc le prix dépend de ton idée. Écris à Ȥrk : il te répondra directement.", target: whatsapp } },
-  { question: "Il y a une promo ?", keys: ["promo", "code", "reduc", "remise", "offre", "halloween", "pourcent"], answer: { text: `Oui ! ${offer} sur toutes les prestations avec le code ${halloweenOffer.code}.`, target: ".halloween-offer, #contact .rounded-full.border-seasonal\\/40" } },
-  { question: "Comment contacter Ȥrk ?", keys: ["contact", "whatsapp", "mail", "joindre", "ecrire", "parler", "appeler", "message"], answer: { text: "Par WhatsApp, Discord ou e-mail : les boutons sont juste là !", target: whatsapp } },
-  { question: "Qui est Ȥrk ?", keys: ["qui", "zrk", "ȥrk", "developpeur", "fondateur"], answer: { text: "Un développeur indépendant : il s’occupe de ton projet de A à Z, du premier échange à la mise en ligne.", target: "#apropos h2" } },
-  { question: "Comment ça se passe ?", keys: ["etape", "comment", "deroule", "passe", "methode", "process"], answer: { text: "3 étapes : on échange, Ȥrk construit et teste avec toi, puis il t’accompagne après la livraison.", target: "#methode article" } },
-  { question: "Quels délais ?", keys: ["delai", "temps", "quand", "rapide", "duree", "semaine"], answer: { text: "Ça dépend de ton projet : demande-le à Ȥrk dès le premier échange, il te suit clairement tout du long.", target: whatsapp } },
-  { question: "Le site m’appartient ?", keys: ["appartient", "proprie", "mien", "a moi", "droits"], answer: { text: "Oui : tu reçois une solution qui t’appartient vraiment.", target: "#apropos .decor-anchor.glass" } },
-  { question: "C’est sécurisé ?", keys: ["secur", "cyber", "hack", "protection", "donnees", "fiable"], answer: { text: "La sécurité est pensée dès le début : accès, données et hébergement.", target: "#services article:nth-of-type(4)" } },
-  { question: "Tu as un Discord ?", keys: ["discord", "serveur", "communaute"], answer: { text: "Oui ! Rejoins le serveur Discord de Ȥrk, le bouton est là.", target: '#accueil a[href*="discord"]' } },
-];
-
-const fallback: Pointing = { text: "Hmm… mes pouvoirs de fantôme ont des limites ! Pose ta question directement à Ȥrk sur WhatsApp.", target: whatsapp };
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+/** Built-in answer used for the ready-made questions and whenever the AI is unavailable. */
 function answerFor(question: string): Pointing {
   const text = normalize(question);
   let best: Pointing = fallback, score = 0;
@@ -167,76 +154,109 @@ function ZombieWand({ origin, target }: { origin: React.RefObject<HTMLElement | 
 }
 
 /**
- * The guide ghost. It floats in with a short tip each time a new part of the page
- * reaches the middle of the screen, and answers questions when clicked, pointing at
- * the matching part of the page with its zombie-finger wand. Tips show once per
- * visit, questions are matched in the browser and never stored or sent; only the
- * ghost button and its question panel take clicks.
+ * The guide ghost. Each time a part of the page reaches the middle of the screen it
+ * gives a short guided tour of it, pointing at each element with its zombie-finger
+ * wand, then asks whether you have questions. Clicked, it opens a question panel:
+ * ready-made questions are answered instantly from the page; typed questions go to a
+ * small AI on the server (see ghost-ai.ts), with the built-in answers as a fallback.
+ * Nothing is stored; only the ghost button and its panel take clicks.
  */
 export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
   const [tip, setTip] = useState<string>("");
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const [thinking, setThinking] = useState(false);
   const [draft, setDraft] = useState("");
-  const [log, setLog] = useState<Array<{ from: "ghost" | "you"; text: string }>>([{ from: "ghost", text: "Bouh ! Choisis une question ou écris la tienne, je te montre la réponse sur la page." }]);
+  const [log, setLog] = useState<Array<{ from: "ghost" | "you"; text: string }>>([{ from: "ghost", text: "Bouh ! Pose-moi n’importe quelle question sur Ȥrk, ou choisis-en une. Je te montre la réponse sur la page." }]);
   const [target, setTarget] = useState<Element | null>(null);
-  const seen = useRef(new Set<string>());
+  const lastTour = useRef(new Map<string, number>());
+  const tourTimers = useRef<number[]>([]);
   const button = useRef<HTMLButtonElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const pointTimer = useRef(0);
+  const bubbleTimer = useRef(0);
+  const openRef = useRef(false);
+  openRef.current = open;
   const ready = phase !== "arrival" && phase !== "releasing";
 
   const point = (selector: string, scroll: boolean, duration: number) => {
-    const element = document.querySelector(selector);
-    if (!element) return;
+    window.clearTimeout(pointTimer.current);
+    const element = selector ? document.querySelector(selector) : null;
+    if (!element) { setTarget(null); return; }
     if (scroll) element.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
     setTarget(element);
-    window.clearTimeout(pointTimer.current);
     pointTimer.current = window.setTimeout(() => setTarget(null), duration);
+  };
+
+  const stopTour = () => { tourTimers.current.forEach((timer) => window.clearTimeout(timer)); tourTimers.current = []; };
+
+  const say = (text: string, selector: string, duration: number) => {
+    setTip(text);
+    setVisible(true);
+    point(selector, false, duration);
+    window.clearTimeout(bubbleTimer.current);
+    bubbleTimer.current = window.setTimeout(() => setVisible(false), duration);
   };
 
   useEffect(() => {
     if (!ready) return;
-    let hide = 0;
+    const step = 4600;
+    const play = (id: string) => {
+      const now = Date.now();
+      // Replays whenever you come back, but not while you scroll up and down within a few seconds.
+      if (now - (lastTour.current.get(id) ?? 0) < 25000 || openRef.current) return;
+      lastTour.current.set(id, now);
+      stopTour();
+      [...tours[id]!, askStep].forEach((item, i) => {
+        tourTimers.current.push(window.setTimeout(() => { if (!openRef.current) say(item.text, item.target, step); }, i * step));
+      });
+    };
     const observer = new IntersectionObserver((entries) => {
       const id = entries.find((item) => item.isIntersecting)?.target.id;
-      if (!id || !tips[id] || seen.current.has(id)) return;
-      seen.current.add(id);
-      setTip(tips[id]!.text);
-      setVisible(true);
-      if (!document.querySelector(".ghost-guide[data-open='true']")) point(tips[id]!.target, false, 6500);
-      window.clearTimeout(hide);
-      hide = window.setTimeout(() => setVisible(false), 6500);
+      if (id && tours[id]) play(id);
     }, { rootMargin: "-45% 0px -45% 0px" });
-    Object.keys(tips).forEach((id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
-    return () => { observer.disconnect(); window.clearTimeout(hide); };
+    Object.keys(tours).forEach((id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
+    return () => { observer.disconnect(); stopTour(); };
   }, [ready]);
 
-  useEffect(() => () => { window.clearTimeout(pointTimer.current); window.clearTimeout(bubbleTimer.current); }, []);
+  useEffect(() => () => { stopTour(); window.clearTimeout(pointTimer.current); window.clearTimeout(bubbleTimer.current); }, []);
 
   useEffect(() => {
     if (!open) return;
+    stopTour();
+    setVisible(false);
     input.current?.focus();
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") { setOpen(false); button.current?.focus(); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const bubbleTimer = useRef(0);
-  const ask = (question: string, answer: Pointing) => {
-    setLog((current) => [...current, { from: "you" as const, text: question }, { from: "ghost" as const, text: answer.text }].slice(-6));
-    window.clearTimeout(bubbleTimer.current);
+  const reply = (answer: Pointing) => {
+    setLog((current) => [...current, { from: "ghost" as const, text: answer.text }].slice(-8));
     if (window.innerWidth < 640) {
       // On a phone the panel would hide what the wand points at: fold it and answer in the bubble.
       setOpen(false);
       button.current?.focus();
-      setTip(answer.text);
-      setVisible(true);
-      bubbleTimer.current = window.setTimeout(() => setVisible(false), 9000);
+      say(answer.text, answer.target, 9000);
+      if (answer.target) point(answer.target, true, 9000);
     } else {
-      setVisible(false);
+      point(answer.target, true, 9000);
     }
-    point(answer.target, true, 9000);
+  };
+
+  const askReady = (question: string, answer: Pointing) => {
+    setLog((current) => [...current, { from: "you" as const, text: question }].slice(-8));
+    reply(answer);
+  };
+
+  const askAi = async (question: string) => {
+    const history = log.slice(1).map((message) => ({ role: message.from === "you" ? "user" as const : "assistant" as const, content: message.text }));
+    setLog((current) => [...current, { from: "you" as const, text: question }].slice(-8));
+    setThinking(true);
+    let result: GhostReply = null;
+    try { result = await askGhost({ data: { question, history } }); } catch { result = null; }
+    setThinking(false);
+    reply(result ? { text: result.answer, target: targetSelectors[result.target] } : answerFor(question));
   };
 
   if (!ready) return null;
@@ -255,15 +275,17 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
           </header>
           <div className="ghost-chat-log" aria-live="polite">
             {log.map((message, i) => <p key={i} className={`ghost-chat-msg from-${message.from}`}>{message.text}</p>)}
+            {thinking && <p className="ghost-chat-msg from-ghost ghost-thinking" aria-label="Le fantôme réfléchit"><span /><span /><span /></p>}
           </div>
           <div className="ghost-chat-chips">
-            {faq.map((entry) => <button key={entry.question} type="button" onClick={() => ask(entry.question, entry.answer)}>{entry.question}</button>)}
+            {faq.map((entry) => <button key={entry.question} type="button" disabled={thinking} onClick={() => askReady(entry.question, entry.answer)}>{entry.question}</button>)}
           </div>
-          <form className="ghost-chat-form" onSubmit={(event) => { event.preventDefault(); const question = draft.trim(); if (!question) return; ask(question, answerFor(question)); setDraft(""); }}>
+          <form className="ghost-chat-form" onSubmit={(event) => { event.preventDefault(); const question = draft.trim(); if (!question || thinking) return; setDraft(""); void askAi(question); }}>
             <label htmlFor="ghost-question" className="sr-only">Ta question</label>
-            <input ref={input} id="ghost-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Écris ta question…" autoComplete="off" maxLength={140} />
-            <button type="submit">Demander</button>
+            <input ref={input} id="ghost-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Écris ta question…" autoComplete="off" maxLength={300} />
+            <button type="submit" disabled={thinking}>Demander</button>
           </form>
+          <p className="ghost-chat-note">Les questions écrites sont envoyées à un service d’IA (Groq) pour te répondre. Rien n’est enregistré sur le site.</p>
         </section>
       </div>
       <ZombieWand origin={button} target={target} />

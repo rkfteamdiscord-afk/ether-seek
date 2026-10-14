@@ -1,0 +1,48 @@
+name: Gardien du site
+
+# Toutes les 5 minutes (le minimum de GitHub) ; chaque passage vérifie le site une fois
+# par minute. Analyse complète par l'IA une fois par heure ou en cas d'incident.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      analyse:
+        description: "Lancer l'analyse complète par l'IA maintenant"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: gardien
+  cancel-in-progress: false
+
+jobs:
+  gardien:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Installer les dépendances
+        run: bun install --frozen-lockfile || bun install
+
+      - name: Surveiller, analyser et corriger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          GARDIEN_DEEP: ${{ github.event_name == 'workflow_dispatch' && inputs.analyse && '1' || '0' }}
+        run: node scripts/gardien/run.mjs
