@@ -19,8 +19,10 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost, CandleCluster } from "@/components/HalloweenDecor";
 import { SpiderWalkers } from "@/components/SpiderWalkers";
+import { GhostSwarm, GhostGuide } from "@/components/HalloweenGhosts";
+import { CursorSparkles } from "@/components/CursorSparkles";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 
@@ -102,7 +104,10 @@ function Portfolio() {
     <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
       <NightSky />
       <DecorDefs />
+      <GhostSwarm />
       <SpiderWalkers />
+      <GhostGuide phase={phase} />
+      <CursorSparkles />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/60 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
@@ -138,6 +143,7 @@ function Portfolio() {
       <section id="accueil" className="halloween-stage relative">
         <WitchDuel />
         <HalloweenScene chapter={0} />
+        <CandleCluster className="candles-hero" />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
@@ -296,6 +302,7 @@ function Portfolio() {
 
       <section id="contact" className="halloween-stage halloween-contact relative text-foreground">
         <HalloweenScene chapter={4} />
+        <CandleCluster className="candles-contact" />
         <SwingingLantern className="lantern-right lantern-short" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">

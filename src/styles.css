@@ -827,3 +827,88 @@ html { scroll-behavior: smooth; }
 [data-halloween-phase="arrival"] .drifting-ghost { visibility: hidden; }
 @media (max-width: 640px) { .drifting-ghost { width: 60px; } }
 @media (prefers-reduced-motion: reduce) { .drifting-ghost { display: none; } }
+
+/* ───────── Brume réaliste (WebGL) ───────── */
+.fog-shader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.fog-shader-ground { opacity: .85; }
+.fog-shader-dense { opacity: .7; }
+
+/* ───────── Ouverture « wow » : noir total, éclair, révélation au clair de lune ───────── */
+.arrival-blackout { position: absolute; inset: 0; z-index: 3; background: oklch(0.05 0.02 290); animation: arrival-reveal 12s linear both; }
+.arrival-bolt { position: absolute; top: 0; left: 58%; height: 78vh; width: auto; opacity: 0; stroke: oklch(0.97 0.05 270); stroke-width: 3; fill: oklch(0.98 0.03 270 / .9); filter: drop-shadow(0 0 10px oklch(0.85 0.12 280)) drop-shadow(0 0 40px oklch(0.75 0.15 285)); animation: arrival-bolt 12s linear both; }
+@keyframes arrival-reveal {
+  0%, 8.5% { opacity: 1; background-color: oklch(0.05 0.02 290); }
+  9% { opacity: 1; background-color: oklch(0.85 0.05 280); }
+  9.8% { opacity: 1; background-color: oklch(0.07 0.02 290); }
+  11.5% { opacity: 1; background-color: oklch(0.06 0.02 290); }
+  12% { opacity: 1; background-color: oklch(0.6 0.06 285); }
+  13% { opacity: .95; background-color: oklch(0.06 0.02 290); }
+  24% { opacity: 0; background-color: oklch(0.06 0.02 290); }
+  100% { opacity: 0; }
+}
+@keyframes arrival-bolt { 0%, 8.5% { opacity: 0; } 9%, 9.7% { opacity: 1; } 10% { opacity: 0; } 11.9%, 12.6% { opacity: .85; } 13.2%, 100% { opacity: 0; } }
+
+/* ───────── Éclairs lointains sur la page ───────── */
+.sky-flash { position: absolute; inset: 0; background: radial-gradient(ellipse at 72% 0%, oklch(0.9 0.05 280 / .35), transparent 65%); opacity: 0; animation: sky-flash 23s linear infinite 9s; }
+.sky-bolt { position: absolute; top: 0; left: 74vw; height: 34vh; width: auto; opacity: 0; fill: oklch(0.97 0.03 270 / .85); filter: drop-shadow(0 0 8px oklch(0.85 0.12 280)); animation: sky-flash 23s linear infinite 9s; }
+@keyframes sky-flash { 0%, 96% { opacity: 0; } 96.4% { opacity: 1; } 96.9% { opacity: .1; } 97.3% { opacity: .8; } 98.3%, 100% { opacity: 0; } }
+
+/* ───────── Bougies réalistes ───────── */
+.candle-cluster { position: absolute; z-index: 3; width: 74px; height: 110px; pointer-events: none; }
+.candles-hero { left: 2.2%; bottom: 150px; }
+.candles-contact { right: 3%; bottom: 120px; }
+.real-candle { position: absolute; bottom: 0; width: 16px; display: flex; flex-direction: column; align-items: center; }
+.real-candle-0 { left: 0; --wax: 72px; }
+.real-candle-1 { left: 24px; --wax: 46px; }
+.real-candle-2 { left: 48px; --wax: 60px; }
+.real-candle-1 .candle-flame { animation-delay: -.4s; }
+.real-candle-2 .candle-flame { animation-delay: -.9s; }
+.candle-wax { position: relative; width: 16px; height: var(--wax); border-radius: 4px 4px 2px 2px; background: linear-gradient(90deg, oklch(0.78 0.04 80), oklch(0.97 0.03 85) 35%, oklch(0.9 0.035 82) 62%, oklch(0.68 0.04 75)); box-shadow: inset 0 9px 9px -6px oklch(0.85 0.15 70 / .9), 0 4px 10px oklch(0.1 0.03 290 / .6); }
+.candle-drip { position: absolute; top: 2px; width: 5px; border-radius: 0 0 4px 4px; background: linear-gradient(90deg, oklch(0.88 0.035 82), oklch(0.98 0.02 85)); }
+.candle-drip:nth-child(1) { left: 1px; height: 18px; } .candle-drip:nth-child(2) { right: 2px; height: 11px; }
+.candle-wick { width: 2px; height: 6px; background: oklch(0.15 0.02 60); border-radius: 1px; }
+.candle-flame { position: relative; width: 11px; height: 28px; margin-bottom: -3px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; transform-origin: 50% 100%;
+  background: radial-gradient(ellipse at 50% 78%, oklch(1 0 0) 0, oklch(0.97 0.1 95) 22%, oklch(0.84 0.17 70) 52%, oklch(0.7 0.2 45 / .6) 72%, transparent 80%);
+  filter: blur(.35px); box-shadow: 0 0 12px 2px oklch(0.85 0.17 70 / .55); animation: real-flicker 2.1s ease-in-out infinite; }
+.candle-core { position: absolute; left: 3px; bottom: 2px; width: 5px; height: 7px; border-radius: 50%; background: oklch(0.6 0.12 250 / .7); filter: blur(.6px); }
+.candle-glow { position: absolute; left: 50%; bottom: calc(var(--wax) + 4px); width: 130px; height: 130px; margin-left: -65px; margin-bottom: -55px; border-radius: 50%; background: radial-gradient(circle, oklch(0.82 0.17 65 / .45), oklch(0.7 0.18 50 / .12) 45%, transparent 70%); mix-blend-mode: screen; animation: glow-breath 2.1s ease-in-out infinite; }
+.candle-smoke { position: absolute; left: 7px; bottom: calc(var(--wax) + 34px); width: 2px; height: 70px; border-radius: 2px; background: linear-gradient(to top, oklch(0.8 0.02 290 / .45), transparent); filter: blur(1.5px); transform-origin: 50% 100%; animation: smoke-rise 5s ease-in-out infinite; }
+.real-candle-1 .candle-smoke { animation-delay: -2s; } .real-candle-2 .candle-smoke { animation-delay: -3.5s; }
+@keyframes real-flicker { 0%,100% { transform: scale(1, 1) skewX(0); } 12% { transform: scale(.94, 1.06) skewX(-3deg); } 27% { transform: scale(1.04, .95) skewX(2deg); } 41% { transform: scale(.97, 1.08) skewX(-1deg); } 58% { transform: scale(1.02, .92) skewX(3deg); } 76% { transform: scale(.95, 1.04) skewX(-2deg); } }
+@keyframes glow-breath { 0%,100% { opacity: .85; transform: scale(1); } 30% { opacity: .65; transform: scale(.94); } 60% { opacity: 1; transform: scale(1.05); } }
+@keyframes smoke-rise { 0% { opacity: 0; transform: translateY(10px) scaleY(.5) skewX(0); } 30% { opacity: .8; } 60% { transform: translateY(-20px) scaleY(1) skewX(14deg); } 100% { opacity: 0; transform: translateY(-50px) scaleY(1.2) skewX(-18deg); } }
+[data-halloween-phase="arrival"] .candle-cluster { visibility: hidden; }
+@media (max-width: 640px) { .candle-cluster { transform: scale(.75); transform-origin: bottom left; } .candles-hero { bottom: 120px; left: 8px; } }
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame, .candle-glow, .candle-smoke, .sky-flash, .sky-bolt { animation: none; }
+  .candle-smoke, .sky-bolt, .sky-flash { display: none; }
+}
+
+/* ───────── Fantômes dans tout le site ───────── */
+.ghost-swarm { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.swarm-ghost { position: absolute; left: 0; top: 0; width: 52px; opacity: 0; will-change: transform, opacity; filter: drop-shadow(0 0 14px oklch(0.9 0.05 290 / .55)); }
+.swarm-ghost-0 { width: 70px; } .swarm-ghost-1 { width: 46px; } .swarm-ghost-2 { width: 58px; } .swarm-ghost-3 { width: 38px; filter: drop-shadow(0 0 14px oklch(0.9 0.05 290 / .55)) blur(1px); }
+.ghost-sprite { display: block; width: 100%; height: auto; overflow: visible; }
+.ghost-sheet { transform-box: fill-box; transform-origin: 50% 0; animation: ghost-wave 2.2s ease-in-out infinite alternate; }
+.ghost-mouth { transform-box: fill-box; transform-origin: center; animation: ghost-boo 3.6s ease-in-out infinite; }
+@keyframes ghost-wave { from { transform: skewX(-4deg) scaleY(.97); } to { transform: skewX(4deg) scaleY(1.03); } }
+@keyframes ghost-boo { 0%,70%,100% { transform: scale(1); } 80% { transform: scale(1.5, 1.7); } }
+[data-halloween-phase="arrival"] :is(.ghost-swarm, .ghost-guide) { visibility: hidden; }
+@media (max-width: 640px) { .ghost-swarm { opacity: .6; } .swarm-ghost-3, .swarm-ghost-4 { display: none; } }
+
+/* ───────── Le fantôme guide et ses petites infos ───────── */
+.ghost-guide { position: fixed; left: 16px; bottom: 18px; z-index: 56; display: flex; align-items: flex-end; gap: 8px; max-width: min(380px, calc(100vw - 190px)); pointer-events: none; }
+.ghost-guide-sprite { width: 64px; flex-shrink: 0; opacity: 0; transform: translateX(-160%) rotate(-20deg); transition: transform .7s cubic-bezier(.2,.9,.25,1.2), opacity .5s ease; filter: drop-shadow(0 0 16px oklch(0.9 0.05 290 / .7)); }
+.ghost-guide-sprite .ghost-sprite { animation: guide-bob 2.6s ease-in-out infinite alternate; }
+.ghost-guide-bubble { margin: 0 0 46px; padding: 10px 14px; border-radius: 16px 16px 16px 4px; font-size: 14px; line-height: 1.45; color: var(--foreground); background: color-mix(in oklab, var(--card) 88%, transparent); border: 1px solid color-mix(in oklab, var(--seasonal) 45%, transparent); box-shadow: 0 12px 36px -12px color-mix(in oklab, var(--seasonal) 60%, transparent); backdrop-filter: blur(10px); opacity: 0; transform: translateY(10px) scale(.9); transform-origin: bottom left; transition: opacity .4s ease .25s, transform .45s cubic-bezier(.2,.9,.25,1.2) .25s; }
+.ghost-guide[data-visible="true"] .ghost-guide-sprite { opacity: .95; transform: none; }
+.ghost-guide[data-visible="true"] .ghost-guide-bubble { opacity: 1; transform: none; }
+@keyframes guide-bob { from { transform: translateY(-4px) rotate(-4deg); } to { transform: translateY(6px) rotate(4deg); } }
+@media (max-width: 640px) { .ghost-guide { left: 8px; bottom: 12px; max-width: calc(100vw - 150px); } .ghost-guide-sprite { width: 46px; } .ghost-guide-bubble { font-size: 13px; margin-bottom: 34px; } }
+
+/* ───────── Étincelles qui suivent la souris ───────── */
+.cursor-sparkles { position: fixed; inset: 0; z-index: 80; width: 100%; height: 100%; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ghost-guide-sprite, .ghost-guide-bubble { transition: none; }
+  .ghost-guide-sprite .ghost-sprite, .ghost-sheet, .ghost-mouth { animation: none; }
+}

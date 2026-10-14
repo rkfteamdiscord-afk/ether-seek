@@ -91,7 +91,7 @@ export function SpiderWalkers() {
         walker.ty = random(top(), h - 70);
       }
       // On narrow screens there is no free margin, so peek in from the very edge instead.
-      walker.tx = w < 640 ? (walker.side === -1 ? -14 : w - 34) : walker.side === -1 ? random(6, edge) : random(w - edge - 60, w - 66);
+      walker.tx = w < 640 ? (walker.side === -1 ? -14 : w - 34) : walker.side === -1 ? random(6, Math.max(6, edge - 60)) : random(Math.min(w - 66, w - edge), w - 66);
     };
     const crawlers: Walker[] = crawlerRefs.current.map((_, i) => {
       const side: -1 | 1 = i % 2 === 0 ? -1 : 1;
