@@ -827,3 +827,59 @@ html { scroll-behavior: smooth; }
 [data-halloween-phase="arrival"] .drifting-ghost { visibility: hidden; }
 @media (max-width: 640px) { .drifting-ghost { width: 60px; } }
 @media (prefers-reduced-motion: reduce) { .drifting-ghost { display: none; } }
+
+/* ───────── Brume réaliste (WebGL) ───────── */
+.fog-shader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.fog-shader-ground { opacity: .85; }
+.fog-shader-dense { opacity: .7; }
+
+/* ───────── Ouverture « wow » : noir total, éclair, révélation au clair de lune ───────── */
+.arrival-blackout { position: absolute; inset: 0; z-index: 3; background: oklch(0.05 0.02 290); animation: arrival-reveal 12s linear both; }
+.arrival-bolt { position: absolute; top: 0; left: 58%; height: 78vh; width: auto; opacity: 0; stroke: oklch(0.97 0.05 270); stroke-width: 3; fill: oklch(0.98 0.03 270 / .9); filter: drop-shadow(0 0 10px oklch(0.85 0.12 280)) drop-shadow(0 0 40px oklch(0.75 0.15 285)); animation: arrival-bolt 12s linear both; }
+@keyframes arrival-reveal {
+  0%, 8.5% { opacity: 1; background-color: oklch(0.05 0.02 290); }
+  9% { opacity: 1; background-color: oklch(0.85 0.05 280); }
+  9.8% { opacity: 1; background-color: oklch(0.07 0.02 290); }
+  11.5% { opacity: 1; background-color: oklch(0.06 0.02 290); }
+  12% { opacity: 1; background-color: oklch(0.6 0.06 285); }
+  13% { opacity: .95; background-color: oklch(0.06 0.02 290); }
+  24% { opacity: 0; background-color: oklch(0.06 0.02 290); }
+  100% { opacity: 0; }
+}
+@keyframes arrival-bolt { 0%, 8.5% { opacity: 0; } 9%, 9.7% { opacity: 1; } 10% { opacity: 0; } 11.9%, 12.6% { opacity: .85; } 13.2%, 100% { opacity: 0; } }
+
+/* ───────── Éclairs lointains sur la page ───────── */
+.sky-flash { position: absolute; inset: 0; background: radial-gradient(ellipse at 72% 0%, oklch(0.9 0.05 280 / .35), transparent 65%); opacity: 0; animation: sky-flash 23s linear infinite 9s; }
+.sky-bolt { position: absolute; top: 0; left: 74vw; height: 34vh; width: auto; opacity: 0; fill: oklch(0.97 0.03 270 / .85); filter: drop-shadow(0 0 8px oklch(0.85 0.12 280)); animation: sky-flash 23s linear infinite 9s; }
+@keyframes sky-flash { 0%, 96% { opacity: 0; } 96.4% { opacity: 1; } 96.9% { opacity: .1; } 97.3% { opacity: .8; } 98.3%, 100% { opacity: 0; } }
+
+/* ───────── Bougies réalistes ───────── */
+.candle-cluster { position: absolute; z-index: 3; width: 74px; height: 110px; pointer-events: none; }
+.candles-hero { left: 2.2%; bottom: 150px; }
+.candles-contact { right: 3%; bottom: 120px; }
+.real-candle { position: absolute; bottom: 0; width: 16px; display: flex; flex-direction: column; align-items: center; }
+.real-candle-0 { left: 0; --wax: 72px; }
+.real-candle-1 { left: 24px; --wax: 46px; }
+.real-candle-2 { left: 48px; --wax: 60px; }
+.real-candle-1 .candle-flame { animation-delay: -.4s; }
+.real-candle-2 .candle-flame { animation-delay: -.9s; }
+.candle-wax { position: relative; width: 16px; height: var(--wax); border-radius: 4px 4px 2px 2px; background: linear-gradient(90deg, oklch(0.78 0.04 80), oklch(0.97 0.03 85) 35%, oklch(0.9 0.035 82) 62%, oklch(0.68 0.04 75)); box-shadow: inset 0 9px 9px -6px oklch(0.85 0.15 70 / .9), 0 4px 10px oklch(0.1 0.03 290 / .6); }
+.candle-drip { position: absolute; top: 2px; width: 5px; border-radius: 0 0 4px 4px; background: linear-gradient(90deg, oklch(0.88 0.035 82), oklch(0.98 0.02 85)); }
+.candle-drip:nth-child(1) { left: 1px; height: 18px; } .candle-drip:nth-child(2) { right: 2px; height: 11px; }
+.candle-wick { width: 2px; height: 6px; background: oklch(0.15 0.02 60); border-radius: 1px; }
+.candle-flame { position: relative; width: 11px; height: 28px; margin-bottom: -3px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; transform-origin: 50% 100%;
+  background: radial-gradient(ellipse at 50% 78%, oklch(1 0 0) 0, oklch(0.97 0.1 95) 22%, oklch(0.84 0.17 70) 52%, oklch(0.7 0.2 45 / .6) 72%, transparent 80%);
+  filter: blur(.35px); box-shadow: 0 0 12px 2px oklch(0.85 0.17 70 / .55); animation: real-flicker 2.1s ease-in-out infinite; }
+.candle-core { position: absolute; left: 3px; bottom: 2px; width: 5px; height: 7px; border-radius: 50%; background: oklch(0.6 0.12 250 / .7); filter: blur(.6px); }
+.candle-glow { position: absolute; left: 50%; bottom: calc(var(--wax) + 4px); width: 130px; height: 130px; margin-left: -65px; margin-bottom: -55px; border-radius: 50%; background: radial-gradient(circle, oklch(0.82 0.17 65 / .45), oklch(0.7 0.18 50 / .12) 45%, transparent 70%); mix-blend-mode: screen; animation: glow-breath 2.1s ease-in-out infinite; }
+.candle-smoke { position: absolute; left: 7px; bottom: calc(var(--wax) + 34px); width: 2px; height: 70px; border-radius: 2px; background: linear-gradient(to top, oklch(0.8 0.02 290 / .45), transparent); filter: blur(1.5px); transform-origin: 50% 100%; animation: smoke-rise 5s ease-in-out infinite; }
+.real-candle-1 .candle-smoke { animation-delay: -2s; } .real-candle-2 .candle-smoke { animation-delay: -3.5s; }
+@keyframes real-flicker { 0%,100% { transform: scale(1, 1) skewX(0); } 12% { transform: scale(.94, 1.06) skewX(-3deg); } 27% { transform: scale(1.04, .95) skewX(2deg); } 41% { transform: scale(.97, 1.08) skewX(-1deg); } 58% { transform: scale(1.02, .92) skewX(3deg); } 76% { transform: scale(.95, 1.04) skewX(-2deg); } }
+@keyframes glow-breath { 0%,100% { opacity: .85; transform: scale(1); } 30% { opacity: .65; transform: scale(.94); } 60% { opacity: 1; transform: scale(1.05); } }
+@keyframes smoke-rise { 0% { opacity: 0; transform: translateY(10px) scaleY(.5) skewX(0); } 30% { opacity: .8; } 60% { transform: translateY(-20px) scaleY(1) skewX(14deg); } 100% { opacity: 0; transform: translateY(-50px) scaleY(1.2) skewX(-18deg); } }
+[data-halloween-phase="arrival"] .candle-cluster { visibility: hidden; }
+@media (max-width: 640px) { .candle-cluster { transform: scale(.75); transform-origin: bottom left; } .candles-hero { bottom: 120px; left: 8px; } }
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame, .candle-glow, .candle-smoke, .sky-flash, .sky-bolt { animation: none; }
+  .candle-smoke, .sky-bolt, .sky-flash { display: none; }
+}

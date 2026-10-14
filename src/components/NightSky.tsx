@@ -1,4 +1,5 @@
 import flyingWitch from "@/assets/halloween-flying-witch.png";
+import { FogShader } from "./FogShader";
 
 /* Fixed Halloween night behind the page: glows, moon, drifting clouds, shooting stars,
    bats crossing the moon, stars and grain. Purely decorative, hidden from assistive tech
@@ -50,9 +51,9 @@ export function NightSky() {
           </svg>
         ))}
       </div>
-      <div className="ground-fog">
-        <span /><span /><span />
-      </div>
+      <div className="sky-flash" />
+      <svg className="sky-bolt" viewBox="0 0 60 300" fill="none"><path d="M38 0 22 92l14 4-26 96 12 3L2 300l40-128-13-3 22-80-14-4Z" /></svg>
+      <FogShader variant="ground" />
       <div className="night-grain" />
     </div>
   );

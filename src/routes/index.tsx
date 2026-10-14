@@ -19,7 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost } from "@/components/HalloweenDecor";
+import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost, CandleCluster } from "@/components/HalloweenDecor";
 import { SpiderWalkers } from "@/components/SpiderWalkers";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
@@ -138,6 +138,7 @@ function Portfolio() {
       <section id="accueil" className="halloween-stage relative">
         <WitchDuel />
         <HalloweenScene chapter={0} />
+        <CandleCluster className="candles-hero" />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
@@ -296,6 +297,7 @@ function Portfolio() {
 
       <section id="contact" className="halloween-stage halloween-contact relative text-foreground">
         <HalloweenScene chapter={4} />
+        <CandleCluster className="candles-contact" />
         <SwingingLantern className="lantern-right lantern-short" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">

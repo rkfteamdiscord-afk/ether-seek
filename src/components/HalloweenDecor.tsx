@@ -167,3 +167,20 @@ export function DriftingGhost({ className = "" }: { className?: string }) {
     </div>
   );
 }
+
+/** Cluster of wax candles with living flames, drips, glow and a thread of smoke. Decorative only. */
+export function CandleCluster({ className = "" }: { className?: string }) {
+  return (
+    <div className={`candle-cluster ${className}`} aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className={`real-candle real-candle-${i}`}>
+          <span className="candle-smoke" />
+          <span className="candle-glow" />
+          <span className="candle-flame"><span className="candle-core" /></span>
+          <span className="candle-wick" />
+          <span className="candle-wax"><span className="candle-drip" /><span className="candle-drip" /></span>
+        </div>
+      ))}
+    </div>
+  );
+}

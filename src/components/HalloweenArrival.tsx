@@ -6,6 +6,7 @@ import pumpkins from "@/assets/halloween-pumpkins.png";
 import { ArrowRight, Check, X } from "lucide-react";
 import { HalloweenWeather } from "./HalloweenWeather";
 import { HalloweenStaircase } from "./HalloweenStaircase";
+import { FogShader } from "./FogShader";
 import flyingWitch from "@/assets/halloween-flying-witch.png";
 
 export type HalloweenPhase = "arrival" | "releasing" | "ready" | "revealed";
@@ -253,9 +254,13 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
   return <>
     {phase === "arrival" && <div className="halloween-arrival">
       <div className="arrival-vignette" aria-hidden="true" />
+      <div className="arrival-blackout" aria-hidden="true">
+        <svg className="arrival-bolt" viewBox="0 0 120 600" fill="none"><path d="M76 0 44 180l28 8-52 190 24 6L4 600l80-256-26-6 44-160-28-8Z" /><path d="m58 250-40 60m66-130 30 50" /></svg>
+      </div>
       <div className="arrival-mist" aria-hidden="true">
         <HalloweenWeather layer="back" />
         <div className="arrival-stairs-stage"><HalloweenStaircase /></div>
+        <FogShader variant="dense" />
         <div className="arrival-fog-drift"><span /><span /><span /></div>
         <HalloweenWeather layer="front" />
       </div>
