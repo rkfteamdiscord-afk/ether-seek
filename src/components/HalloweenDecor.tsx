@@ -1,5 +1,5 @@
 import { extraMotifs, ExtraIllustration, type ExtraMotif } from "./HalloweenExtras";
-import pumpkins from "@/assets/halloween-pumpkins.png";
+import { PumpkinPatch } from "./RealPumpkin";
 import ghost from "@/assets/halloween-ghost.png";
 import witchKit from "@/assets/halloween-witch-kit.png";
 
@@ -75,7 +75,7 @@ export function DecorDefs() {
 }
 
 export function Pumpkins({ className = "" }: { className?: string }) {
-  return <img src={pumpkins} width={992} height={672} loading="lazy" alt="" aria-hidden="true" className={`halloween-pumpkins ${className}`} />;
+  return <PumpkinPatch className={`halloween-pumpkins ${className}`} />;
 }
 
 export function HalloweenGarland() {

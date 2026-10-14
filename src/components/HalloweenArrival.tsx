@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { halloweenOffer } from "@/lib/seasonal-offer";
-import pumpkins from "@/assets/halloween-pumpkins.png";
+import { PumpkinPatch } from "./RealPumpkin";
 import { ArrowRight, Check, X } from "lucide-react";
 import { HalloweenWeather } from "./HalloweenWeather";
 import { HalloweenStaircase } from "./HalloweenStaircase";
@@ -273,13 +273,13 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
     </div>}
     {phase === "ready" && <div className="pumpkin-surprise">
       <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); setOpen(true); }}>
-        <img src={pumpkins} alt="" /><span>Clique dessus !</span>
+        <PumpkinPatch className="pumpkin-trigger-art" /><span>Clique dessus !</span>
       </Button>
     </div>}
     {phase === "releasing" && <div className="candy-burst" aria-hidden="true"><div className="reveal-witch"><FlyingWitch /></div>{Array.from({ length: 32 }, (_, i) => <span key={i} className={`burst-candy candy-${i % 16}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-md border-seasonal/30 text-center">
-        <img src={pumpkins} alt="" className="mx-auto h-32 w-48 object-contain" />
+        <PumpkinPatch className="mx-auto h-32 w-48" />
         <DialogHeader><DialogTitle className="text-center font-display text-3xl">Bravo !</DialogTitle><DialogDescription className="text-center text-base">Tu as −{halloweenOffer.discountPercent} % sur toutes les prestations avec le code</DialogDescription></DialogHeader>
         <strong className="rounded-md border border-dashed border-seasonal bg-seasonal-soft py-4 font-mono text-2xl text-seasonal">{halloweenOffer.code}</strong>
         <Button asChild onClick={() => setOpen(false)}><a href="#contact">Contacter Ȥrk <ArrowRight className="h-4 w-4" /></a></Button>
