@@ -28,7 +28,7 @@ const REQUIRED_HEADERS = ["strict-transport-security", "x-content-type-options",
 
 // Only these files may be touched, and never the sensitive ones.
 const ALLOWED = /^src\/.+\.(ts|tsx|css)$/;
-const DENIED = [/^src\/server\.ts$/, /^src\/lib\/ghost-ai\.ts$/, /^src\/lib\/admin/, /^src\/routes\/admin/, /^src\/lib\/seasonal-offer/, /^src\/lib\/error-/, /routeTree\.gen\.ts$/, /\.test\./];
+const DENIED = [/^src\/server\.ts$/, /^src\/lib\/ghost-ai\.ts$/, /^src\/lib\/ghost-prompt\.ts$/, /^src\/lib\/ghost-browser-ai\.ts$/, /^src\/lib\/guardian-journal\.ts$/, /^src\/lib\/admin/, /^src\/routes\/admin/, /^src\/lib\/seasonal-offer/, /^src\/lib\/error-/, /routeTree\.gen\.ts$/, /\.test\./];
 const FORBIDDEN = [/https?:\/\//i, /<script/i, /dangerouslySetInnerHTML/, /\beval\s*\(/, /new\s+Function/, /process\.env/, /\bfetch\s*\(/, /^\s*import\s/m, /document\.cookie/, /localStorage|sessionStorage/, /innerHTML/, /\brequire\s*\(/];
 const MAX_LINES = 20;
 

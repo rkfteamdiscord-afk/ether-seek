@@ -365,7 +365,7 @@ function Portfolio() {
         <Ghost className="halloween-footer-ghost h-8 w-8 text-seasonal" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <p>© 2026 <span className="font-brand font-semibold text-foreground">Ȥrk</span> — Création numérique sur mesure</p>
-          <p>Designed by Eliza</p>
+          <p className="flex items-center gap-4">Designed by Eliza <a href="/admin" className="rounded-full border border-border/60 px-3 py-1 text-xs transition-colors hover:border-seasonal hover:text-seasonal">🛡️ Admin</a></p>
         </div>
       </footer>
     </main>
