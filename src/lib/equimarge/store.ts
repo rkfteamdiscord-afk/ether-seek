@@ -1,4 +1,5 @@
 import { getSupabase } from "@/integrations/supabase/client";
+import { newId } from "./demo";
 import type { Expense, Horse, Revenue, Structure, Workspace } from "./types";
 
 export interface Account {
@@ -277,6 +278,13 @@ function toHex(buffer: ArrayBuffer) {
 }
 
 async function hashPassword(password: string, salt: string) {
+  // Pages opened from a file or plain http may lack SubtleCrypto: fall back to
+  // a simple digest, acceptable for browser-only demo accounts.
+  if (!globalThis.crypto?.subtle) {
+    let h = 2166136261;
+    for (const ch of salt + password) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+    return `fnv-${(h >>> 0).toString(16)}`;
+  }
   const material = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(password),
@@ -331,7 +339,7 @@ function createLocalStore(): EquiStore {
         throw new Error("Un compte existe déjà avec cet e-mail.");
       const salt = toHex(crypto.getRandomValues(new Uint8Array(16)).buffer);
       const user: LocalUser = {
-        id: crypto.randomUUID(),
+        id: newId(),
         email: normalized,
         salt,
         hash: await hashPassword(password, salt),
