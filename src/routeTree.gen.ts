@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EquimargeRouteRouteImport } from './routes/equimarge/route'
+import { Route as EquimargeIndexRouteImport } from './routes/equimarge/index'
+import { Route as EquimargeAppRouteRouteImport } from './routes/equimarge/app/route'
+import { Route as EquimargeConnexionRouteImport } from './routes/equimarge/connexion'
+import { Route as EquimargeAppIndexRouteImport } from './routes/equimarge/app/index'
+import { Route as EquimargeAppDepensesRouteImport } from './routes/equimarge/app/depenses'
+import { Route as EquimargeAppParametresRouteImport } from './routes/equimarge/app/parametres'
+import { Route as EquimargeAppRapportRouteImport } from './routes/equimarge/app/rapport'
+import { Route as EquimargeAppRevenusRouteImport } from './routes/equimarge/app/revenus'
+import { Route as EquimargeAppSimulateurRouteImport } from './routes/equimarge/app/simulateur'
+import { Route as EquimargeAppChevauxIndexRouteImport } from './routes/equimarge/app/chevaux/index'
+import { Route as EquimargeAppChevauxHorseIdRouteImport } from './routes/equimarge/app/chevaux/$horseId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EquimargeRouteRoute = EquimargeRouteRouteImport.update({
+  id: '/equimarge',
+  path: '/equimarge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquimargeIndexRoute = EquimargeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EquimargeRouteRoute,
+} as any)
+const EquimargeAppRouteRoute = EquimargeAppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => EquimargeRouteRoute,
+} as any)
+const EquimargeConnexionRoute = EquimargeConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => EquimargeRouteRoute,
+} as any)
+const EquimargeAppIndexRoute = EquimargeAppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppDepensesRoute = EquimargeAppDepensesRouteImport.update({
+  id: '/depenses',
+  path: '/depenses',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppParametresRoute = EquimargeAppParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppRapportRoute = EquimargeAppRapportRouteImport.update({
+  id: '/rapport',
+  path: '/rapport',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppRevenusRoute = EquimargeAppRevenusRouteImport.update({
+  id: '/revenus',
+  path: '/revenus',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppSimulateurRoute = EquimargeAppSimulateurRouteImport.update({
+  id: '/simulateur',
+  path: '/simulateur',
+  getParentRoute: () => EquimargeAppRouteRoute,
+} as any)
+const EquimargeAppChevauxIndexRoute =
+  EquimargeAppChevauxIndexRouteImport.update({
+    id: '/chevaux/',
+    path: '/chevaux/',
+    getParentRoute: () => EquimargeAppRouteRoute,
+  } as any)
+const EquimargeAppChevauxHorseIdRoute =
+  EquimargeAppChevauxHorseIdRouteImport.update({
+    id: '/chevaux/$horseId',
+    path: '/chevaux/$horseId',
+    getParentRoute: () => EquimargeAppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/equimarge': typeof EquimargeRouteRouteWithChildren
+  '/equimarge/app': typeof EquimargeAppRouteRouteWithChildren
+  '/equimarge/connexion': typeof EquimargeConnexionRoute
+  '/equimarge/': typeof EquimargeIndexRoute
+  '/equimarge/app/depenses': typeof EquimargeAppDepensesRoute
+  '/equimarge/app/parametres': typeof EquimargeAppParametresRoute
+  '/equimarge/app/rapport': typeof EquimargeAppRapportRoute
+  '/equimarge/app/revenus': typeof EquimargeAppRevenusRoute
+  '/equimarge/app/simulateur': typeof EquimargeAppSimulateurRoute
+  '/equimarge/app/': typeof EquimargeAppIndexRoute
+  '/equimarge/app/chevaux/$horseId': typeof EquimargeAppChevauxHorseIdRoute
+  '/equimarge/app/chevaux/': typeof EquimargeAppChevauxIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/equimarge/connexion': typeof EquimargeConnexionRoute
+  '/equimarge': typeof EquimargeIndexRoute
+  '/equimarge/app/depenses': typeof EquimargeAppDepensesRoute
+  '/equimarge/app/parametres': typeof EquimargeAppParametresRoute
+  '/equimarge/app/rapport': typeof EquimargeAppRapportRoute
+  '/equimarge/app/revenus': typeof EquimargeAppRevenusRoute
+  '/equimarge/app/simulateur': typeof EquimargeAppSimulateurRoute
+  '/equimarge/app': typeof EquimargeAppIndexRoute
+  '/equimarge/app/chevaux/$horseId': typeof EquimargeAppChevauxHorseIdRoute
+  '/equimarge/app/chevaux': typeof EquimargeAppChevauxIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/equimarge': typeof EquimargeRouteRouteWithChildren
+  '/equimarge/app': typeof EquimargeAppRouteRouteWithChildren
+  '/equimarge/connexion': typeof EquimargeConnexionRoute
+  '/equimarge/': typeof EquimargeIndexRoute
+  '/equimarge/app/depenses': typeof EquimargeAppDepensesRoute
+  '/equimarge/app/parametres': typeof EquimargeAppParametresRoute
+  '/equimarge/app/rapport': typeof EquimargeAppRapportRoute
+  '/equimarge/app/revenus': typeof EquimargeAppRevenusRoute
+  '/equimarge/app/simulateur': typeof EquimargeAppSimulateurRoute
+  '/equimarge/app/': typeof EquimargeAppIndexRoute
+  '/equimarge/app/chevaux/$horseId': typeof EquimargeAppChevauxHorseIdRoute
+  '/equimarge/app/chevaux/': typeof EquimargeAppChevauxIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/equimarge'
+    | '/equimarge/app'
+    | '/equimarge/connexion'
+    | '/equimarge/'
+    | '/equimarge/app/depenses'
+    | '/equimarge/app/parametres'
+    | '/equimarge/app/rapport'
+    | '/equimarge/app/revenus'
+    | '/equimarge/app/simulateur'
+    | '/equimarge/app/'
+    | '/equimarge/app/chevaux/$horseId'
+    | '/equimarge/app/chevaux/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/equimarge/connexion'
+    | '/equimarge'
+    | '/equimarge/app/depenses'
+    | '/equimarge/app/parametres'
+    | '/equimarge/app/rapport'
+    | '/equimarge/app/revenus'
+    | '/equimarge/app/simulateur'
+    | '/equimarge/app'
+    | '/equimarge/app/chevaux/$horseId'
+    | '/equimarge/app/chevaux'
+  id:
+    | '__root__'
+    | '/'
+    | '/equimarge'
+    | '/equimarge/app'
+    | '/equimarge/connexion'
+    | '/equimarge/'
+    | '/equimarge/app/depenses'
+    | '/equimarge/app/parametres'
+    | '/equimarge/app/rapport'
+    | '/equimarge/app/revenus'
+    | '/equimarge/app/simulateur'
+    | '/equimarge/app/'
+    | '/equimarge/app/chevaux/$horseId'
+    | '/equimarge/app/chevaux/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EquimargeRouteRoute: typeof EquimargeRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/equimarge': {
+      id: '/equimarge'
+      path: '/equimarge'
+      fullPath: '/equimarge'
+      preLoaderRoute: typeof EquimargeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equimarge/': {
+      id: '/equimarge/'
+      path: '/'
+      fullPath: '/equimarge/'
+      preLoaderRoute: typeof EquimargeIndexRouteImport
+      parentRoute: typeof EquimargeRouteRoute
+    }
+    '/equimarge/app': {
+      id: '/equimarge/app'
+      path: '/app'
+      fullPath: '/equimarge/app'
+      preLoaderRoute: typeof EquimargeAppRouteRouteImport
+      parentRoute: typeof EquimargeRouteRoute
+    }
+    '/equimarge/connexion': {
+      id: '/equimarge/connexion'
+      path: '/connexion'
+      fullPath: '/equimarge/connexion'
+      preLoaderRoute: typeof EquimargeConnexionRouteImport
+      parentRoute: typeof EquimargeRouteRoute
+    }
+    '/equimarge/app/': {
+      id: '/equimarge/app/'
+      path: '/'
+      fullPath: '/equimarge/app/'
+      preLoaderRoute: typeof EquimargeAppIndexRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/depenses': {
+      id: '/equimarge/app/depenses'
+      path: '/depenses'
+      fullPath: '/equimarge/app/depenses'
+      preLoaderRoute: typeof EquimargeAppDepensesRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/parametres': {
+      id: '/equimarge/app/parametres'
+      path: '/parametres'
+      fullPath: '/equimarge/app/parametres'
+      preLoaderRoute: typeof EquimargeAppParametresRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/rapport': {
+      id: '/equimarge/app/rapport'
+      path: '/rapport'
+      fullPath: '/equimarge/app/rapport'
+      preLoaderRoute: typeof EquimargeAppRapportRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/revenus': {
+      id: '/equimarge/app/revenus'
+      path: '/revenus'
+      fullPath: '/equimarge/app/revenus'
+      preLoaderRoute: typeof EquimargeAppRevenusRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/simulateur': {
+      id: '/equimarge/app/simulateur'
+      path: '/simulateur'
+      fullPath: '/equimarge/app/simulateur'
+      preLoaderRoute: typeof EquimargeAppSimulateurRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/chevaux/': {
+      id: '/equimarge/app/chevaux/'
+      path: '/chevaux'
+      fullPath: '/equimarge/app/chevaux/'
+      preLoaderRoute: typeof EquimargeAppChevauxIndexRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
+    '/equimarge/app/chevaux/$horseId': {
+      id: '/equimarge/app/chevaux/$horseId'
+      path: '/chevaux/$horseId'
+      fullPath: '/equimarge/app/chevaux/$horseId'
+      preLoaderRoute: typeof EquimargeAppChevauxHorseIdRouteImport
+      parentRoute: typeof EquimargeAppRouteRoute
+    }
   }
 }
 
+interface EquimargeAppRouteRouteChildren {
+  EquimargeAppDepensesRoute: typeof EquimargeAppDepensesRoute
+  EquimargeAppParametresRoute: typeof EquimargeAppParametresRoute
+  EquimargeAppRapportRoute: typeof EquimargeAppRapportRoute
+  EquimargeAppRevenusRoute: typeof EquimargeAppRevenusRoute
+  EquimargeAppSimulateurRoute: typeof EquimargeAppSimulateurRoute
+  EquimargeAppIndexRoute: typeof EquimargeAppIndexRoute
+  EquimargeAppChevauxHorseIdRoute: typeof EquimargeAppChevauxHorseIdRoute
+  EquimargeAppChevauxIndexRoute: typeof EquimargeAppChevauxIndexRoute
+}
+
+const EquimargeAppRouteRouteChildren: EquimargeAppRouteRouteChildren = {
+  EquimargeAppDepensesRoute: EquimargeAppDepensesRoute,
+  EquimargeAppParametresRoute: EquimargeAppParametresRoute,
+  EquimargeAppRapportRoute: EquimargeAppRapportRoute,
+  EquimargeAppRevenusRoute: EquimargeAppRevenusRoute,
+  EquimargeAppSimulateurRoute: EquimargeAppSimulateurRoute,
+  EquimargeAppIndexRoute: EquimargeAppIndexRoute,
+  EquimargeAppChevauxHorseIdRoute: EquimargeAppChevauxHorseIdRoute,
+  EquimargeAppChevauxIndexRoute: EquimargeAppChevauxIndexRoute,
+}
+
+const EquimargeAppRouteRouteWithChildren =
+  EquimargeAppRouteRoute._addFileChildren(EquimargeAppRouteRouteChildren)
+
+interface EquimargeRouteRouteChildren {
+  EquimargeAppRouteRoute: typeof EquimargeAppRouteRouteWithChildren
+  EquimargeConnexionRoute: typeof EquimargeConnexionRoute
+  EquimargeIndexRoute: typeof EquimargeIndexRoute
+}
+
+const EquimargeRouteRouteChildren: EquimargeRouteRouteChildren = {
+  EquimargeAppRouteRoute: EquimargeAppRouteRouteWithChildren,
+  EquimargeConnexionRoute: EquimargeConnexionRoute,
+  EquimargeIndexRoute: EquimargeIndexRoute,
+}
+
+const EquimargeRouteRouteWithChildren = EquimargeRouteRoute._addFileChildren(
+  EquimargeRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EquimargeRouteRoute: EquimargeRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -912,3 +912,107 @@ html { scroll-behavior: smooth; }
   .ghost-guide-sprite, .ghost-guide-bubble { transition: none; }
   .ghost-guide-sprite .ghost-sprite, .ghost-sheet, .ghost-mouth { animation: none; }
 }
+
+/* ------------------------------------------------------------------ */
+/* EquiMarge: sage, beige and light brown, scoped to its own pages.    */
+/* The html class covers dialogs and toasts rendered outside the tree. */
+/* ------------------------------------------------------------------ */
+.equimarge,
+html.equimarge-theme {
+  color-scheme: light;
+  --radius: 0.875rem;
+  --background: oklch(0.967 0.014 85);
+  --foreground: oklch(0.29 0.03 120);
+  --card: oklch(0.993 0.006 85);
+  --card-foreground: oklch(0.29 0.03 120);
+  --popover: oklch(0.993 0.006 85);
+  --popover-foreground: oklch(0.29 0.03 120);
+  --primary: oklch(0.47 0.065 140);
+  --primary-foreground: oklch(0.99 0.005 85);
+  --secondary: oklch(0.93 0.025 85);
+  --secondary-foreground: oklch(0.32 0.04 70);
+  --muted: oklch(0.94 0.016 85);
+  --muted-foreground: oklch(0.47 0.025 100);
+  --accent: oklch(0.91 0.035 135);
+  --accent-foreground: oklch(0.3 0.04 135);
+  --destructive: oklch(0.55 0.19 28);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.88 0.02 85);
+  --input: oklch(0.84 0.025 85);
+  --ring: oklch(0.55 0.08 140);
+  --em-brown: oklch(0.58 0.08 60);
+  --em-brown-soft: oklch(0.91 0.035 70);
+  --em-sage-soft: oklch(0.92 0.03 135);
+  --em-good: oklch(0.52 0.12 150);
+  --em-good-soft: oklch(0.94 0.045 150);
+  --em-warn: oklch(0.6 0.13 65);
+  --em-warn-soft: oklch(0.95 0.05 80);
+  --em-bad: oklch(0.53 0.18 28);
+  --em-bad-soft: oklch(0.95 0.03 28);
+  --em-revenue: #16805a;
+  --em-expense: #c9802f;
+}
+
+html.equimarge-theme,
+html.equimarge-theme body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.equimarge {
+  min-height: 100dvh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+.equimarge-dialog {
+  font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  color: var(--foreground);
+}
+
+.font-serif-em,
+.equimarge h1,
+.equimarge h2,
+.equimarge h3 {
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.equimarge ::selection {
+  background: oklch(0.85 0.06 135);
+}
+
+/* Native inputs stay big enough for a thumb on a phone. */
+.em-input {
+  width: 100%;
+  min-height: 3rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--input);
+  background: var(--card);
+  padding: 0.625rem 0.875rem;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+.em-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+select.em-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23596150' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+.em-safe-bottom {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  .em-safe-bottom {
+    padding-bottom: 2.5rem;
+  }
+}

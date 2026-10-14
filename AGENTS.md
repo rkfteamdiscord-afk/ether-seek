@@ -16,3 +16,5 @@
 - Measure the header logo for the witch pickup and animate only that element; render procedural weather in a separate browser-only canvas effect to preserve the portrait and avoid viewport-dependent pickup coordinates.
 - Keep the hat-wearing spiders in their own aria-hidden, pointer-events-free overlay that writes positions straight to the DOM and stays hidden during the arrival; they must never block reading or clicking the contacts.
 - Keep the roaming ghosts behind the content and the guide ghost's tips short, read from the shared offer module where they mention the promotion, remembered in memory only and announced politely; the guide never takes clicks.
+- Keep EquiMarge business rules (cost split, alerts, simulator, recommendations) as pure functions in `src/lib/equimarge/`, tested with bun; pages only display them, and every figure ships with a one-sentence French explanation.
+- EquiMarge data goes through the `EquiStore` interface: Supabase with owner-only Row Level Security when configured, browser-only demo storage otherwise; never let a page talk to Supabase directly.
