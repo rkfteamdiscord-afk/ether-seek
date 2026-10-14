@@ -13,6 +13,7 @@ transition CSS, ni minuteur, ni état conservé d'une image à l'autre (le conte
 python3 build.py                 # écrit equimarge-film.html (polices intégrées)
 open equimarge-film.html         # lecteur : Espace, ← → image par image, Maj + ← → temps par temps
 node render.mjs out 0 5.4 13.125 # images PNG aux instants voulus
+node export.mjs equimarge-film.mp4 # vidéo MP4 H.264, 900 images (ffmpeg requis)
 ```
 
 `equimarge-film.html?t=5.4` ouvre le film arrêté à 5,4 s ; `?capture=1` masque les commandes.
