@@ -20,7 +20,7 @@ const MODEL = env.GROQ_MODEL || "llama-3.3-70b-versatile";
 const GITHUB_API = env.GITHUB_API_URL || "https://api.github.com";
 const GROQ_API = env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
 const DRY_RUN = env.GARDIEN_DRY_RUN === "1"; // tout faire sauf publier (pour les tests)
-const ROUNDS = Number(env.GARDIEN_ROUNDS ?? 5);
+const ROUNDS = Number(env.GARDIEN_ROUNDS ?? 50);
 const JOURNAL_TITLE = "🛡️ Journal du gardien";
 const STATUS_MARK = "gardien:statut";
 const ENTRY_MARK = "gardien:entree";
@@ -159,6 +159,8 @@ function guard(fix) {
 async function deepAnalysis(issue, commentId, state, reason) {
   state.activity = "🔍 analyse complète en cours (compilation et tests)";
   await writeStatus(issue, commentId, state);
+  // Work on the latest site, including changes made in Lovable since this run started.
+  try { execSync("git pull --ff-only -q origin main", { stdio: "pipe" }); } catch { /* keep the current copy */ }
   const results = verify();
   const entry = { at: now(), reason, checks: state.checks.slice(-5), results: results.map(({ command, ok }) => ({ command, ok })), pensee: "", constats: [], correction: null, decision: "" };
   if (!GROQ_KEY) {
@@ -230,30 +232,46 @@ async function deepAnalysis(issue, commentId, state, reason) {
   await github(`/issues/${issue}/comments`, { method: "POST", body: { body } });
 }
 
+/** When the last full analysis was written to the journal, so it happens about once an hour whatever GitHub's delays. */
+async function lastAnalysisAt(issue) {
+  const comments = await github(`/issues/comments?sort=created&direction=desc&per_page=50`).catch(() => []);
+  const latest = comments.find((comment) => comment.issue_url?.endsWith(`/issues/${issue}`) && comment.body?.includes(`<!-- ${ENTRY_MARK}`));
+  return latest ? Date.parse(latest.created_at) : 0;
+}
+
+/** Start the next run, so watching continues around the clock even when GitHub delays its schedule. */
+async function chainNextRun() {
+  if (env.GARDIEN_CHAIN !== "1") return;
+  await github("/actions/workflows/gardien.yml/dispatches", { method: "POST", body: { ref: "main", inputs: { analyse: "false" } } })
+    .catch((error) => console.error("Relance impossible :", error.message));
+}
+
 async function main() {
   const issue = await journalIssue();
   const commentId = await statusComment(issue);
   const state = { activity: "👀 surveillance du site", site: SITE_URL, checks: [], updated: now() };
-  let deepDone = false;
-  const hourly = env.GARDIEN_DEEP === "1" || new Date().getUTCMinutes() < 5;
+  let lastDeep = env.GARDIEN_DEEP === "1" ? 0 : await lastAnalysisAt(issue);
+  let lastIncident = 0;
   for (let round = 0; round < ROUNDS; round++) {
     const check = await checkSite();
     state.checks = [...state.checks, check].slice(-10);
     state.activity = check.ok ? "👀 surveillance du site" : "⚠️ le site ne répond pas correctement";
     state.updated = now();
     await writeStatus(issue, commentId, state);
-    const failures = state.checks.slice(-2).filter((item) => !item.ok).length;
-    if (!deepDone && (failures === 2 || (hourly && round === 0))) {
-      deepDone = true;
-      await deepAnalysis(issue, commentId, state, failures === 2 ? "incident : le site a échoué deux vérifications de suite" : "passage horaire");
+    const incident = state.checks.slice(-2).filter((item) => !item.ok).length === 2 && Date.now() - lastIncident > 30 * 60000;
+    if (incident || Date.now() - lastDeep > 55 * 60000) {
+      if (incident) lastIncident = Date.now();
+      lastDeep = Date.now();
+      await deepAnalysis(issue, commentId, state, incident ? "incident : le site a échoué deux vérifications de suite" : "analyse horaire");
       state.activity = "👀 surveillance du site";
       await writeStatus(issue, commentId, state);
     }
     if (round < ROUNDS - 1) await sleep(55000);
   }
-  state.activity = "😴 en attente du prochain passage";
+  state.activity = env.GARDIEN_CHAIN === "1" ? "🔁 je me relance pour continuer la surveillance" : "😴 en attente du prochain passage";
   state.updated = now();
   await writeStatus(issue, commentId, state);
+  await chainNextRun();
 }
 
 main().catch((error) => { console.error(error); process.exit(1); });

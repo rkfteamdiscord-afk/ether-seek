@@ -1,7 +1,8 @@
 name: Gardien du site
 
-# Toutes les 5 minutes (le minimum de GitHub) ; chaque passage vérifie le site une fois
-# par minute. Analyse complète par l'IA une fois par heure ou en cas d'incident.
+# Chaque passage vérifie le site une fois par minute pendant environ 50 minutes, puis
+# relance le suivant : la surveillance est continue. Le planning toutes les 5 minutes
+# sert de filet si la chaîne s'arrête. Analyse par l'IA chaque heure ou en cas d'incident.
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -15,6 +16,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 concurrency:
   group: gardien
@@ -23,7 +25,7 @@ concurrency:
 jobs:
   gardien:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,4 +47,6 @@ jobs:
           GROQ_MODEL: ${{ vars.GROQ_MODEL }}
           SITE_URL: ${{ vars.SITE_URL }}
           GARDIEN_DEEP: ${{ github.event_name == 'workflow_dispatch' && inputs.analyse && '1' || '0' }}
+          GARDIEN_ROUNDS: "50"
+          GARDIEN_CHAIN: "1"
         run: node scripts/gardien/run.mjs
