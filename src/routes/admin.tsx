@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { codeMatches, loadJournal, type GuardianEntry, type Journal } from "@/lib/guardian-journal";
+import { codeMatches, loadJournal, loadJournalPage, mergeEntries, type GuardianEntry, type Journal } from "@/lib/guardian-journal";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -12,8 +12,10 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-// The public GitHub API allows about 60 requests an hour per visitor: refresh once a minute.
-const REFRESH_MS = 60000;
+// The public GitHub API allows about 60 requests an hour per visitor: the journal is read
+// every 90 seconds (one request) and runs and fixes every tenth refresh.
+const REFRESH_MS = 90000;
+const ANALYSE_MS = 5 * 60000;
 const UNLOCK_KEY = "zrk-admin-unlocked";
 
 function ago(iso: string | undefined, now: number) {
@@ -36,10 +38,37 @@ function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
+  const [olderPage, setOlderPage] = useState<number | null>(null);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const dataRef = useRef<Journal | null>(null);
+  const refreshes = useRef(0);
+
   const refresh = useCallback(async () => {
-    try { setData(await loadJournal()); }
-    catch (error) { setData((current) => ({ ...(current ?? { repo: "", journalUrl: null, status: null, entries: [], runs: [], fixes: [] }), fetchedAt: new Date().toISOString(), error: `Impossible de lire le journal : ${error instanceof Error ? error.message : "erreur"}.` })); }
+    const withActivity = refreshes.current++ % 10 === 0;
+    try {
+      const next = await loadJournal(dataRef.current, withActivity);
+      dataRef.current = next;
+      setData(next);
+    } catch (error) {
+      setData((current) => ({ ...(current ?? { repo: "", journalUrl: null, issueNumber: null, totalComments: 0, status: null, entries: [], runs: [], fixes: [] }), fetchedAt: new Date().toISOString(), error: `Impossible de lire le journal : ${error instanceof Error ? error.message : "erreur"}.` }));
+    }
   }, []);
+
+  const loadOlder = useCallback(async () => {
+    const current = dataRef.current;
+    if (!current?.issueNumber) return;
+    const lastPage = Math.max(1, Math.ceil(current.totalComments / 100));
+    const page = (olderPage ?? lastPage) - 1;
+    if (page < 1) return;
+    setLoadingOlder(true);
+    try {
+      const older = await loadJournalPage(current.issueNumber, page);
+      const next = { ...current, entries: mergeEntries(current.entries, older) };
+      dataRef.current = next;
+      setData(next);
+      setOlderPage(page);
+    } finally { setLoadingOlder(false); }
+  }, [olderPage]);
 
   useEffect(() => { try { if (sessionStorage.getItem(UNLOCK_KEY) === "1") setUnlocked(true); } catch { /* storage unavailable */ } }, []);
   useEffect(() => {
@@ -121,10 +150,24 @@ function AdminPage() {
         </section>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
-          <section aria-label="Pensées et décisions du gardien">
-            <h2 className="font-display text-2xl font-bold">Pensées et décisions</h2>
-            {data.entries.length === 0 && <p className="mt-4 text-muted-foreground">Le gardien n’a pas encore fait d’analyse complète. Elle a lieu chaque heure, ou tout de suite en cas d’incident.</p>}
-            <ol className="mt-4 space-y-4">{data.entries.map((entry) => <Entry key={entry.at} entry={entry} />)}</ol>
+          <section aria-label="Historique du gardien">
+            <div className="flex flex-wrap items-end justify-between gap-2">
+              <h2 className="font-display text-2xl font-bold">Tout ce qu’il a fait</h2>
+              <p className="text-sm text-muted-foreground">
+                {data.entries.length} passage{data.entries.length > 1 ? "s" : ""} affiché{data.entries.length > 1 ? "s" : ""}
+                {data.entries[0] && <> · prochain passage {nextIn(data.entries[0].at, now)}</>}
+              </p>
+            </div>
+            {data.entries.length === 0 && <p className="mt-4 text-muted-foreground">Le gardien n’a pas encore fait d’analyse. Il en fait une toutes les 5 minutes, ou tout de suite en cas d’incident.</p>}
+            {groupByDay(data.entries).map(([day, entries]) => (
+              <div key={day} className="mt-6">
+                <h3 className="text-sm uppercase tracking-widest text-muted-foreground">{day}</h3>
+                <ol className="mt-3 space-y-2">{entries.map((entry) => <Entry key={entry.at} entry={entry} />)}</ol>
+              </div>
+            ))}
+            {data.issueNumber && (olderPage ?? Math.ceil(data.totalComments / 100)) > 1 && (
+              <button type="button" disabled={loadingOlder} onClick={() => void loadOlder()} className="glass mt-6 w-full rounded-full px-4 py-3 text-sm disabled:opacity-50">{loadingOlder ? "Chargement…" : "Voir plus ancien"}</button>
+            )}
           </section>
           <aside className="space-y-6">
             <section className="glass rounded-3xl p-6" aria-label="Derniers passages">
@@ -150,19 +193,53 @@ function AdminPage() {
   );
 }
 
+const missions = { bug: "🐛 bug", deco: "🎃 déco", fantome: "👻 fantôme", detail: "✨ détail" } as const;
+
+function outcome(entry: GuardianEntry) {
+  const decision = entry.decision;
+  if (decision.includes("publiée")) return { label: "✅ publié", tone: "bg-whatsapp/25" };
+  if (decision.includes("plus tard") || decision.includes("à blanc")) return { label: "💡 idée gardée", tone: "bg-primary/20" };
+  if (decision.includes("Rien")) return { label: "😌 rien à faire", tone: "bg-muted" };
+  if (decision.includes("refusée") || decision.includes("annulée")) return { label: "🛑 refusée", tone: "bg-destructive/20" };
+  if (decision.includes("interrompue") || decision.includes("quota")) return { label: "⚠️ IA indisponible", tone: "bg-seasonal/20" };
+  return { label: "🔎 vérifications", tone: "bg-muted" };
+}
+
+function groupByDay(entries: GuardianEntry[]) {
+  const days = new Map<string, GuardianEntry[]>();
+  for (const entry of entries) {
+    const day = new Date(entry.at).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    days.set(day, [...(days.get(day) ?? []), entry]);
+  }
+  return [...days.entries()];
+}
+
+function nextIn(lastAt: string, now: number) {
+  const seconds = Math.round((Date.parse(lastAt) + ANALYSE_MS - now) / 1000);
+  if (seconds <= 0) return "imminent";
+  return seconds < 60 ? `dans ${seconds} s` : `dans ${Math.ceil(seconds / 60)} min`;
+}
+
 function Entry({ entry }: { entry: GuardianEntry }) {
+  const result = outcome(entry);
+  const summary = entry.correction?.raison ?? (entry.pensee || entry.decision);
   return (
-    <li className="glass rounded-3xl p-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <strong>{entry.reason.startsWith("incident") ? "🚨" : "🛡️"} {when(entry.at)}</strong>
-        <span className="text-sm text-muted-foreground">{entry.reason}</span>
-      </div>
+    <li>
+      <details className="glass group rounded-2xl">
+        <summary className="flex cursor-pointer list-none flex-wrap items-center gap-3 px-4 py-3">
+          <time className="font-mono text-sm text-seasonal">{new Date(entry.at).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}</time>
+          {entry.reason.startsWith("incident") && <span title="incident">🚨</span>}
+          {entry.theme && <span className="text-sm">{missions[entry.theme]}</span>}
+          <span className={`rounded-full px-2.5 py-0.5 text-xs ${result.tone}`}>{result.label}</span>
+          <span className="min-w-0 flex-1 truncate text-sm text-muted-foreground">{summary}</span>
+          <span aria-hidden="true" className="text-muted-foreground transition-transform group-open:rotate-90">›</span>
+        </summary>
+        <div className="border-t border-border/40 px-4 pb-4">
       <p className="mt-3 flex flex-wrap gap-2 text-xs">
         {entry.results.map((result) => <span key={result.command} className={`rounded-full px-2.5 py-1 ${result.ok ? "bg-whatsapp/20" : "bg-destructive/25"}`}>{result.ok ? "✅" : "❌"} {result.command.replace(/^npx |^bun /, "")}</span>)}
       </p>
       {entry.pensee && <blockquote className="mt-4 border-l-2 border-seasonal pl-4 italic leading-7 text-foreground/90">{entry.pensee}</blockquote>}
       {entry.constats.length > 0 && <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.constats.map((item, i) => <li key={i}>{item}</li>)}</ul>}
-      {entry.theme && <p className="mt-3 text-sm text-muted-foreground">Mission : {{ bug: "🐛 corriger un bug", deco: "🎃 décoration", fantome: "👻 réponses du fantôme", detail: "✨ petite amélioration" }[entry.theme]}</p>}
       {(entry.corrections ?? (entry.correction ? [entry.correction] : [])).map((fix, i) => (
         <div key={i} className="mt-4 text-sm">
           <p>{i === 0 ? `Modification : ${fix.raison} — ` : ""}<code className="text-seasonal">{fix.fichier}</code></p>
@@ -174,6 +251,8 @@ function Entry({ entry }: { entry: GuardianEntry }) {
       ))}
       {entry.relecture && <p className="mt-3 text-sm"><strong>Relecture :</strong> {entry.relecture}</p>}
       <p className="mt-3 text-sm"><strong>Décision :</strong> {entry.decision}</p>
+        </div>
+      </details>
     </li>
   );
 }

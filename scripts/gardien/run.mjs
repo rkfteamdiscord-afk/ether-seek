@@ -19,6 +19,7 @@ const GROQ_KEY = env.GROQ_API_KEY || "";
 // Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
 const PREFERRED_MODELS = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "qwen/qwen3-32b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.1-8b-instant"];
 let chosenModel = env.GROQ_MODEL || "";
+const exhausted = new Set(); // models whose quota is used up for now
 const GITHUB_API = env.GITHUB_API_URL || "https://api.github.com";
 const GROQ_API = env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
 const DRY_RUN = env.GARDIEN_DRY_RUN === "1"; // tout faire sauf publier (pour les tests)
@@ -106,11 +107,12 @@ function run(command) {
 const verify = () => [run("npx tsc --noEmit -p ."), run("npx vite build"), run("bun test src/lib/seasonal-offer.test.js")];
 
 async function pickModel() {
-  if (chosenModel) return chosenModel;
+  if (chosenModel && !exhausted.has(chosenModel)) return chosenModel;
   const response = await fetch(`${GROQ_API}/models`, { headers: { authorization: `Bearer ${GROQ_KEY}` }, signal: AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error(`Groq modèles → ${response.status}`);
   const ids = ((await response.json()).data ?? []).map((model) => model.id);
-  chosenModel = PREFERRED_MODELS.find((id) => ids.includes(id)) ?? ids.find((id) => !/whisper|tts|guard|embed|distil|compound|playai/i.test(id)) ?? "";
+  const usable = [...PREFERRED_MODELS.filter((id) => ids.includes(id)), ...ids.filter((id) => !/whisper|tts|guard|embed|distil|compound|playai|orpheus/i.test(id))];
+  chosenModel = usable.find((id) => !exhausted.has(id)) ?? "";
   if (!chosenModel) throw new Error("aucun modèle Groq disponible");
   return chosenModel;
 }
@@ -122,13 +124,19 @@ async function groq(system, user) {
   const response = await fetch(`${GROQ_API}/chat/completions`, {
     method: "POST",
     headers: { authorization: `Bearer ${GROQ_KEY}`, "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 1400, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
+    body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 900, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
     signal: AbortSignal.timeout(60000),
   });
   if (response.status === 429) {
-    // Free keys have daily limits shared with the ghost: back off instead of hammering.
-    groqPauseUntil = Date.now() + 15 * 60000;
-    throw new Error("quota Groq atteint, je fais une pause de 15 minutes");
+    // Each Groq model has its own free quota: switch to the next one; pause only when all are used up.
+    exhausted.add(MODEL);
+    if (!env.GROQ_MODEL && exhausted.size < 6) {
+      chosenModel = "";
+      try { await pickModel(); return groq(system, user); } catch { /* every model exhausted */ }
+    }
+    groqPauseUntil = Date.now() + 10 * 60000;
+    setTimeout(() => exhausted.clear(), 10 * 60000).unref();
+    throw new Error("quota Groq atteint sur tous les modèles, pause de 10 minutes");
   }
   if (!response.ok) throw new Error(`Groq (${MODEL}) → ${response.status}`);
   const payload = await response.json();
@@ -205,7 +213,7 @@ function themeContext(theme) {
   }
   if (theme === "detail") {
     const css = readFileSync("src/styles.css", "utf8");
-    return `--- fin de src/styles.css\n${css.slice(-5000)}`;
+    return `--- fin de src/styles.css\n${css.slice(-2500)}`;
   }
   return `--- src/lib/ghost-knowledge.ts\n${readFileSync("src/lib/ghost-knowledge.ts", "utf8")}`;
 }
