@@ -130,9 +130,10 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
         const base = sprite.getBoundingClientRect();
         const ox = base.left - x, oy = base.top - y;
         if (to.bottom > 0 && to.top < window.innerHeight && to.width > 0) {
-          // The sheet's lower edge meets the element, rather than the speech bubble.
+          // Approach from below: the crown of the head meets the element's lower edge.
           const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - base.width / 2), window.innerWidth - base.width - 8);
-          const destY = Math.min(Math.max(8, to.top - base.height * 0.82), window.innerHeight - base.height - 8);
+          const contactY = Math.min(to.bottom, window.innerHeight - base.height - 8 + base.height * 0.05);
+          const destY = Math.max(8, contactY - base.height * 0.05);
           tx = destX - ox; ty = destY - oy;
           canTouch = true;
         }
@@ -276,6 +277,7 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
       <div ref={home} className="ghost-guide" data-visible={visible && !open ? "true" : "false"} data-open={open ? "true" : "false"}>
         <button ref={button} type="button" className="ghost-guide-sprite" aria-label="Poser une question au fantôme" aria-expanded={open} aria-controls="ghost-chat" onClick={() => setOpen((value) => !value)}>
           <GhostSprite />
+          <span className="ghost-head-impact" aria-hidden="true"><i /><i /><i /></span>
           <span className="ghost-guide-badge" aria-hidden="true">?</span>
         </button>
         <p className="ghost-guide-bubble" role="status" aria-live="polite">{tip}</p>
