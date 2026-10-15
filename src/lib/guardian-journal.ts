@@ -25,7 +25,7 @@ export type GuardianEntry = {
 };
 export type GuardianRun = { status: string; conclusion: string | null; createdAt: string; url: string };
 export type GuardianFix = { sha: string; message: string; date: string; url: string };
-export type Journal = { repo: string; journalUrl: string | null; status: GuardianStatus | null; entries: GuardianEntry[]; runs: GuardianRun[]; fixes: GuardianFix[]; fetchedAt: string; error?: string };
+export type Journal = { repo: string; journalUrl: string | null; issueNumber: number | null; totalComments: number; status: GuardianStatus | null; entries: GuardianEntry[]; runs: GuardianRun[]; fixes: GuardianFix[]; fetchedAt: string; error?: string };
 
 async function github<T>(path: string): Promise<T> {
   const response = await fetch(`https://api.github.com/repos/${REPO}${path}`, { headers: { accept: "application/vnd.github+json" } });
@@ -44,22 +44,54 @@ function decode<T>(body: string, mark: string): T | null {
   }
 }
 
-export async function loadJournal(): Promise<Journal> {
-  const issues = await github<Array<{ number: number; title: string; html_url: string; user: { login: string } }>>(`/issues?state=all&per_page=100&creator=${encodeURIComponent(BOT)}`);
-  const journal = issues.find((issue) => issue.title === "🛡️ Journal du gardien" && issue.user.login === BOT);
+type Comment = { body: string; issue_url: string; user: { login: string } };
+type Issue = { number: number; title: string; html_url: string; comments: number; user: { login: string } };
+
+const entriesOf = (comments: Comment[], issueNumber: number) =>
+  comments
+    .filter((comment) => comment.user.login === BOT && comment.issue_url.endsWith(`/issues/${issueNumber}`))
+    .map((comment) => decode<GuardianEntry>(comment.body, "gardien:entree"))
+    .filter((item): item is GuardianEntry => !!item);
+
+/** Newest first, without duplicates. */
+export function mergeEntries(...lists: GuardianEntry[][]) {
+  const byTime = new Map<string, GuardianEntry>();
+  for (const list of lists) for (const entry of list) byTime.set(entry.at, entry);
+  return [...byTime.values()].sort((a, b) => b.at.localeCompare(a.at));
+}
+
+/**
+ * Latest status and roughly the last 8 hours of analyses in one request. Runs, fixes and
+ * the journal issue itself are fetched only when `withActivity` is set, to stay well
+ * under GitHub's limit of 60 anonymous requests an hour.
+ */
+export async function loadJournal(previous: Journal | null, withActivity: boolean): Promise<Journal> {
+  let issue: Issue | undefined;
+  if (withActivity || !previous?.issueNumber) {
+    const issues = await github<Issue[]>(`/issues?state=all&per_page=100&creator=${encodeURIComponent(BOT)}`);
+    issue = issues.find((item) => item.title === "🛡️ Journal du gardien" && item.user.login === BOT);
+  }
+  const issueNumber = issue?.number ?? previous?.issueNumber ?? null;
   const [comments, runs, commits] = await Promise.all([
-    journal ? github<Array<{ body: string; issue_url: string; user: { login: string } }>>(`/issues/comments?sort=updated&direction=desc&per_page=60`) : Promise.resolve([]),
-    github<{ workflow_runs: Array<{ status: string; conclusion: string | null; created_at: string; html_url: string }> }>(`/actions/workflows/gardien.yml/runs?per_page=6`).catch(() => ({ workflow_runs: [] })),
-    github<Array<{ sha: string; html_url: string; commit: { message: string; author: { date: string } } }>>(`/commits?per_page=40`),
+    issueNumber ? github<Comment[]>(`/issues/comments?sort=updated&direction=desc&per_page=100`) : Promise.resolve([]),
+    withActivity ? github<{ workflow_runs: Array<{ status: string; conclusion: string | null; created_at: string; html_url: string }> }>(`/actions/workflows/gardien.yml/runs?per_page=6`).catch(() => ({ workflow_runs: [] })) : null,
+    withActivity ? github<Array<{ sha: string; html_url: string; commit: { message: string; author: { date: string } } }>>(`/commits?per_page=60`) : null,
   ]);
-  const own = comments.filter((comment) => comment.user.login === BOT && journal && comment.issue_url.endsWith(`/issues/${journal.number}`));
+  const own = comments.filter((comment) => comment.user.login === BOT && issueNumber && comment.issue_url.endsWith(`/issues/${issueNumber}`));
   return {
     repo: REPO,
-    journalUrl: journal?.html_url ?? null,
-    status: own.map((comment) => decode<GuardianStatus>(comment.body, "gardien:statut")).find((item) => item && item.checks) ?? null,
-    entries: own.map((comment) => decode<GuardianEntry>(comment.body, "gardien:entree")).filter((item): item is GuardianEntry => !!item).sort((a, b) => b.at.localeCompare(a.at)).slice(0, 25),
-    runs: runs.workflow_runs.map((run) => ({ status: run.status, conclusion: run.conclusion, createdAt: run.created_at, url: run.html_url })),
-    fixes: commits.filter((commit) => commit.commit.message.startsWith("gardien:")).map((commit) => ({ sha: commit.sha.slice(0, 7), message: commit.commit.message.split("\n")[0]!, date: commit.commit.author.date, url: commit.html_url })),
+    journalUrl: issue?.html_url ?? previous?.journalUrl ?? null,
+    issueNumber,
+    totalComments: issue?.comments ?? previous?.totalComments ?? 0,
+    status: own.map((comment) => decode<GuardianStatus>(comment.body, "gardien:statut")).find((item) => item && item.checks) ?? previous?.status ?? null,
+    entries: mergeEntries(previous?.entries ?? [], issueNumber ? entriesOf(own, issueNumber) : []),
+    runs: runs ? runs.workflow_runs.map((run) => ({ status: run.status, conclusion: run.conclusion, createdAt: run.created_at, url: run.html_url })) : previous?.runs ?? [],
+    fixes: commits ? commits.filter((commit) => commit.commit.message.startsWith("gardien:")).map((commit) => ({ sha: commit.sha.slice(0, 7), message: commit.commit.message.split("\n")[0]!, date: commit.commit.author.date, url: commit.html_url })) : previous?.fixes ?? [],
     fetchedAt: new Date().toISOString(),
   };
+}
+
+/** One older page of the journal (100 comments, oldest pages first on GitHub). */
+export async function loadJournalPage(issueNumber: number, page: number) {
+  return entriesOf(await github<Comment[]>(`/issues/${issueNumber}/comments?per_page=100&page=${page}`), issueNumber);
 }
