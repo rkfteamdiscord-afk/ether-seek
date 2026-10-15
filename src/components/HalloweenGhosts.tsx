@@ -108,56 +108,40 @@ function answerFor(question: string): Pointing {
   return best;
 }
 
-/** Stretching magic wand held by a zombie finger, from the guide ghost to whatever it talks about. */
-function ZombieWand({ origin, target }: { origin: React.RefObject<HTMLElement | null>; target: Element | null }) {
-  const ref = useRef<HTMLDivElement>(null);
+/** Flies the guide ghost itself to whatever it talks about, touches it, then floats back home. */
+function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Element | null, enabled: boolean) {
   useEffect(() => {
-    const wand = ref.current;
-    if (!wand || !target) return;
-    let raf = 0;
+    const ghost = home.current;
+    if (!ghost) return;
+    let raf = 0, x = 0, y = 0;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const place = () => {
-      const from = origin.current?.getBoundingClientRect();
-      const to = target.getBoundingClientRect();
-      const visible = from && to.bottom > 0 && to.top < window.innerHeight && to.width > 0;
-      wand.dataset["active"] = visible ? "true" : "false";
-      if (visible) {
-        const ox = from.left + from.width * 0.82, oy = from.top + from.height * 0.5;
-        const tx = to.left + Math.min(to.width / 2, 48), ty = to.top + Math.min(to.height / 2, 28);
-        const length = Math.max(60, Math.hypot(tx - ox, ty - oy) - 6);
-        wand.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0) rotate(${Math.atan2(ty - oy, tx - ox).toFixed(4)}rad)`;
-        wand.style.width = `${length.toFixed(1)}px`;
+      let tx = 0, ty = 0;
+      if (enabled && target) {
+        const to = target.getBoundingClientRect();
+        const base = ghost.getBoundingClientRect();
+        const ox = base.left - x, oy = base.top - y;
+        if (to.bottom > 0 && to.top < window.innerHeight && to.width > 0) {
+          // Land on the element's upper-left corner, staying on screen.
+          const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - 20), window.innerWidth - base.width - 8);
+          const destY = Math.min(Math.max(8, to.top - base.height * 0.55), window.innerHeight - base.height - 8);
+          tx = destX - ox; ty = destY - oy;
+        }
       }
+      const k = reduce ? 1 : 0.06;
+      x += (tx - x) * k; y += (ty - y) * k;
+      ghost.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
       raf = requestAnimationFrame(place);
     };
     raf = requestAnimationFrame(place);
-    target.classList.add("guide-highlight");
-    return () => { cancelAnimationFrame(raf); target.classList.remove("guide-highlight"); wand.dataset["active"] = "false"; };
-  }, [origin, target]);
-  return (
-    <div ref={ref} className="zombie-wand" data-active="false" aria-hidden="true">
-      <div className="zombie-wand-grow">
-        <svg viewBox="0 0 54 26" className="zombie-finger">
-          <defs>
-            <linearGradient id="zf-skin" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="oklch(0.74 0.07 135)" /><stop offset="1" stopColor="oklch(0.45 0.06 145)" />
-            </linearGradient>
-          </defs>
-          <path d="M0 5Q16 2 34 6L46 8Q53 10 52 14Q51 18 45 18L34 19Q16 23 0 21Z" fill="url(#zf-skin)" stroke="oklch(0.3 0.04 150)" strokeWidth="1" />
-          <path d="M16 8q2 4 0 9M30 8q2 4 0 10" fill="none" stroke="oklch(0.35 0.05 150)" strokeWidth="1" />
-          <path d="M44 9 51 11 50 16 44 17Z" fill="oklch(0.3 0.04 60)" />
-          <ellipse cx="24" cy="15" rx="3" ry="2" fill="oklch(0.45 0.12 20 / .6)" />
-        </svg>
-        <span className="wand-stick" />
-        <span className="wand-star">✦</span>
-      </div>
-    </div>
-  );
+    if (target) target.classList.add("guide-highlight");
+    return () => { cancelAnimationFrame(raf); target?.classList.remove("guide-highlight"); };
+  }, [home, target, enabled]);
 }
 
 /**
  * The guide ghost. Each time a part of the page reaches the middle of the screen it
- * gives a short guided tour of it, pointing at each element with its zombie-finger
- * wand, then asks whether you have questions. Clicked, it opens a question panel:
+ * gives a short guided tour of it, flying over to touch each element, then asks whether you have questions. Clicked, it opens a question panel:
  * ready-made questions are answered instantly from the page; typed questions go to a
  * small AI on the server (see ghost-ai.ts), with the built-in answers as a fallback.
  * Nothing is stored; only the ghost button and its panel take clicks.
@@ -173,6 +157,7 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
   const lastTour = useRef(new Map<string, number>());
   const tourTimers = useRef<number[]>([]);
   const button = useRef<HTMLButtonElement>(null);
+  const home = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const pointTimer = useRef(0);
   const bubbleTimer = useRef(0);
@@ -235,7 +220,7 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
   const reply = (answer: Pointing) => {
     setLog((current) => [...current, { from: "ghost" as const, text: answer.text }].slice(-8));
     if (window.innerWidth < 640) {
-      // On a phone the panel would hide what the wand points at: fold it and answer in the bubble.
+      // On a phone the panel would hide what the ghost flies to: fold it and answer in the bubble.
       setOpen(false);
       button.current?.focus();
       say(answer.text, answer.target, 9000);
@@ -262,10 +247,12 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
     reply(result ? { text: result.answer, target: targetSelectors[result.target] } : answerFor(question));
   };
 
+  useGhostTravel(home, target, ready && !open);
+
   if (!ready) return null;
   return (
     <>
-      <div className="ghost-guide" data-visible={visible && !open ? "true" : "false"} data-open={open ? "true" : "false"}>
+      <div ref={home} className="ghost-guide" data-visible={visible && !open ? "true" : "false"} data-open={open ? "true" : "false"}>
         <button ref={button} type="button" className="ghost-guide-sprite" aria-label="Poser une question au fantôme" aria-expanded={open} aria-controls="ghost-chat" onClick={() => setOpen((value) => !value)}>
           <GhostSprite />
           <span className="ghost-guide-badge" aria-hidden="true">?</span>
@@ -291,7 +278,6 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
           <p className="ghost-chat-note">Les questions écrites sont envoyées à un service d’IA (Groq ou Pollinations) pour te répondre. Rien n’est enregistré sur le site.</p>
         </section>
       </div>
-      <ZombieWand origin={button} target={target} />
     </>
   );
 }
