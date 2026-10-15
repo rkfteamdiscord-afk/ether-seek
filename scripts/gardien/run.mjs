@@ -16,10 +16,16 @@ const SITE_URL = env.SITE_URL || "https://www.zrk.lol";
 const REPO = env.GITHUB_REPOSITORY;
 const TOKEN = env.GITHUB_TOKEN;
 const GROQ_KEY = env.GROQ_API_KEY || "";
-const MODEL = env.GROQ_MODEL || "llama-3.3-70b-versatile";
+// Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
+const PREFERRED_MODELS = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "qwen/qwen3-32b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.1-8b-instant"];
+let chosenModel = env.GROQ_MODEL || "";
 const GITHUB_API = env.GITHUB_API_URL || "https://api.github.com";
 const GROQ_API = env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
 const DRY_RUN = env.GARDIEN_DRY_RUN === "1"; // tout faire sauf publier (pour les tests)
+const ANALYSE_EVERY = Number(env.GARDIEN_ANALYSE_MIN ?? 5) * 60000; // analyse IA
+const PUBLISH_EVERY = Number(env.GARDIEN_PUBLISH_MIN ?? 15) * 60000; // une publication au plus
+let lastPublish = 0;
+let groqPauseUntil = 0;
 const ROUNDS = Number(env.GARDIEN_ROUNDS ?? 50);
 const JOURNAL_TITLE = "🛡️ Journal du gardien";
 const STATUS_MARK = "gardien:statut";
@@ -99,15 +105,32 @@ function run(command) {
 
 const verify = () => [run("npx tsc --noEmit -p ."), run("npx vite build"), run("bun test src/lib/seasonal-offer.test.js")];
 
+async function pickModel() {
+  if (chosenModel) return chosenModel;
+  const response = await fetch(`${GROQ_API}/models`, { headers: { authorization: `Bearer ${GROQ_KEY}` }, signal: AbortSignal.timeout(20000) });
+  if (!response.ok) throw new Error(`Groq modèles → ${response.status}`);
+  const ids = ((await response.json()).data ?? []).map((model) => model.id);
+  chosenModel = PREFERRED_MODELS.find((id) => ids.includes(id)) ?? ids.find((id) => !/whisper|tts|guard|embed|distil|compound|playai/i.test(id)) ?? "";
+  if (!chosenModel) throw new Error("aucun modèle Groq disponible");
+  return chosenModel;
+}
+
 async function groq(system, user) {
   if (!GROQ_KEY) return null;
+  if (Date.now() < groqPauseUntil) throw new Error("quota Groq atteint, pause en cours");
+  const MODEL = await pickModel();
   const response = await fetch(`${GROQ_API}/chat/completions`, {
     method: "POST",
     headers: { authorization: `Bearer ${GROQ_KEY}`, "content-type": "application/json" },
     body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 1400, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
     signal: AbortSignal.timeout(60000),
   });
-  if (!response.ok) throw new Error(`Groq → ${response.status}`);
+  if (response.status === 429) {
+    // Free keys have daily limits shared with the ghost: back off instead of hammering.
+    groqPauseUntil = Date.now() + 15 * 60000;
+    throw new Error("quota Groq atteint, je fais une pause de 15 minutes");
+  }
+  if (!response.ok) throw new Error(`Groq (${MODEL}) → ${response.status}`);
   const payload = await response.json();
   return JSON.parse(payload.choices?.[0]?.message?.content ?? "{}");
 }
@@ -202,7 +225,7 @@ async function deepAnalysis(issue, commentId, state, reason) {
       await writeStatus(issue, commentId, state);
       const knowledge = readFileSync("src/lib/ghost-knowledge.ts", "utf8");
       const broken = results.some((result) => !result.ok);
-      const theme = broken ? "bug" : env.GARDIEN_THEME || ["deco", "fantome", "detail"][Math.floor(Date.now() / 3600000) % 3];
+      const theme = broken ? "bug" : env.GARDIEN_THEME || ["deco", "fantome", "detail"][Math.floor(Date.now() / ANALYSE_EVERY) % 3];
       entry.theme = theme;
       const analysis = await groq(analystPrompt, [
         `Raison du passage : ${reason}`,
@@ -238,7 +261,11 @@ async function deepAnalysis(issue, commentId, state, reason) {
           if (after.every((result) => result.ok) && DRY_RUN) {
             restore();
             entry.decision = "Modification validée (mode à blanc : rien n’a été publié).";
+          } else if (after.every((result) => result.ok) && Date.now() - lastPublish < PUBLISH_EVERY) {
+            restore();
+            entry.decision = `Bonne idée, validée, mais gardée pour plus tard : une publication toutes les ${PUBLISH_EVERY / 60000} minutes au maximum.`;
           } else if (after.every((result) => result.ok)) {
+            lastPublish = Date.now();
             const message = `gardien: ${raison.replace(/\s+/g, " ").slice(0, 80)}`;
             execSync(`git add ${[...files.keys()].map((file) => JSON.stringify(file)).join(" ")}`);
             execSync(`git -c user.name="gardien-zrk[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m ${JSON.stringify(message)}`);
@@ -274,8 +301,10 @@ async function deepAnalysis(issue, commentId, state, reason) {
 /** When the last full analysis was written to the journal, so it happens about once an hour whatever GitHub's delays. */
 async function lastAnalysisAt(issue) {
   const comments = await github(`/issues/comments?sort=created&direction=desc&per_page=50`).catch(() => []);
-  const latest = comments.find((comment) => comment.issue_url?.endsWith(`/issues/${issue}`) && comment.body?.includes(`<!-- ${ENTRY_MARK}`));
-  return latest ? Date.parse(latest.created_at) : 0;
+  const entries = comments.filter((comment) => comment.issue_url?.endsWith(`/issues/${issue}`) && comment.body?.includes(`<!-- ${ENTRY_MARK}`));
+  const published = entries.find((comment) => comment.body.includes("appliquée et publiée"));
+  if (published) lastPublish = Date.parse(published.created_at);
+  return entries[0] ? Date.parse(entries[0].created_at) : 0;
 }
 
 /** Start the next run, so watching continues around the clock even when GitHub delays its schedule. */
@@ -298,10 +327,10 @@ async function main() {
     state.updated = now();
     await writeStatus(issue, commentId, state);
     const incident = state.checks.slice(-2).filter((item) => !item.ok).length === 2 && Date.now() - lastIncident > 30 * 60000;
-    if (incident || Date.now() - lastDeep > 55 * 60000) {
+    if (incident || Date.now() - lastDeep > ANALYSE_EVERY - 30000) {
       if (incident) lastIncident = Date.now();
       lastDeep = Date.now();
-      await deepAnalysis(issue, commentId, state, incident ? "incident : le site a échoué deux vérifications de suite" : "analyse horaire");
+      await deepAnalysis(issue, commentId, state, incident ? "incident : le site a échoué deux vérifications de suite" : "analyse régulière");
       state.activity = "👀 surveillance du site";
       await writeStatus(issue, commentId, state);
     }
