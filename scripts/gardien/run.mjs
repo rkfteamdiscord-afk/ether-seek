@@ -15,7 +15,8 @@ const env = process.env;
 const SITE_URL = env.SITE_URL || "https://www.zrk.lol";
 const REPO = env.GITHUB_REPOSITORY;
 const TOKEN = env.GITHUB_TOKEN;
-const GROQ_KEY = env.GROQ_API_KEY || "";
+// A second key (another Groq account) gives the guardian its own quota, apart from the ghost's.
+const GROQ_KEY = env.GROQ_API_KEY_2 || env.GROQ_API_KEY || "";
 // Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
 const PREFERRED_MODELS = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "qwen/qwen3-32b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.1-8b-instant"];
 let chosenModel = env.GROQ_MODEL || "";
