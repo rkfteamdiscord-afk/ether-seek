@@ -970,7 +970,7 @@ html { scroll-behavior: smooth; }
 .ghost-chat-close { width: 32px; height: 32px; border-radius: 50%; font-size: 22px; line-height: 1; color: var(--muted-foreground); }
 .ghost-chat-close:hover { color: var(--foreground); background: color-mix(in oklab, var(--foreground) 10%, transparent); }
 .ghost-chat-log { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 60px; }
-.ghost-chat-msg { margin: 0; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border-radius: 14px; }
+.ghost-chat-msg { margin: 0; margin-bottom: 6px; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border-radius: 14px; }
 .ghost-chat-msg.from-ghost { align-self: flex-start; background: color-mix(in oklab, var(--primary) 16%, transparent); border-bottom-left-radius: 4px; }
 .ghost-chat-msg.from-you { align-self: flex-end; color: var(--seasonal-foreground); background: var(--seasonal); border-bottom-right-radius: 4px; }
 .ghost-chat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
