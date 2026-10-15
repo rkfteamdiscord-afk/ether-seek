@@ -592,7 +592,7 @@ export function ReportView({
         <h4 className="mt-6 font-semibold">Reporting obligations to check</h4>
         <ul className="mt-2 space-y-2">
           {flags.map((f) => (
-            <li key={f.form} className="flex gap-3 rounded-xl border border-ay-line p-3">
+            <li key={f.form} className="flex items-start gap-3 rounded-xl border border-ay-line p-3">
               <Pill
                 tone={
                   f.required === "likely" ? "warn" : f.required === "possible" ? "neutral" : "good"
