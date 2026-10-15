@@ -45,6 +45,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
           GROQ_MODEL: ${{ vars.GROQ_MODEL }}
           SITE_URL: ${{ vars.SITE_URL }}
           GARDIEN_DEEP: ${{ github.event_name == 'workflow_dispatch' && inputs.analyse && '1' || '0' }}
