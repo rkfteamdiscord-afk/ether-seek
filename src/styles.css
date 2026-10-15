@@ -935,6 +935,8 @@ html { scroll-behavior: smooth; }
 .zombie-hand { position: absolute; z-index: 3; bottom: 4px; width: 92px; pointer-events: none; filter: drop-shadow(0 6px 10px oklch(0.08 0.03 290 / .6)); }
 .zombie-hand svg { display: block; width: 100%; height: auto; overflow: visible; }
 .zh-arm { animation: zombie-rise 9s ease-in-out infinite; }
+.lantern-extra-hero { right: 2%; top: 20%; }
+.lantern-extra-hero-bottom { right: 2%; bottom: 5%; }
 .zh-fingers { transform-box: fill-box; transform-origin: 50% 100%; animation: zombie-claw 9s ease-in-out infinite; }
 .zh-hero { left: 42%; } .zh-services { left: 6%; animation-delay: -3s; } .zh-method { right: 14%; }
 .zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }
@@ -970,16 +972,17 @@ html { scroll-behavior: smooth; }
 .ghost-chat-close { width: 32px; height: 32px; border-radius: 50%; font-size: 22px; line-height: 1; color: var(--muted-foreground); }
 .ghost-chat-close:hover { color: var(--foreground); background: color-mix(in oklab, var(--foreground) 10%, transparent); }
 .ghost-chat-log { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 60px; }
-.ghost-chat-msg { margin: 0; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border-radius: 14px; }
+.ghost-chat-msg { margin: 0; margin-bottom: 6px; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border-radius: 14px; }
 .ghost-chat-msg.from-ghost { align-self: flex-start; background: color-mix(in oklab, var(--primary) 16%, transparent); border-bottom-left-radius: 4px; }
 .ghost-chat-msg.from-you { align-self: flex-end; color: var(--seasonal-foreground); background: var(--seasonal); border-bottom-right-radius: 4px; }
 .ghost-chat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.ghost-chat-chips button { padding: 6px 10px; font-size: 12.5px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--seasonal) 40%, transparent); background: color-mix(in oklab, var(--seasonal) 10%, transparent); color: var(--foreground); transition: background .2s ease; }
-.ghost-chat-chips button:hover, .ghost-chat-chips button:focus-visible { background: color-mix(in oklab, var(--seasonal) 28%, transparent); outline: 2px solid var(--seasonal); }
+.ghost-chat-chips button { padding: 6px 10px; font-size: 12.5px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--seasonal) 40%, transparent); background: color-mix(in oklab, var(--seasonal) 10%, transparent); color: var(--foreground); transition: background .2s ease, color .2s ease; cursor: pointer; }
+.ghost-chat-chips button:hover, .ghost-chat-chips button:focus-visible { background: color-mix(in oklab, var(--seasonal) 28%, transparent); outline: 4px solid var(--foreground); }
 .ghost-chat-form { display: flex; gap: 6px; }
 .ghost-chat-form input { flex: 1; min-width: 0; height: 40px; padding: 0 12px; font-size: 14px; border-radius: 999px; color: var(--foreground); background: color-mix(in oklab, var(--background) 70%, transparent); border: 1px solid var(--border); }
-.ghost-chat-form input:focus-visible { outline: 2px solid var(--seasonal); outline-offset: 1px; }
-.ghost-chat-form button { height: 40px; padding: 0 14px; font-size: 14px; font-weight: 700; border-radius: 999px; color: var(--seasonal-foreground); background: var(--seasonal); }
+.ghost-chat-form input:focus-visible { outline: 2px solid var(--foreground); outline-offset: 5px; transition: outline .2s ease; }
+.ghost-chat-form button { height: 40px; padding: 0 14px; font-size: 14px; font-weight: 700; border-radius: 999px; color: var(--seasonal-foreground); background: var(--seasonal); text-shadow: 0 0 2px var(--background); }
+.ghost-chat-form button:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; }
 @media (max-width: 640px) { .ghost-chat { left: 8px; bottom: 84px; width: calc(100vw - 16px); max-height: 62vh; } }
 
 /* ───────── Baguette tenue par un doigt de zombie ───────── */
@@ -988,7 +991,7 @@ html { scroll-behavior: smooth; }
 .zombie-wand-grow { display: flex; align-items: center; width: 100%; height: 100%; transform-origin: 0 50%; animation: wand-grow .55s cubic-bezier(.2,.9,.25,1) both; }
 .zombie-finger { width: 46px; height: 22px; flex-shrink: 0; filter: drop-shadow(0 2px 4px oklch(0.1 0.03 290 / .6)); }
 .wand-stick { flex: 1; height: 4px; margin-left: -6px; border-radius: 3px; background: linear-gradient(180deg, oklch(0.55 0.08 60), oklch(0.32 0.06 50)); box-shadow: 0 0 8px oklch(0.85 0.15 85 / .45); }
-.wand-star { margin-left: -4px; font-size: 20px; line-height: 1; color: oklch(0.95 0.13 90); text-shadow: 0 0 8px oklch(0.9 0.16 85), 0 0 18px oklch(0.8 0.17 70); animation: wand-star 1.2s ease-in-out infinite; }
+.wand-star { margin-left: -4px; font-size: 20px; line-height: 1; color: oklch(0.95 0.13 90); text-shadow: 0 0 8px oklch(0.9 0.16 85), 0 0 18px oklch(0.8 0.17 70); animation: wand-star 2s ease-in-out infinite; }
 @keyframes wand-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes wand-star { 0%,100% { transform: rotate(0) scale(1); } 50% { transform: rotate(45deg) scale(1.3); } }
 .guide-highlight { outline: 2px solid color-mix(in oklab, var(--seasonal) 80%, transparent); outline-offset: 6px; border-radius: 16px; animation: guide-glow 1.4s ease-in-out infinite; }

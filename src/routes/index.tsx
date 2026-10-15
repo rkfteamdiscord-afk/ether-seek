@@ -150,7 +150,8 @@ function Portfolio() {
         <RealPumpkin carved className="ground-pumpkin gp-hero-a" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-hero-b" />
         <ZombieHand className="zh-hero" />
-        <HalloweenGarland />
+        <SwingingLantern className="lantern-extra-hero" />
+        <HalloweenGarland /><SwingingLantern className="lantern-extra-hero-bottom" />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-16 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-24">
