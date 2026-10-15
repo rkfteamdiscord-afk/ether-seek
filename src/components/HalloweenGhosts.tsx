@@ -142,19 +142,19 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
       position.current.y += (ty - y) * k;
       if (!touchedAt && canTouch && Math.hypot(tx - position.current.x, ty - position.current.y) < 3) {
         touchedAt = now;
-        ghost.dataset.touching = "true";
+        ghost.dataset["touching"] = "true";
         target?.classList.add("guide-highlight");
       }
       if (returning) {
-        ghost.dataset.touching = "false";
+        ghost.dataset["touching"] = "false";
         target?.classList.remove("guide-highlight");
       }
-      ghost.dataset.travel = returning || !target || !enabled ? "returning" : touchedAt ? "touching" : "flying";
+      ghost.dataset["travel"] = returning || !target || !enabled ? "returning" : touchedAt ? "touching" : "flying";
       ghost.style.transform = `translate3d(${position.current.x.toFixed(1)}px, ${position.current.y.toFixed(1)}px, 0)`;
       raf = requestAnimationFrame(place);
     };
     raf = requestAnimationFrame(place);
-    return () => { cancelAnimationFrame(raf); ghost.dataset.touching = "false"; target?.classList.remove("guide-highlight"); };
+    return () => { cancelAnimationFrame(raf); ghost.dataset["touching"] = "false"; target?.classList.remove("guide-highlight"); };
   }, [home, target, enabled]);
 }
 
