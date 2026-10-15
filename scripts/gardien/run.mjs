@@ -124,36 +124,67 @@ function errorContext(results) {
   }).join("\n\n");
 }
 
-const analystPrompt = `Tu es le gardien du site du studio Ȥrk (React, TanStack Start, TypeScript, Tailwind).
-Tu surveilles le site jour et nuit. On te donne les résultats des vérifications et des extraits de code.
-1. Écris ta pensée : ce que tu observes, ce qui va bien, ce qui pose problème et pourquoi.
+// Each analysis works on one theme, in rotation, unless something is broken.
+const THEMES = {
+  bug: "Corrige l’erreur de compilation ou le test qui échoue montré ci-dessous. C’est la priorité absolue.",
+  deco: "Ajoute OU améliore UNE décoration d’Halloween sur la page, en réutilisant uniquement les composants déjà importés (RealPumpkin avec skin \"orange\" | \"deep\" | \"ghost\" et carved, ZombieHand, CandleCluster, SwingingLantern, DriftingGhost) et, si besoin, une règle CSS de position dans src/styles.css. Place-la dans les marges ou en bas d’une section, jamais sur le texte ou les boutons, avec une classe de position unique.",
+  fantome: "Enrichis les réponses du petit fantôme dans src/lib/ghost-knowledge.ts : plus de détails dans les étapes de visite ou les réponses toutes prêtes, ou une nouvelle question toute prête. N’utilise QUE des faits présents dans siteFacts : jamais de prix, de délai ou de promesse inventés.",
+  detail: "Fais UNE petite amélioration visuelle ou d’accessibilité (animation plus douce, contraste, espacement, texte alternatif…) sans changer le design global.",
+};
+
+const analystPrompt = `Tu es le gardien du site du studio Ȥrk (React, TanStack Start, TypeScript, Tailwind), un site d’Halloween.
+Tu surveilles le site jour et nuit et tu l’améliores petit à petit. On te donne les résultats des vérifications, ta mission du moment et des extraits de code.
+1. Écris ta pensée : ce que tu observes, ce qui va bien, ce que tu veux faire et pourquoi.
 2. Liste tes constats.
-3. Propose AU PLUS UNE petite correction, seulement si elle est utile et sans danger :
-   - en priorité, corriger une erreur de compilation ou un test qui échoue ;
-   - sinon, enrichir les réponses du petit fantôme dans src/lib/ghost-knowledge.ts avec plus de détails,
-     en n’utilisant QUE des faits présents dans la fiche (siteFacts) de ce fichier : jamais de prix, de délai ou de promesse inventés ;
-   - sinon, ne propose rien (correction: null). Ne change jamais la structure, le design global, la sécurité, les liens ni l’offre.
-   Une correction remplace un texte EXACT (présent une seule fois dans le fichier) par un autre, 20 lignes maximum.
-Réponds uniquement en JSON : {"pensee": "...", "constats": ["..."], "correction": null ou {"fichier": "src/...", "chercher": "texte exact actuel", "remplacer": "nouveau texte", "raison": "..."}}`;
+3. Propose UNE petite modification pour ta mission, en 1 à 3 remplacements (40 lignes ajoutées au total au maximum),
+   ou aucune (corrections: []) si rien d’utile et sans danger n’est possible.
+   Chaque remplacement remplace un texte EXACT, copié tel quel d’un extrait fourni et présent une seule fois dans son fichier, par un nouveau texte.
+   Interdits : ajouter un import, un lien, un script, un accès réseau ; toucher à la sécurité, aux contacts, à l’offre ou à la structure de la page.
+Réponds uniquement en JSON : {"pensee": "...", "constats": ["..."], "raison": "résumé court de la modification", "corrections": [{"fichier": "src/...", "chercher": "texte exact actuel", "remplacer": "nouveau texte"}]}`;
 
 const reviewerPrompt = `Tu es le relecteur du gardien du site Ȥrk. Une IA propose une petite modification qui sera publiée automatiquement.
-Approuve-la seulement si TOUTES ces conditions sont vraies : elle est petite ; elle ne casse rien ; elle ne touche ni à la sécurité, ni aux liens, ni à l’offre ;
-elle ne change pas le design global ; et, si elle modifie le texte du fantôme, elle n’affirme que des faits de la fiche fournie (aucun prix, délai ou promesse inventés).
+Approuve-la seulement si TOUTES ces conditions sont vraies : elle est petite ; elle ne casse rien ; elle ne touche ni à la sécurité, ni aux liens, ni aux contacts, ni à l’offre ;
+elle ne change pas le design global ; une décoration ajoutée ne recouvre ni le texte ni les boutons ;
+et, si elle modifie le texte du fantôme, elle n’affirme que des faits de la fiche fournie (aucun prix, délai ou promesse inventés).
 Dans le doute, refuse. Réponds uniquement en JSON : {"approuve": true ou false, "raison": "..."}`;
 
-function guard(fix) {
-  if (!fix || typeof fix !== "object") return "aucune correction proposée";
-  const { fichier, chercher, remplacer } = fix;
-  if (typeof fichier !== "string" || typeof chercher !== "string" || typeof remplacer !== "string" || !chercher) return "correction mal formée";
-  if (!ALLOWED.test(fichier) || DENIED.some((rule) => rule.test(fichier))) return `fichier interdit : ${fichier}`;
-  let source;
-  try { source = readFileSync(fichier, "utf8"); } catch { return `fichier introuvable : ${fichier}`; }
-  if (source.split(chercher).length !== 2) return "le texte à remplacer n’apparaît pas exactement une fois";
-  if (chercher === remplacer) return "aucun changement";
-  if (chercher.split("\n").length > MAX_LINES || remplacer.split("\n").length > MAX_LINES) return "correction trop grande";
-  const added = FORBIDDEN.filter((rule) => rule.test(remplacer) && !rule.test(chercher));
-  if (added.length) return "contenu dangereux ajouté (lien, script, accès réseau ou import)";
-  return null;
+/** Checks every edit against the rules and returns the new file contents, or the reason for refusing. */
+function guard(fixes) {
+  if (!Array.isArray(fixes) || fixes.length === 0) return { problem: "aucune correction proposée" };
+  if (fixes.length > 3) return { problem: "trop de remplacements" };
+  const files = new Map();
+  let addedLines = 0;
+  for (const fix of fixes) {
+    const { fichier, chercher, remplacer } = fix ?? {};
+    if (typeof fichier !== "string" || typeof chercher !== "string" || typeof remplacer !== "string" || !chercher) return { problem: "correction mal formée" };
+    if (!ALLOWED.test(fichier) || DENIED.some((rule) => rule.test(fichier))) return { problem: `fichier interdit : ${fichier}` };
+    let source = files.get(fichier);
+    if (source === undefined) { try { source = readFileSync(fichier, "utf8"); } catch { return { problem: `fichier introuvable : ${fichier}` }; } }
+    if (source.split(chercher).length !== 2) return { problem: `le texte à remplacer n’apparaît pas exactement une fois dans ${fichier}` };
+    if (chercher === remplacer) return { problem: "aucun changement" };
+    if (chercher.split("\n").length > 25 || remplacer.split("\n").length > 25) return { problem: "remplacement trop grand" };
+    if (FORBIDDEN.some((rule) => rule.test(remplacer) && !rule.test(chercher))) return { problem: "contenu dangereux ajouté (lien, script, accès réseau ou import)" };
+    addedLines += Math.max(0, remplacer.split("\n").length - chercher.split("\n").length) + 1;
+    files.set(fichier, source.replace(chercher, remplacer));
+  }
+  if (addedLines > MAX_LINES * 2) return { problem: "modification trop grande" };
+  return { files };
+}
+
+/** Code the AI needs for its theme, kept short so it fits Groq's limits. */
+function themeContext(theme) {
+  if (theme === "deco") {
+    const page = readFileSync("src/routes/index.tsx", "utf8").split("\n");
+    const lines = page.map((line, i) => ({ line, i })).filter(({ line }) => /<(RealPumpkin|ZombieHand|CandleCluster|SwingingLantern|DriftingGhost|HalloweenScene)\b/.test(line));
+    const excerpt = lines.map(({ i }) => page.slice(Math.max(0, i - 1), i + 2).join("\n")).join("\n…\n");
+    const css = readFileSync("src/styles.css", "utf8").split("\n").filter((line) => /^\.(gp-|zh-|candles-|lantern-|ghost-high|ghost-low)/.test(line)).join("\n");
+    return `--- extraits de src/routes/index.tsx (décorations déjà placées)\n${excerpt}\n\n--- extraits de src/styles.css (positions)\n${css}`;
+  }
+  if (theme === "detail") {
+    const css = readFileSync("src/styles.css", "utf8");
+    return `--- fin de src/styles.css\n${css.slice(-5000)}`;
+  }
+  return `--- src/lib/ghost-knowledge.ts\n${readFileSync("src/lib/ghost-knowledge.ts", "utf8")}`;
 }
 
 async function deepAnalysis(issue, commentId, state, reason) {
@@ -170,45 +201,52 @@ async function deepAnalysis(issue, commentId, state, reason) {
       state.activity = "🧠 l’IA réfléchit aux résultats";
       await writeStatus(issue, commentId, state);
       const knowledge = readFileSync("src/lib/ghost-knowledge.ts", "utf8");
+      const broken = results.some((result) => !result.ok);
+      const theme = broken ? "bug" : env.GARDIEN_THEME || ["deco", "fantome", "detail"][Math.floor(Date.now() / 3600000) % 3];
+      entry.theme = theme;
       const analysis = await groq(analystPrompt, [
         `Raison du passage : ${reason}`,
+        `Ta mission : ${THEMES[theme]}`,
         `Vérifications du site en ligne : ${JSON.stringify(state.checks.slice(-5))}`,
         ...results.map((result) => `$ ${result.command} → ${result.ok ? "OK" : "ÉCHEC"}\n${result.ok ? "" : result.output}`),
-        errorContext(results),
-        `--- src/lib/ghost-knowledge.ts\n${knowledge}`,
+        broken ? errorContext(results) : themeContext(theme),
+        theme === "fantome" ? "" : `--- fiche du site (siteFacts)\n${knowledge.slice(knowledge.indexOf("siteFacts"))}`,
       ].join("\n\n"));
       entry.pensee = clean(analysis?.pensee, 2500);
       entry.constats = (Array.isArray(analysis?.constats) ? analysis.constats : []).slice(0, 8).map((item) => clean(item, 300));
-      const problem = guard(analysis?.correction);
+      const fixes = Array.isArray(analysis?.corrections) ? analysis.corrections : analysis?.correction ? [analysis.correction] : [];
+      const { problem, files } = guard(fixes);
       if (problem) {
-        entry.decision = problem === "aucune correction proposée" ? "Rien à corriger pour l’instant." : `Correction refusée par les règles : ${problem}.`;
+        entry.decision = problem === "aucune correction proposée" ? "Rien à modifier pour l’instant." : `Modification refusée par les règles : ${problem}.`;
       } else {
-        const fix = analysis.correction;
-        entry.correction = { fichier: fix.fichier, chercher: clean(fix.chercher, 1500), remplacer: clean(fix.remplacer, 1500), raison: clean(fix.raison, 300) };
-        state.activity = "⚖️ le relecteur vérifie la correction";
+        const raison = clean(analysis?.raison ?? fixes[0]?.raison ?? "petite amélioration", 300);
+        entry.corrections = fixes.map((fix) => ({ fichier: fix.fichier, chercher: clean(fix.chercher, 1500), remplacer: clean(fix.remplacer, 1500), raison }));
+        entry.correction = entry.corrections[0];
+        state.activity = "⚖️ le relecteur vérifie la modification";
         await writeStatus(issue, commentId, state);
-        const review = await groq(reviewerPrompt, `Fichier : ${fix.fichier}\nRaison : ${fix.raison}\n\nAvant :\n${fix.chercher}\n\nAprès :\n${fix.remplacer}\n\nFiche du site :\n${knowledge.slice(knowledge.indexOf("siteFacts"))}`);
+        const review = await groq(reviewerPrompt, `Raison : ${raison}\n\n${fixes.map((fix, i) => `Remplacement ${i + 1} dans ${fix.fichier}\nAvant :\n${fix.chercher}\n\nAprès :\n${fix.remplacer}`).join("\n\n")}\n\nFiche du site :\n${knowledge.slice(knowledge.indexOf("siteFacts"))}`);
         entry.relecture = clean(review?.raison, 600);
         if (review?.approuve !== true) {
-          entry.decision = "Correction refusée par le relecteur.";
+          entry.decision = "Modification refusée par le relecteur.";
         } else {
-          const original = readFileSync(fix.fichier, "utf8");
-          writeFileSync(fix.fichier, original.replace(fix.chercher, fix.remplacer));
-          state.activity = "🧪 je vérifie que le site marche toujours avec la correction";
+          const originals = new Map([...files.keys()].map((file) => [file, readFileSync(file, "utf8")]));
+          const restore = () => originals.forEach((content, file) => writeFileSync(file, content));
+          files.forEach((content, file) => writeFileSync(file, content));
+          state.activity = "🧪 je vérifie que le site marche toujours avec la modification";
           await writeStatus(issue, commentId, state);
           const after = verify();
           if (after.every((result) => result.ok) && DRY_RUN) {
-            writeFileSync(fix.fichier, original);
-            entry.decision = "Correction validée (mode à blanc : rien n’a été publié).";
+            restore();
+            entry.decision = "Modification validée (mode à blanc : rien n’a été publié).";
           } else if (after.every((result) => result.ok)) {
-            const message = `gardien: ${String(fix.raison).replace(/\s+/g, " ").slice(0, 80)}`;
-            execSync(`git add ${JSON.stringify(fix.fichier)}`);
+            const message = `gardien: ${raison.replace(/\s+/g, " ").slice(0, 80)}`;
+            execSync(`git add ${[...files.keys()].map((file) => JSON.stringify(file)).join(" ")}`);
             execSync(`git -c user.name="gardien-zrk[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m ${JSON.stringify(message)}`);
             execSync("git push origin HEAD:main");
-            entry.decision = `Correction appliquée et publiée (${execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim()}).`;
+            entry.decision = `Modification appliquée et publiée (${execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim()}).`;
           } else {
-            writeFileSync(fix.fichier, original);
-            entry.decision = "Correction annulée : le site ne compilait plus ou un test échouait.";
+            restore();
+            entry.decision = "Modification annulée : le site ne compilait plus ou un test échouait.";
           }
         }
       }
@@ -225,7 +263,8 @@ async function deepAnalysis(issue, commentId, state, reason) {
     `**Vérifications :** ${entry.results.map((result) => `${result.ok ? "✅" : "❌"} \`${result.command}\``).join(" · ")}`,
     entry.pensee ? `**Pensée du gardien :** ${entry.pensee}` : "",
     entry.constats.length ? `**Constats :**\n${entry.constats.map((item) => `- ${item}`).join("\n")}` : "",
-    entry.correction ? `**Correction proposée** dans \`${entry.correction.fichier}\` : ${entry.correction.raison}` : "",
+    entry.theme ? `**Mission :** ${{ bug: "🐛 corriger un bug", deco: "🎃 décoration", fantome: "👻 réponses du fantôme", detail: "✨ petite amélioration" }[entry.theme]}` : "",
+    entry.corrections?.length ? `**Modification proposée** (${entry.corrections.map((fix) => `\`${fix.fichier}\``).join(", ")}) : ${entry.correction.raison}` : "",
     entry.relecture ? `**Relecture :** ${entry.relecture}` : "",
     `**Décision :** ${entry.decision}`,
   ].filter(Boolean).join("\n\n");
