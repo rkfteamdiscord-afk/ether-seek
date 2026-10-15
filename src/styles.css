@@ -1007,7 +1007,7 @@ html { scroll-behavior: smooth; }
 .wand-star { margin-left: -4px; font-size: 20px; line-height: 1; color: oklch(0.95 0.13 90); text-shadow: 0 0 8px oklch(0.9 0.16 85), 0 0 18px oklch(0.8 0.17 70); animation: wand-star 4s ease-in-out infinite; }
 @keyframes wand-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes wand-star { 0%,100% { transform: rotate(0) scale(1); } 50% { transform: rotate(45deg) scale(1.3); } }
-.guide-highlight { outline: 2px solid color-mix(in oklab, var(--seasonal) 80%, transparent); outline-offset: 6px; border-radius: 16px; animation: guide-glow 1.4s ease-in-out infinite; }
+.guide-highlight { outline: 2px solid oklch(0.6 0.2 30); outline-offset: 6px; border-radius: 16px; animation: guide-glow 1.4s ease-in-out infinite; }
 @keyframes guide-glow { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--seasonal) 0%, transparent); } 50% { box-shadow: 0 0 34px 6px color-mix(in oklab, var(--seasonal) 45%, transparent); } }
 @media (prefers-reduced-motion: reduce) {
   .pk-fire, .pk-fire-glow, .zh-arm, .zh-fingers, .zombie-walker-body, .zw-leg, .zw-arm, .zw-head, .zw-eye, .ghost-guide-badge, .ghost-chat, .zombie-wand-grow, .wand-star, .guide-highlight { animation: none; }
