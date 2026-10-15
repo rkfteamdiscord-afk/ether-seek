@@ -21,6 +21,21 @@ function validate(input: unknown): { question: string; history: GhostTurn[] } {
   return { question, history };
 }
 
+// Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
+const PREFERRED_MODELS = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "qwen/qwen3-32b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.1-8b-instant"];
+let chosenModel = "";
+
+async function pickModel(base: string, key: string) {
+  const configured = process.env["GROQ_MODEL"];
+  if (configured) return configured;
+  if (chosenModel) return chosenModel;
+  const response = await fetch(`${base}/models`, { headers: { authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(8000) });
+  if (!response.ok) return "";
+  const ids = (((await response.json()) as { data?: Array<{ id: string }> }).data ?? []).map((model) => model.id);
+  chosenModel = PREFERRED_MODELS.find((id) => ids.includes(id)) ?? ids.find((id) => !/whisper|tts|guard|embed|distil|compound|playai/i.test(id)) ?? "";
+  return chosenModel;
+}
+
 export const askGhost = createServerFn({ method: "POST" })
   .validator(validate)
   .handler(async ({ data }): Promise<GhostReply> => {
@@ -28,11 +43,13 @@ export const askGhost = createServerFn({ method: "POST" })
     if (!key) return null;
     const base = process.env["GROQ_BASE_URL"] ?? "https://api.groq.com/openai/v1";
     try {
+      const model = await pickModel(base, key);
+      if (!model) return null;
       const response = await fetch(`${base}/chat/completions`, {
         method: "POST",
         headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
         body: JSON.stringify({
-          model: process.env["GROQ_MODEL"] ?? "llama-3.3-70b-versatile",
+          model,
           temperature: 0.6,
           max_tokens: 220,
           response_format: { type: "json_object" },
