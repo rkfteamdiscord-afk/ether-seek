@@ -6,6 +6,11 @@ export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Panneau du gardien — Ȥrk" },
+      { name: "description", content: "Journal public des vérifications et corrections du gardien du studio Ȥrk." },
+      { property: "og:title", content: "Panneau du gardien — Ȥrk" },
+      { property: "og:description", content: "Journal public des vérifications et corrections du gardien du studio Ȥrk." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
