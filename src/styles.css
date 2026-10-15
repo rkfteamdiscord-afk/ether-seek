@@ -1030,3 +1030,4 @@ html { scroll-behavior: smooth; }
 .admin-bar.is-ok { background: linear-gradient(to top, oklch(0.55 0.13 150), oklch(0.75 0.17 145)); }
 .admin-bar.is-ko { background: linear-gradient(to top, oklch(0.5 0.18 25), oklch(0.68 0.2 27)); }
 @media (prefers-reduced-motion: reduce) { .admin-live-dot { animation: none; } }
+html { scroll-behavior: smooth; }
