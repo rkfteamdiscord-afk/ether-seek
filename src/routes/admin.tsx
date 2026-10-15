@@ -162,15 +162,16 @@ function Entry({ entry }: { entry: GuardianEntry }) {
       </p>
       {entry.pensee && <blockquote className="mt-4 border-l-2 border-seasonal pl-4 italic leading-7 text-foreground/90">{entry.pensee}</blockquote>}
       {entry.constats.length > 0 && <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.constats.map((item, i) => <li key={i}>{item}</li>)}</ul>}
-      {entry.correction && (
-        <div className="mt-4 text-sm">
-          <p>Correction dans <code className="text-seasonal">{entry.correction.fichier}</code> : {entry.correction.raison}</p>
+      {entry.theme && <p className="mt-3 text-sm text-muted-foreground">Mission : {{ bug: "🐛 corriger un bug", deco: "🎃 décoration", fantome: "👻 réponses du fantôme", detail: "✨ petite amélioration" }[entry.theme]}</p>}
+      {(entry.corrections ?? (entry.correction ? [entry.correction] : [])).map((fix, i) => (
+        <div key={i} className="mt-4 text-sm">
+          <p>{i === 0 ? `Modification : ${fix.raison} — ` : ""}<code className="text-seasonal">{fix.fichier}</code></p>
           <div className="mt-2 grid gap-2 md:grid-cols-2">
-            <pre className="overflow-x-auto rounded-xl bg-destructive/10 p-3 text-xs whitespace-pre-wrap">{entry.correction.chercher}</pre>
-            <pre className="overflow-x-auto rounded-xl bg-whatsapp/10 p-3 text-xs whitespace-pre-wrap">{entry.correction.remplacer}</pre>
+            <pre className="overflow-x-auto rounded-xl bg-destructive/10 p-3 text-xs whitespace-pre-wrap">{fix.chercher}</pre>
+            <pre className="overflow-x-auto rounded-xl bg-whatsapp/10 p-3 text-xs whitespace-pre-wrap">{fix.remplacer}</pre>
           </div>
         </div>
-      )}
+      ))}
       {entry.relecture && <p className="mt-3 text-sm"><strong>Relecture :</strong> {entry.relecture}</p>}
       <p className="mt-3 text-sm"><strong>Décision :</strong> {entry.decision}</p>
     </li>

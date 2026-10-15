@@ -20,6 +20,8 @@ export type GuardianEntry = {
   at: string; reason: string; results: Array<{ command: string; ok: boolean }>;
   pensee: string; constats: string[]; decision: string; relecture?: string;
   correction: { fichier: string; chercher: string; remplacer: string; raison: string } | null;
+  corrections?: Array<{ fichier: string; chercher: string; remplacer: string; raison: string }>;
+  theme?: "bug" | "deco" | "fantome" | "detail";
 };
 export type GuardianRun = { status: string; conclusion: string | null; createdAt: string; url: string };
 export type GuardianFix = { sha: string; message: string; date: string; url: string };
