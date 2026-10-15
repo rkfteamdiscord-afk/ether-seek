@@ -110,32 +110,51 @@ function answerFor(question: string): Pointing {
 
 /** Flies the guide ghost itself to whatever it talks about, touches it, then floats back home. */
 function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Element | null, enabled: boolean) {
+  // Keep the actual position across target changes: restarting at zero causes a jump.
+  const position = useRef({ x: 0, y: 0 });
   useEffect(() => {
     const ghost = home.current;
-    if (!ghost) return;
-    let raf = 0, x = 0, y = 0;
+    const sprite = ghost?.querySelector<HTMLElement>(".ghost-guide-sprite");
+    if (!ghost || !sprite) return;
+    let raf = 0, touchedAt = 0, last = performance.now();
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const place = () => {
+    const place = (now: number) => {
+      const { x, y } = position.current;
+      const dt = Math.min(now - last, 50);
+      last = now;
       let tx = 0, ty = 0;
-      if (enabled && target) {
+      const returning = touchedAt > 0 && now - touchedAt >= 1600;
+      let canTouch = false;
+      if (enabled && target && !returning) {
         const to = target.getBoundingClientRect();
-        const base = ghost.getBoundingClientRect();
+        const base = sprite.getBoundingClientRect();
         const ox = base.left - x, oy = base.top - y;
         if (to.bottom > 0 && to.top < window.innerHeight && to.width > 0) {
-          // Land on the element's upper-left corner, staying on screen.
-          const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - 20), window.innerWidth - base.width - 8);
-          const destY = Math.min(Math.max(8, to.top - base.height * 0.55), window.innerHeight - base.height - 8);
+          // The sheet's lower edge meets the element, rather than the speech bubble.
+          const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - base.width / 2), window.innerWidth - base.width - 8);
+          const destY = Math.min(Math.max(8, to.top - base.height * 0.82), window.innerHeight - base.height - 8);
           tx = destX - ox; ty = destY - oy;
+          canTouch = true;
         }
       }
-      const k = reduce ? 1 : 0.06;
-      x += (tx - x) * k; y += (ty - y) * k;
-      ghost.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      const k = reduce ? 1 : 1 - Math.exp(-dt / (returning || !target || !enabled ? 340 : 170));
+      position.current.x += (tx - x) * k;
+      position.current.y += (ty - y) * k;
+      if (!touchedAt && canTouch && Math.hypot(tx - position.current.x, ty - position.current.y) < 3) {
+        touchedAt = now;
+        ghost.dataset.touching = "true";
+        target?.classList.add("guide-highlight");
+      }
+      if (returning) {
+        ghost.dataset.touching = "false";
+        target?.classList.remove("guide-highlight");
+      }
+      ghost.dataset.travel = returning || !target || !enabled ? "returning" : touchedAt ? "touching" : "flying";
+      ghost.style.transform = `translate3d(${position.current.x.toFixed(1)}px, ${position.current.y.toFixed(1)}px, 0)`;
       raf = requestAnimationFrame(place);
     };
     raf = requestAnimationFrame(place);
-    if (target) target.classList.add("guide-highlight");
-    return () => { cancelAnimationFrame(raf); target?.classList.remove("guide-highlight"); };
+    return () => { cancelAnimationFrame(raf); ghost.dataset.touching = "false"; target?.classList.remove("guide-highlight"); };
   }, [home, target, enabled]);
 }
 
@@ -193,7 +212,9 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
       if (now - (lastTour.current.get(id) ?? 0) < 25000 || openRef.current) return;
       lastTour.current.set(id, now);
       stopTour();
-      [...tours[id]!, askStep].forEach((item, i) => {
+      const tour = tours[id];
+      if (!tour) return;
+      [...tour, askStep].forEach((item, i) => {
         tourTimers.current.push(window.setTimeout(() => { if (!openRef.current) say(item.text, item.target, step); }, i * step));
       });
     };
