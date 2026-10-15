@@ -1017,3 +1017,115 @@ html { scroll-behavior: smooth; }
 .admin-bar.is-ok { background: linear-gradient(to top, oklch(0.55 0.13 150), oklch(0.75 0.17 145)); }
 .admin-bar.is-ko { background: linear-gradient(to top, oklch(0.5 0.18 25), oklch(0.68 0.2 27)); }
 @media (prefers-reduced-motion: reduce) { .admin-live-dot { animation: none; } }
+
+/* ---------------------------------------------------------------------------
+   AbroadYield — calm, trustworthy light theme (navy, white, warm sand).
+   Scoped to .ay-root so the studio site above keeps its own look.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-ay-ink: #0b1b33;
+  --color-ay-navy: #12284b;
+  --color-ay-navy-2: #1d3a66;
+  --color-ay-sky: #e8eef7;
+  --color-ay-sand: #f5efe4;
+  --color-ay-sand-2: #eadfcb;
+  --color-ay-gold: #8a5a12;
+  --color-ay-paper: #ffffff;
+  --color-ay-mist: #f7f8fa;
+  --color-ay-line: #dfe3ea;
+  --color-ay-slate: #4a5568;
+  --color-ay-good: #1d6b45;
+  --color-ay-good-bg: #e6f4ec;
+  --color-ay-warn: #8a4b00;
+  --color-ay-warn-bg: #fff4e0;
+  --color-ay-bad: #a3261b;
+  --color-ay-bad-bg: #fdecea;
+  --font-ay-head: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-ay-body: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+}
+
+body:has(.ay-root) {
+  background: #ffffff;
+  color: #0b1b33;
+  color-scheme: light;
+}
+
+.ay-root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #0b1b33;
+  --card: #ffffff;
+  --card-foreground: #0b1b33;
+  --popover: #ffffff;
+  --popover-foreground: #0b1b33;
+  --primary: #12284b;
+  --primary-foreground: #ffffff;
+  --secondary: #f5efe4;
+  --secondary-foreground: #0b1b33;
+  --muted: #f7f8fa;
+  --muted-foreground: #4a5568;
+  --accent: #e8eef7;
+  --accent-foreground: #0b1b33;
+  --border: #dfe3ea;
+  --input: #c9d0db;
+  --ring: #1d3a66;
+  font-family: var(--font-ay-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  background: #ffffff;
+  color: #0b1b33;
+}
+.ay-root :is(h1, h2, h3, h4) {
+  font-family: var(--font-ay-head);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.ay-root :focus-visible {
+  outline: 3px solid #1d3a66;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.ay-root a,
+.ay-root button,
+.ay-root [role="button"],
+.ay-root label[for],
+.ay-root summary {
+  cursor: pointer;
+}
+.ay-root ::selection {
+  background: #eadfcb;
+}
+.ay-blur {
+  filter: blur(6px);
+  user-select: none;
+  pointer-events: none;
+}
+.ay-map-bg {
+  background-image: radial-gradient(circle at 1px 1px, rgb(18 40 75 / 0.12) 1px, transparent 0);
+  background-size: 18px 18px;
+}
+.ay-prose h2 { font-size: 1.35rem; font-weight: 600; margin: 1.6em 0 0.5em; }
+.ay-prose p { margin: 0.8em 0; }
+.ay-prose ul { list-style: disc; padding-left: 1.25rem; margin: 0.8em 0; }
+.ay-prose li { margin: 0.3em 0; }
+.ay-prose a { text-decoration: underline; color: #1d3a66; }
+.ay-prose strong { font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) {
+  .ay-fade-in { animation: ay-fade-in 320ms ease-out both; }
+}
+@keyframes ay-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@media print {
+  @page { margin: 16mm 14mm; }
+  body:has(.ay-root) { background: #fff; }
+  .ay-root { font-size: 11pt; }
+  .ay-no-print { display: none !important; }
+  .ay-print-only { display: block !important; }
+  .ay-print-break { break-before: page; }
+  .ay-root section, .ay-root figure, .ay-root table { break-inside: avoid; }
+  .ay-root .ay-shadow { box-shadow: none !important; }
+}
+.ay-print-only { display: none; }

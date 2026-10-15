@@ -10,11 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbroadyieldRouteImport } from './routes/abroadyield'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AbroadyieldIndexRouteImport } from './routes/abroadyield/index'
+import { Route as AbroadyieldAccountRouteImport } from './routes/abroadyield/account'
+import { Route as AbroadyieldAdminRouteImport } from './routes/abroadyield/admin'
+import { Route as AbroadyieldCheckoutRouteImport } from './routes/abroadyield/checkout'
+import { Route as AbroadyieldExpertsRouteImport } from './routes/abroadyield/experts'
+import { Route as AbroadyieldMethodologyRouteImport } from './routes/abroadyield/methodology'
+import { Route as AbroadyieldReportRouteImport } from './routes/abroadyield/report'
+import { Route as AbroadyieldResultsRouteImport } from './routes/abroadyield/results'
+import { Route as AbroadyieldStartRouteImport } from './routes/abroadyield/start'
+import { Route as AbroadyieldBlogIndexRouteImport } from './routes/abroadyield/blog.index'
+import { Route as AbroadyieldBlogSlugRouteImport } from './routes/abroadyield/blog.$slug'
+import { Route as AbroadyieldGuidesIndexRouteImport } from './routes/abroadyield/guides.index'
+import { Route as AbroadyieldGuidesSlugRouteImport } from './routes/abroadyield/guides.$slug'
+import { Route as AbroadyieldLegalPageRouteImport } from './routes/abroadyield/legal.$page'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbroadyieldRoute = AbroadyieldRouteImport.update({
+  id: '/abroadyield',
+  path: '/abroadyield',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -22,30 +42,196 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbroadyieldIndexRoute = AbroadyieldIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldAccountRoute = AbroadyieldAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldAdminRoute = AbroadyieldAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldCheckoutRoute = AbroadyieldCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldExpertsRoute = AbroadyieldExpertsRouteImport.update({
+  id: '/experts',
+  path: '/experts',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldMethodologyRoute = AbroadyieldMethodologyRouteImport.update({
+  id: '/methodology',
+  path: '/methodology',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldReportRoute = AbroadyieldReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldResultsRoute = AbroadyieldResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldStartRoute = AbroadyieldStartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldBlogIndexRoute = AbroadyieldBlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldBlogSlugRoute = AbroadyieldBlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldGuidesIndexRoute = AbroadyieldGuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldGuidesSlugRoute = AbroadyieldGuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
+const AbroadyieldLegalPageRoute = AbroadyieldLegalPageRouteImport.update({
+  id: '/legal/$page',
+  path: '/legal/$page',
+  getParentRoute: () => AbroadyieldRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abroadyield': typeof AbroadyieldRouteWithChildren
   '/admin': typeof AdminRoute
+  '/abroadyield/account': typeof AbroadyieldAccountRoute
+  '/abroadyield/admin': typeof AbroadyieldAdminRoute
+  '/abroadyield/checkout': typeof AbroadyieldCheckoutRoute
+  '/abroadyield/experts': typeof AbroadyieldExpertsRoute
+  '/abroadyield/methodology': typeof AbroadyieldMethodologyRoute
+  '/abroadyield/report': typeof AbroadyieldReportRoute
+  '/abroadyield/results': typeof AbroadyieldResultsRoute
+  '/abroadyield/start': typeof AbroadyieldStartRoute
+  '/abroadyield/': typeof AbroadyieldIndexRoute
+  '/abroadyield/blog/$slug': typeof AbroadyieldBlogSlugRoute
+  '/abroadyield/guides/$slug': typeof AbroadyieldGuidesSlugRoute
+  '/abroadyield/legal/$page': typeof AbroadyieldLegalPageRoute
+  '/abroadyield/blog/': typeof AbroadyieldBlogIndexRoute
+  '/abroadyield/guides/': typeof AbroadyieldGuidesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/abroadyield/account': typeof AbroadyieldAccountRoute
+  '/abroadyield/admin': typeof AbroadyieldAdminRoute
+  '/abroadyield/checkout': typeof AbroadyieldCheckoutRoute
+  '/abroadyield/experts': typeof AbroadyieldExpertsRoute
+  '/abroadyield/methodology': typeof AbroadyieldMethodologyRoute
+  '/abroadyield/report': typeof AbroadyieldReportRoute
+  '/abroadyield/results': typeof AbroadyieldResultsRoute
+  '/abroadyield/start': typeof AbroadyieldStartRoute
+  '/abroadyield': typeof AbroadyieldIndexRoute
+  '/abroadyield/blog/$slug': typeof AbroadyieldBlogSlugRoute
+  '/abroadyield/guides/$slug': typeof AbroadyieldGuidesSlugRoute
+  '/abroadyield/legal/$page': typeof AbroadyieldLegalPageRoute
+  '/abroadyield/blog': typeof AbroadyieldBlogIndexRoute
+  '/abroadyield/guides': typeof AbroadyieldGuidesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abroadyield': typeof AbroadyieldRouteWithChildren
   '/admin': typeof AdminRoute
+  '/abroadyield/account': typeof AbroadyieldAccountRoute
+  '/abroadyield/admin': typeof AbroadyieldAdminRoute
+  '/abroadyield/checkout': typeof AbroadyieldCheckoutRoute
+  '/abroadyield/experts': typeof AbroadyieldExpertsRoute
+  '/abroadyield/methodology': typeof AbroadyieldMethodologyRoute
+  '/abroadyield/report': typeof AbroadyieldReportRoute
+  '/abroadyield/results': typeof AbroadyieldResultsRoute
+  '/abroadyield/start': typeof AbroadyieldStartRoute
+  '/abroadyield/': typeof AbroadyieldIndexRoute
+  '/abroadyield/blog/$slug': typeof AbroadyieldBlogSlugRoute
+  '/abroadyield/guides/$slug': typeof AbroadyieldGuidesSlugRoute
+  '/abroadyield/legal/$page': typeof AbroadyieldLegalPageRoute
+  '/abroadyield/blog/': typeof AbroadyieldBlogIndexRoute
+  '/abroadyield/guides/': typeof AbroadyieldGuidesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin'
+  fullPaths:
+    | '/'
+    | '/abroadyield'
+    | '/admin'
+    | '/abroadyield/account'
+    | '/abroadyield/admin'
+    | '/abroadyield/checkout'
+    | '/abroadyield/experts'
+    | '/abroadyield/methodology'
+    | '/abroadyield/report'
+    | '/abroadyield/results'
+    | '/abroadyield/start'
+    | '/abroadyield/'
+    | '/abroadyield/blog/$slug'
+    | '/abroadyield/guides/$slug'
+    | '/abroadyield/legal/$page'
+    | '/abroadyield/blog/'
+    | '/abroadyield/guides/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin'
-  id: '__root__' | '/' | '/admin'
+  to:
+    | '/'
+    | '/admin'
+    | '/abroadyield/account'
+    | '/abroadyield/admin'
+    | '/abroadyield/checkout'
+    | '/abroadyield/experts'
+    | '/abroadyield/methodology'
+    | '/abroadyield/report'
+    | '/abroadyield/results'
+    | '/abroadyield/start'
+    | '/abroadyield'
+    | '/abroadyield/blog/$slug'
+    | '/abroadyield/guides/$slug'
+    | '/abroadyield/legal/$page'
+    | '/abroadyield/blog'
+    | '/abroadyield/guides'
+  id:
+    | '__root__'
+    | '/'
+    | '/abroadyield'
+    | '/admin'
+    | '/abroadyield/account'
+    | '/abroadyield/admin'
+    | '/abroadyield/checkout'
+    | '/abroadyield/experts'
+    | '/abroadyield/methodology'
+    | '/abroadyield/report'
+    | '/abroadyield/results'
+    | '/abroadyield/start'
+    | '/abroadyield/'
+    | '/abroadyield/blog/$slug'
+    | '/abroadyield/guides/$slug'
+    | '/abroadyield/legal/$page'
+    | '/abroadyield/blog/'
+    | '/abroadyield/guides/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbroadyieldRoute: typeof AbroadyieldRouteWithChildren
   AdminRoute: typeof AdminRoute
 }
 
@@ -58,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abroadyield': {
+      id: '/abroadyield'
+      path: '/abroadyield'
+      fullPath: '/abroadyield'
+      preLoaderRoute: typeof AbroadyieldRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -65,11 +258,148 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abroadyield/': {
+      id: '/abroadyield/'
+      path: '/'
+      fullPath: '/abroadyield/'
+      preLoaderRoute: typeof AbroadyieldIndexRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/account': {
+      id: '/abroadyield/account'
+      path: '/account'
+      fullPath: '/abroadyield/account'
+      preLoaderRoute: typeof AbroadyieldAccountRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/admin': {
+      id: '/abroadyield/admin'
+      path: '/admin'
+      fullPath: '/abroadyield/admin'
+      preLoaderRoute: typeof AbroadyieldAdminRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/checkout': {
+      id: '/abroadyield/checkout'
+      path: '/checkout'
+      fullPath: '/abroadyield/checkout'
+      preLoaderRoute: typeof AbroadyieldCheckoutRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/experts': {
+      id: '/abroadyield/experts'
+      path: '/experts'
+      fullPath: '/abroadyield/experts'
+      preLoaderRoute: typeof AbroadyieldExpertsRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/methodology': {
+      id: '/abroadyield/methodology'
+      path: '/methodology'
+      fullPath: '/abroadyield/methodology'
+      preLoaderRoute: typeof AbroadyieldMethodologyRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/report': {
+      id: '/abroadyield/report'
+      path: '/report'
+      fullPath: '/abroadyield/report'
+      preLoaderRoute: typeof AbroadyieldReportRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/results': {
+      id: '/abroadyield/results'
+      path: '/results'
+      fullPath: '/abroadyield/results'
+      preLoaderRoute: typeof AbroadyieldResultsRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/start': {
+      id: '/abroadyield/start'
+      path: '/start'
+      fullPath: '/abroadyield/start'
+      preLoaderRoute: typeof AbroadyieldStartRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/blog/': {
+      id: '/abroadyield/blog/'
+      path: '/blog'
+      fullPath: '/abroadyield/blog/'
+      preLoaderRoute: typeof AbroadyieldBlogIndexRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/blog/$slug': {
+      id: '/abroadyield/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/abroadyield/blog/$slug'
+      preLoaderRoute: typeof AbroadyieldBlogSlugRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/guides/': {
+      id: '/abroadyield/guides/'
+      path: '/guides'
+      fullPath: '/abroadyield/guides/'
+      preLoaderRoute: typeof AbroadyieldGuidesIndexRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/guides/$slug': {
+      id: '/abroadyield/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/abroadyield/guides/$slug'
+      preLoaderRoute: typeof AbroadyieldGuidesSlugRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
+    '/abroadyield/legal/$page': {
+      id: '/abroadyield/legal/$page'
+      path: '/legal/$page'
+      fullPath: '/abroadyield/legal/$page'
+      preLoaderRoute: typeof AbroadyieldLegalPageRouteImport
+      parentRoute: typeof AbroadyieldRoute
+    }
   }
 }
 
+interface AbroadyieldRouteChildren {
+  AbroadyieldAccountRoute: typeof AbroadyieldAccountRoute
+  AbroadyieldAdminRoute: typeof AbroadyieldAdminRoute
+  AbroadyieldCheckoutRoute: typeof AbroadyieldCheckoutRoute
+  AbroadyieldExpertsRoute: typeof AbroadyieldExpertsRoute
+  AbroadyieldMethodologyRoute: typeof AbroadyieldMethodologyRoute
+  AbroadyieldReportRoute: typeof AbroadyieldReportRoute
+  AbroadyieldResultsRoute: typeof AbroadyieldResultsRoute
+  AbroadyieldStartRoute: typeof AbroadyieldStartRoute
+  AbroadyieldIndexRoute: typeof AbroadyieldIndexRoute
+  AbroadyieldBlogSlugRoute: typeof AbroadyieldBlogSlugRoute
+  AbroadyieldGuidesSlugRoute: typeof AbroadyieldGuidesSlugRoute
+  AbroadyieldLegalPageRoute: typeof AbroadyieldLegalPageRoute
+  AbroadyieldBlogIndexRoute: typeof AbroadyieldBlogIndexRoute
+  AbroadyieldGuidesIndexRoute: typeof AbroadyieldGuidesIndexRoute
+}
+
+const AbroadyieldRouteChildren: AbroadyieldRouteChildren = {
+  AbroadyieldAccountRoute: AbroadyieldAccountRoute,
+  AbroadyieldAdminRoute: AbroadyieldAdminRoute,
+  AbroadyieldCheckoutRoute: AbroadyieldCheckoutRoute,
+  AbroadyieldExpertsRoute: AbroadyieldExpertsRoute,
+  AbroadyieldMethodologyRoute: AbroadyieldMethodologyRoute,
+  AbroadyieldReportRoute: AbroadyieldReportRoute,
+  AbroadyieldResultsRoute: AbroadyieldResultsRoute,
+  AbroadyieldStartRoute: AbroadyieldStartRoute,
+  AbroadyieldIndexRoute: AbroadyieldIndexRoute,
+  AbroadyieldBlogSlugRoute: AbroadyieldBlogSlugRoute,
+  AbroadyieldGuidesSlugRoute: AbroadyieldGuidesSlugRoute,
+  AbroadyieldLegalPageRoute: AbroadyieldLegalPageRoute,
+  AbroadyieldBlogIndexRoute: AbroadyieldBlogIndexRoute,
+  AbroadyieldGuidesIndexRoute: AbroadyieldGuidesIndexRoute,
+}
+
+const AbroadyieldRouteWithChildren = AbroadyieldRoute._addFileChildren(
+  AbroadyieldRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbroadyieldRoute: AbroadyieldRouteWithChildren,
   AdminRoute: AdminRoute,
 }
 export const routeTree = rootRouteImport

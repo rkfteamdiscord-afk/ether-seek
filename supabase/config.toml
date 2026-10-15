@@ -1,0 +1,4 @@
+# Supabase CLI settings for the AbroadYield Edge Functions.
+# The Stripe webhook authenticates with Stripe's signature instead of a Supabase JWT.
+[functions.ay-stripe-webhook]
+verify_jwt = false
