@@ -935,6 +935,7 @@ html { scroll-behavior: smooth; }
 .zombie-hand { position: absolute; z-index: 3; bottom: 4px; width: 92px; pointer-events: none; filter: drop-shadow(0 6px 10px oklch(0.08 0.03 290 / .6)); }
 .zombie-hand svg { display: block; width: 100%; height: auto; overflow: visible; }
 .zh-arm { animation: zombie-rise 9s ease-in-out infinite; }
+.lantern-extra-hero { right: 2%; top: 20%; }
 .zh-fingers { transform-box: fill-box; transform-origin: 50% 100%; animation: zombie-claw 9s ease-in-out infinite; }
 .zh-hero { left: 42%; } .zh-services { left: 6%; animation-delay: -3s; } .zh-method { right: 14%; }
 .zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }

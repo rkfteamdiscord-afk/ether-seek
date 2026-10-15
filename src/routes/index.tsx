@@ -150,6 +150,7 @@ function Portfolio() {
         <RealPumpkin carved className="ground-pumpkin gp-hero-a" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-hero-b" />
         <ZombieHand className="zh-hero" />
+        <SwingingLantern className="lantern-extra-hero" />
         <HalloweenGarland />
         <Cobweb className="web-section-left" />
         <Cobweb className="web-section-right" />
