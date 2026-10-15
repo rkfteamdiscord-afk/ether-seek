@@ -2,7 +2,8 @@ name: Gardien du site
 
 # Chaque passage vérifie le site une fois par minute pendant environ 50 minutes, puis
 # relance le suivant : la surveillance est continue. Le planning toutes les 5 minutes
-# sert de filet si la chaîne s'arrête. Analyse par l'IA chaque heure ou en cas d'incident.
+# sert de filet si la chaîne s'arrête. Analyse par l'IA toutes les 5 minutes (ou en cas
+# d'incident), une publication sur le site toutes les 15 minutes au maximum.
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -49,4 +50,6 @@ jobs:
           GARDIEN_DEEP: ${{ github.event_name == 'workflow_dispatch' && inputs.analyse && '1' || '0' }}
           GARDIEN_ROUNDS: "50"
           GARDIEN_CHAIN: "1"
+          GARDIEN_ANALYSE_MIN: "5"
+          GARDIEN_PUBLISH_MIN: "15"
         run: node scripts/gardien/run.mjs
