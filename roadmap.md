@@ -18,5 +18,5 @@
 - [x] Corriger le démarrage en haut et voler uniquement le logo du menu
 - [x] Renforcer la brume et la pluie, afficher la version Halloween et lancer les décors
 - [x] Vérifier le nouveau parcours et préserver la photo
-- [ ] Rendre le vol du logo visible et lâcher automatiquement les décors
-- [ ] Améliorer la sorcière et la brume, puis vérifier le parcours
+- [x] Rendre le vol du logo visible et lâcher automatiquement les décors
+- [x] Améliorer la sorcière et la brume, puis vérifier le parcours
