@@ -81,7 +81,8 @@ function Questionnaire() {
       firstRender.current = false;
       return;
     }
-    headingRef.current?.focus();
+    headingRef.current?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
     track("questionnaire_step", { step: step + 1, key: STEPS[step]!.key });
   }, [step]);
 

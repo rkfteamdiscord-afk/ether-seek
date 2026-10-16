@@ -79,12 +79,13 @@ export function SectionHeading({
   const Heading = level === 1 ? "h1" : "h2";
   return (
     <div className="max-w-3xl">
+      {level === 1 ? <span aria-hidden className="ay-title-rule mb-4" /> : null}
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
       <Heading
         id={id}
         className={cn(
           "mt-2 font-semibold text-ay-ink",
-          level === 1 ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl",
+          level === 1 ? "text-3xl sm:text-[2.6rem] sm:leading-[1.12]" : "text-2xl sm:text-3xl",
         )}
       >
         {title}

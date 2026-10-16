@@ -143,7 +143,6 @@ function Landing() {
 
       {/* Hero */}
       <section className="ay-aurora overflow-hidden">
-        <RouteMap className="pointer-events-none absolute top-1/2 right-0 -z-10 hidden w-[62%] max-w-[900px] -translate-y-1/2 opacity-50 md:block" />
         <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div className="ay-fade-in">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ay-sand-2">
@@ -228,6 +227,9 @@ function Landing() {
               </p>
             </Card>
           ) : null}
+        </Container>
+        <Container className="relative -mt-4 pb-8 sm:-mt-6 lg:-mt-10">
+          <RouteMap className="h-auto w-full opacity-80" />
         </Container>
       </section>
 

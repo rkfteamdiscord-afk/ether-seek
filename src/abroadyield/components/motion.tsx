@@ -136,40 +136,44 @@ export function CountUp({
   );
 }
 
-// Approximate positions on a 1000×500 equirectangular canvas (x = (lon + 180) / 360, y = (90 − lat) / 180).
-const ORIGIN = { x: 290, y: 138, label: "US" };
+// A schematic strip (not to scale): the US on the left, destinations spread west to east.
+const ORIGIN = { x: 70, y: 92, label: "United States" };
 const DESTINATIONS = [
-  { x: 474, y: 140, label: "Lisbon" },
-  { x: 490, y: 136, label: "Madrid" },
-  { x: 535, y: 133, label: "Rome" },
-  { x: 565, y: 146, label: "Athens" },
-  { x: 222, y: 196, label: "Mexico City" },
-  { x: 265, y: 224, label: "San José" },
-  { x: 653, y: 180, label: "Dubai" },
+  { x: 190, y: 150, label: "Mexico" },
+  { x: 285, y: 172, label: "Costa Rica" },
+  { x: 545, y: 104, label: "Portugal" },
+  { x: 625, y: 128, label: "Spain" },
+  { x: 705, y: 100, label: "Italy" },
+  { x: 785, y: 136, label: "Greece" },
+  { x: 920, y: 158, label: "Dubai" },
 ];
 
-/** Decorative route map for the hero: flight arcs from the US to each destination. */
+/** Decorative band for the hero: flight arcs from the US to each destination, drawn in on load. */
 export function RouteMap({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="180 50 520 220"
-      className={cn("ay-route-map", className)}
-      preserveAspectRatio="xMidYMid meet"
-    >
+    <svg aria-hidden viewBox="0 0 1000 210" className={cn("ay-route-map", className)}>
       <defs>
-        <pattern id="ay-dots" width="8" height="8" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.22" />
+        <pattern id="ay-dots" width="9" height="9" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.2" />
         </pattern>
         <linearGradient id="ay-arc" x1="0" x2="1">
-          <stop offset="0" stopColor="#eadfcb" stopOpacity="0.15" />
+          <stop offset="0" stopColor="#eadfcb" stopOpacity="0.2" />
           <stop offset="1" stopColor="#eadfcb" stopOpacity="0.95" />
         </linearGradient>
+        <linearGradient id="ay-fade" x1="0" x2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0.12" stopColor="#fff" stopOpacity="1" />
+          <stop offset="0.88" stopColor="#fff" stopOpacity="1" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
+        </linearGradient>
+        <mask id="ay-fade-mask">
+          <rect width="1000" height="210" fill="url(#ay-fade)" />
+        </mask>
       </defs>
-      <rect x="180" y="50" width="520" height="220" fill="url(#ay-dots)" />
+      <rect width="1000" height="210" fill="url(#ay-dots)" mask="url(#ay-fade-mask)" />
       {DESTINATIONS.map((d, i) => {
         const mx = (ORIGIN.x + d.x) / 2;
-        const lift = Math.max(40, Math.abs(d.x - ORIGIN.x) * 0.35);
+        const lift = Math.min(86, 24 + Math.abs(d.x - ORIGIN.x) * 0.075);
         const my = Math.min(ORIGIN.y, d.y) - lift;
         return (
           <g key={d.label} style={{ "--i": i } as CSSProperties}>
@@ -178,32 +182,53 @@ export function RouteMap({ className }: { className?: string }) {
               d={`M${ORIGIN.x},${ORIGIN.y} Q${mx},${my} ${d.x},${d.y}`}
               fill="none"
               stroke="url(#ay-arc)"
-              strokeWidth="1.4"
+              strokeWidth="1.6"
               pathLength={1}
             />
-            <circle className="ay-dest" cx={d.x} cy={d.y} r="3.2" fill="#eadfcb" />
+            <circle className="ay-dest" cx={d.x} cy={d.y} r="4" fill="#eadfcb" />
             <circle
               className="ay-dest-ring"
               cx={d.x}
               cy={d.y}
-              r="3.2"
+              r="4"
               fill="none"
               stroke="#eadfcb"
               strokeWidth="1"
             />
+            <text
+              className="ay-dest"
+              x={d.x}
+              y={d.y + 22}
+              textAnchor="middle"
+              fill="#eadfcb"
+              fontSize="14"
+              fontWeight="600"
+            >
+              {d.label}
+            </text>
           </g>
         );
       })}
-      <circle cx={ORIGIN.x} cy={ORIGIN.y} r="5" fill="#ffffff" />
+      <circle cx={ORIGIN.x} cy={ORIGIN.y} r="6" fill="#ffffff" />
       <circle
         className="ay-dest-ring"
         cx={ORIGIN.x}
         cy={ORIGIN.y}
-        r="5"
+        r="6"
         fill="none"
         stroke="#ffffff"
         strokeWidth="1"
       />
+      <text
+        x={ORIGIN.x}
+        y={ORIGIN.y + 26}
+        textAnchor="middle"
+        fill="#ffffff"
+        fontSize="14"
+        fontWeight="600"
+      >
+        {ORIGIN.label}
+      </text>
     </svg>
   );
 }

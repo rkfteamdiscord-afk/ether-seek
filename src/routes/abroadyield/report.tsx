@@ -257,10 +257,7 @@ function ReportPage() {
         </div>
       ) : null}
 
-      <nav
-        aria-label="Report sections"
-        className="ay-no-print mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm"
-      >
+      <nav aria-label="Report sections" className="ay-no-print mt-6 flex flex-wrap gap-2 text-sm">
         {[
           ["summary", "Summary"],
           ["simulator", "Simulator"],
@@ -277,7 +274,7 @@ function ReportPage() {
           <a
             key={anchor}
             href={`#${current.id}-${anchor}`}
-            className="inline-flex min-h-11 items-center text-ay-navy-2 underline underline-offset-4"
+            className="inline-flex min-h-11 items-center rounded-full border border-ay-line bg-white px-4 font-semibold text-ay-navy-2 transition-colors duration-200 hover:border-ay-navy/40 hover:bg-ay-sky"
           >
             {label}
           </a>

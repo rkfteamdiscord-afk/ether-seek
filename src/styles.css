@@ -1238,3 +1238,21 @@ body:has(.ay-root) {
   .ay-aurora { background: #fff; color: #0b1b33; }
   .ay-aurora::before, .ay-aurora::after, .ay-route-map { display: none; }
 }
+
+/* Inner pages: a soft sky-and-sand glow behind the page title. */
+.ay-root #ay-main {
+  background:
+    radial-gradient(55% 340px at 12% 0, rgb(232 238 247 / 0.95), transparent 70%),
+    radial-gradient(40% 280px at 92% 0, rgb(245 239 228 / 0.95), transparent 70%) #ffffff;
+  background-repeat: no-repeat;
+}
+.ay-title-rule {
+  display: block;
+  width: 3rem;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #12284b, #c9a66b);
+}
+@media print {
+  .ay-root #ay-main { background: #fff; }
+}
