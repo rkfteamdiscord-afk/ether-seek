@@ -50,7 +50,7 @@ type Issue = { number: number; title: string; html_url: string; comments: number
 const entriesOf = (comments: Comment[], issueNumber: number) =>
   comments
     .filter((comment) => comment.user.login === BOT && comment.issue_url.endsWith(`/issues/${issueNumber}`))
-    .map((comment) => decode<GuardianEntry>(comment.body, "gardien:entree"))
+    .flatMap((comment) => decode<GuardianEntry[]>(comment.body, "gardien:recap") ?? [decode<GuardianEntry>(comment.body, "gardien:entree")])
     .filter((item): item is GuardianEntry => !!item);
 
 /** Newest first, without duplicates. */

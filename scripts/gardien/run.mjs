@@ -32,6 +32,7 @@ const ROUNDS = Number(env.GARDIEN_ROUNDS ?? 50);
 const JOURNAL_TITLE = "🛡️ Journal du gardien";
 const STATUS_MARK = "gardien:statut";
 const ENTRY_MARK = "gardien:entree";
+const RECAP_MARK = "gardien:recap";
 const REQUIRED_HEADERS = ["strict-transport-security", "x-content-type-options", "x-frame-options", "referrer-policy"];
 
 // Only these files may be touched, and never the sensitive ones.
@@ -112,7 +113,7 @@ async function pickModel() {
   const response = await fetch(`${GROQ_API}/models`, { headers: { authorization: `Bearer ${GROQ_KEY}` }, signal: AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error(`Groq modèles → ${response.status}`);
   const ids = ((await response.json()).data ?? []).map((model) => model.id);
-  const usable = [...PREFERRED_MODELS.filter((id) => ids.includes(id)), ...ids.filter((id) => !/whisper|tts|guard|embed|distil|compound|playai|orpheus/i.test(id))];
+  const usable = PREFERRED_MODELS.filter((id) => ids.includes(id));
   chosenModel = usable.find((id) => !exhausted.has(id)) ?? "";
   if (!chosenModel) throw new Error("aucun modèle Groq disponible");
   return chosenModel;
@@ -128,7 +129,7 @@ async function groq(system, user) {
     body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 900, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
     signal: AbortSignal.timeout(60000),
   });
-  if (response.status === 429) {
+  if (response.status === 429 || response.status === 400 || response.status === 413) {
     // Each Groq model has its own free quota: switch to the next one; pause only when all are used up.
     exhausted.add(MODEL);
     if (!env.GROQ_MODEL && exhausted.size < 6) {
@@ -137,7 +138,7 @@ async function groq(system, user) {
     }
     groqPauseUntil = Date.now() + 10 * 60000;
     setTimeout(() => exhausted.clear(), 10 * 60000).unref();
-    throw new Error("quota Groq atteint sur tous les modèles, pause de 10 minutes");
+    throw new Error(response.status === 429 ? "quota Groq atteint sur tous les modèles, pause de 10 minutes" : `aucun modèle Groq n’a accepté la demande (${response.status}), pause de 10 minutes`);
   }
   if (!response.ok) throw new Error(`Groq (${MODEL}) → ${response.status}`);
   const payload = await response.json();
@@ -304,13 +305,33 @@ async function deepAnalysis(issue, commentId, state, reason) {
     entry.relecture ? `**Relecture :** ${entry.relecture}` : "",
     `**Décision :** ${entry.decision}`,
   ].filter(Boolean).join("\n\n");
+  pending.push({ entry, body });
+  if (Date.now() - lastRecap >= RECAP_EVERY || reason.startsWith("incident")) await flushRecap(issue);
+}
+
+// Everything done in the last 15 minutes is written as one recap comment.
+const RECAP_EVERY = Number(env.GARDIEN_RECAP_MIN ?? 15) * 60000;
+let pending = [];
+let lastRecap = Date.now();
+
+async function flushRecap(issue) {
+  if (!pending.length) return;
+  const items = pending;
+  pending = [];
+  lastRecap = Date.now();
+  const published = items.filter(({ entry }) => entry.decision.includes("publiée")).length;
+  const body = [
+    `<!-- ${RECAP_MARK} ${encode(items.map(({ entry }) => entry))} -->`,
+    `# 🧾 Récapitulatif — ${items.length} passage${items.length > 1 ? "s" : ""}, ${published} modification${published > 1 ? "s" : ""} publiée${published > 1 ? "s" : ""}`,
+    ...items.map(({ body: part }) => part.replace(/^<!-- [^>]*-->\n?/, "")),
+  ].join("\n\n---\n\n");
   await github(`/issues/${issue}/comments`, { method: "POST", body: { body } });
 }
 
 /** When the last full analysis was written to the journal, so it happens about once an hour whatever GitHub's delays. */
 async function lastAnalysisAt(issue) {
   const comments = await github(`/issues/comments?sort=created&direction=desc&per_page=50`).catch(() => []);
-  const entries = comments.filter((comment) => comment.issue_url?.endsWith(`/issues/${issue}`) && comment.body?.includes(`<!-- ${ENTRY_MARK}`));
+  const entries = comments.filter((comment) => comment.issue_url?.endsWith(`/issues/${issue}`) && (comment.body?.includes(`<!-- ${ENTRY_MARK}`) || comment.body?.includes(`<!-- ${RECAP_MARK}`)));
   const published = entries.find((comment) => comment.body.includes("appliquée et publiée"));
   if (published) lastPublish = Date.parse(published.created_at);
   return entries[0] ? Date.parse(entries[0].created_at) : 0;
@@ -345,6 +366,7 @@ async function main() {
     }
     if (round < ROUNDS - 1) await sleep(55000);
   }
+  await flushRecap(issue);
   state.activity = env.GARDIEN_CHAIN === "1" ? "🔁 je me relance pour continuer la surveillance" : "😴 en attente du prochain passage";
   state.updated = now();
   await writeStatus(issue, commentId, state);
