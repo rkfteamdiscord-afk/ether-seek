@@ -59,7 +59,7 @@ export const faq: Array<{ question: string; keys: string[]; answer: Pointing }> 
   { question: "Pour qui travailles-tu ?", keys: ["client", "particulier", "entreprise", "createur", "communaute", "public", "cible"], answer: { text: "Ȥrk accompagne particuliers, créateurs, communautés et entreprises. L'objectif est de fournir une solution sur mesure sans avoir à coordonner plusieurs prestataires.", target: guide("apropos-metier") } },
 ];
 
-export const fallback: Pointing = { text: "Hmm… mes pouvoirs de fantôme ont des limites ! Pose ta question directement à Ȥrk sur WhatsApp.", target: guide("whatsapp") };
+export const fallback: Pointing = { text: "Hmm… je ne sais pas, mais tu peux consulter la Méthode en 3 étapes décrite sur le site ou contacter Ȥrk directement via WhatsApp.", target: guide("whatsapp") };
 
 // Everything the ghost may say comes from here, which mirrors the page itself.
 export const siteFacts = `
