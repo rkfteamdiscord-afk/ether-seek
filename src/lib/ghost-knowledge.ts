@@ -23,7 +23,7 @@ export const tours: Record<string, Pointing[]> = {
   services: [
     { text: "Les sites web : vitrines, portfolios, boutiques… rapides, élégants et faits pour convertir.", target: guide("service-0") },
     { text: "Les applis iOS et Android, prêtes à être publiées sur l’App Store et le Play Store.", target: guide("service-1") },
-    { text: "Les bots Telegram, WhatsApp et Discord, pensés pour ta communauté ou ton activité.", target: guide("service-2") },
+    { text: "Les bots Telegram, WhatsApp et Discord, ainsi que des outils d'automatisation adaptés à ton activité.", target: guide("service-2") },
     { text: "Et la cybersécurité : audit et protection des accès intégrés dès le départ.", target: guide("service-3") },
   ],
   apropos: [
