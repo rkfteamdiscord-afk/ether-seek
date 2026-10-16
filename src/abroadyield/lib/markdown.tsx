@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 /**
@@ -46,13 +47,16 @@ function inline(text: string): ReactNode[] {
     else if (match[2] !== undefined && match[3] !== undefined) {
       const external = match[3].startsWith("http");
       parts.push(
-        <a
-          key={key++}
-          href={match[3]}
-          {...(external ? { target: "_blank", rel: "noopener noreferrer nofollow" } : {})}
-        >
-          {match[2]}
-        </a>,
+        external ? (
+          <a key={key++} href={match[3]} target="_blank" rel="noopener noreferrer nofollow">
+            {match[2]}
+          </a>
+        ) : (
+          // Internal links navigate inside the app instead of reloading the page.
+          <Link key={key++} to={match[3]}>
+            {match[2]}
+          </Link>
+        ),
       );
     }
     last = match.index + match[0].length;

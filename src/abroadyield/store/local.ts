@@ -159,6 +159,18 @@ export class LocalBackend implements Backend {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("demo_magic");
     if (!token) return null;
+    const user = await this.signInWithDemoToken(token);
+    params.delete("demo_magic");
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${params.size ? `?${params}` : ""}`,
+    );
+    return user;
+  }
+
+  /** Demo stand-in for clicking the emailed magic link. */
+  async signInWithDemoToken(token: string): Promise<AuthUser> {
     const email = atob(token);
     let user = this.users().find((u) => u.email === email);
     if (!user) {
@@ -167,12 +179,6 @@ export class LocalBackend implements Backend {
     }
     const { passwordHash: _ignored, ...publicUser } = user;
     this.setSession(publicUser);
-    params.delete("demo_magic");
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}${params.size ? `?${params}` : ""}`,
-    );
     return publicUser;
   }
 

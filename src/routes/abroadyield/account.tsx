@@ -14,7 +14,7 @@ import {
   buttonClass,
 } from "@/abroadyield/components/ui";
 import { formatDate, formatUsd } from "@/abroadyield/engine";
-import { getBackend, newId } from "@/abroadyield/store";
+import { LocalBackend, getBackend, newId } from "@/abroadyield/store";
 import {
   loadProfile,
   useAuth,
@@ -175,9 +175,22 @@ function AuthForms() {
           >
             <p>{message.text}</p>
             {message.link ? (
-              <a href={message.link} className="mt-1 inline-block font-semibold underline">
+              <button
+                type="button"
+                className="mt-1 inline-flex min-h-11 items-center font-semibold underline"
+                onClick={async () => {
+                  const backend = getBackend();
+                  const token = new URLSearchParams(message.link?.split("?")[1] ?? "").get(
+                    "demo_magic",
+                  );
+                  if (backend instanceof LocalBackend && token) {
+                    await backend.signInWithDemoToken(token);
+                    await refresh();
+                  }
+                }}
+              >
                 Sign in with the demo link
-              </a>
+              </button>
             ) : null}
           </div>
         ) : null}

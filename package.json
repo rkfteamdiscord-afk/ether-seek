@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "bun test",
-    "ay:sitemap": "bun scripts/abroadyield/sitemap.ts"
+    "ay:sitemap": "bun scripts/abroadyield/sitemap.ts",
+    "ay:standalone": "vite build -c scripts/abroadyield/standalone/vite.config.ts && bun scripts/abroadyield/standalone/inline.ts"
   },
   "overrides": {
     "rolldown": "1.2.1"
