@@ -94,7 +94,9 @@ export class SupabaseBackend implements Backend {
     if (collection === "reports") {
       // Saved reports come back through a function that decrypts the owner's financial inputs.
       if (!(await this.currentUser())) return null;
-      const rows = (await (await this.rest("rpc/ay_my_reports", { method: "POST", body: "{}" })).json()) as T[];
+      const rows = (await (
+        await this.rest("rpc/ay_my_reports", { method: "POST", body: "{}" })
+      ).json()) as T[];
       return rows.length ? rows : null;
     }
     const response = await this.rest(

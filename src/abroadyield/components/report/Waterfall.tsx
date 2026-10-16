@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -10,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { formatUsd, formatUsdCompact, waterfallBars, type WaterfallStep } from "../../engine";
+import { prefersReducedMotion } from "../motion";
 
 const TAX_KEYS = new Set(["localTax", "federal", "state"]);
 
@@ -26,6 +28,13 @@ function colorFor(step: WaterfallStep) {
  * values so meaning never depends on colour or hover.
  */
 export function Waterfall({ steps, title }: { steps: WaterfallStep[]; title: string }) {
+  // Bars grow in on first render, never when the visitor prefers reduced motion.
+  // After the first draw, simulator changes update instantly.
+  const [animate, setAnimate] = useState(() => !prefersReducedMotion());
+  useEffect(() => {
+    const id = window.setTimeout(() => setAnimate(false), 1200);
+    return () => window.clearTimeout(id);
+  }, []);
   const bars = waterfallBars(steps).map((bar) => ({
     ...bar,
     color: colorFor(bar),
@@ -73,12 +82,26 @@ export function Waterfall({ steps, title }: { steps: WaterfallStep[]; title: str
                 );
               }}
             />
-            <Bar dataKey="base" stackId="w" fill="transparent" isAnimationActive={false}>
+            <Bar
+              dataKey="base"
+              stackId="w"
+              fill="transparent"
+              isAnimationActive={animate}
+              animationDuration={900}
+              animationEasing="ease-out"
+            >
               {bars.map((bar) => (
                 <Cell key={bar.key} fill="transparent" />
               ))}
             </Bar>
-            <Bar dataKey="height" stackId="w" radius={[4, 4, 0, 0]} isAnimationActive={false}>
+            <Bar
+              dataKey="height"
+              stackId="w"
+              radius={[4, 4, 0, 0]}
+              isAnimationActive={animate}
+              animationDuration={900}
+              animationEasing="ease-out"
+            >
               {bars.map((bar) => (
                 <Cell key={bar.key} fill={bar.color} />
               ))}
@@ -163,6 +186,7 @@ export function WaterfallTable({ steps }: { steps: WaterfallStep[] }) {
 /** "$13.1K", "$240", "−$1.2K"; rounds to whole dollars below $1,000 and drops the sign on zero. */
 function shortMoney(value: number) {
   if (Math.round(Math.abs(value)) === 0) return "$0";
-  const abs = Math.abs(value) < 1000 ? formatUsd(Math.abs(value)) : formatUsdCompact(Math.abs(value));
+  const abs =
+    Math.abs(value) < 1000 ? formatUsd(Math.abs(value)) : formatUsdCompact(Math.abs(value));
   return value < 0 ? `−${abs}` : abs;
 }

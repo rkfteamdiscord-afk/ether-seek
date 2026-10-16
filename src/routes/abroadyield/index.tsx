@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
+import { CountUp, Reveal, RouteMap } from "@/abroadyield/components/motion";
 import {
   Card,
   Container,
@@ -141,30 +142,37 @@ function Landing() {
       />
 
       {/* Hero */}
-      <section className="ay-map-bg relative overflow-hidden border-b border-ay-line bg-gradient-to-b from-ay-sky/60 to-white">
-        <Container className="grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+      <section className="ay-aurora overflow-hidden">
+        <RouteMap className="pointer-events-none absolute top-1/2 right-0 -z-10 hidden w-[62%] max-w-[900px] -translate-y-1/2 opacity-50 md:block" />
+        <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div className="ay-fade-in">
-            <Eyebrow>For US citizens and green card holders</Eyebrow>
-            <h1 className="mt-3 text-4xl font-semibold text-ay-ink sm:text-5xl">
-              Where should you invest abroad? Find out what you'll really earn.
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ay-sand-2">
+              For US citizens and green card holders
+            </p>
+            <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">
+              Where should you invest abroad?{" "}
+              <span className="text-ay-sand-2">Find out what you'll really earn.</span>
             </h1>
-            <p className="mt-5 max-w-xl text-xl text-ay-slate">
+            <p className="mt-5 max-w-xl text-xl text-white/80">
               Free country ranking in 3 minutes. After-tax returns, financing options and risks —
               built for US taxpayers.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 to="/abroadyield/start"
-                className={buttonClass("primary", "px-7 text-lg")}
+                className={buttonClass("sand", "ay-shine ay-btn-arrow px-7 text-lg")}
                 onClick={() => track("questionnaire_start", { from: "hero" })}
               >
                 Get my free ranking <ArrowRight aria-hidden className="size-5" />
               </Link>
-              <a href="#sample-report" className={buttonClass("secondary", "px-7 text-lg")}>
+              <a
+                href="#sample-report"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/30 px-7 py-2.5 text-lg font-semibold text-white transition-colors duration-200 hover:bg-white/10"
+              >
                 See a sample report
               </a>
             </div>
-            <ul className="mt-8 grid gap-2 text-ay-slate sm:grid-cols-2">
+            <ul className="mt-8 grid gap-2 text-white/80 sm:grid-cols-2">
               {[
                 "No credit card for the ranking",
                 `${published.length} countries compared`,
@@ -172,13 +180,13 @@ function Landing() {
                 "Sources and dates on every number",
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
-                  <Check aria-hidden className="size-5 text-ay-good" /> {item}
+                  <Check aria-hidden className="size-5 text-ay-sand-2" /> {item}
                 </li>
               ))}
             </ul>
           </div>
           {example ? (
-            <Card className="ay-fade-in relative">
+            <Card className="ay-fade-in relative text-ay-ink shadow-2xl shadow-black/30">
               <p className="text-sm font-semibold uppercase tracking-wider text-ay-gold">
                 Example · {example.country.name}
               </p>
@@ -191,18 +199,21 @@ function Landing() {
                   value={example.result.grossYield}
                   max={0.08}
                   tone="sand"
+                  delay={300}
                 />
                 <YieldBar
                   label="After running costs"
                   value={example.result.netYieldBeforeTax}
                   max={0.08}
                   tone="sky"
+                  delay={550}
                 />
                 <YieldBar
                   label="After local + US taxes"
                   value={example.result.afterTaxYield}
                   max={0.08}
                   tone="navy"
+                  delay={800}
                 />
               </dl>
               <p className="mt-5 rounded-lg bg-ay-sand p-3 text-ay-ink">
@@ -217,6 +228,46 @@ function Landing() {
               </p>
             </Card>
           ) : null}
+        </Container>
+      </section>
+
+      {/* Key figures */}
+      <section aria-label="AbroadYield in numbers" className="border-b border-ay-line bg-white">
+        <Container>
+          <dl className="grid grid-cols-2 divide-ay-line py-8 md:grid-cols-4 md:divide-x">
+            {[
+              {
+                value: published.length,
+                label: "countries compared",
+                format: (v: number) => String(Math.round(v)),
+              },
+              {
+                value: cities.length,
+                label: "cities with rents and prices",
+                format: (v: number) => String(Math.round(v)),
+              },
+              {
+                value: 3,
+                label: "tax layers: local, federal, state",
+                format: (v: number) => String(Math.round(v)),
+              },
+              {
+                value: 3,
+                label: "minutes to your free ranking",
+                format: (v: number) => String(Math.round(v)),
+              },
+            ].map((stat, i) => (
+              <Reveal key={stat.label} delay={i * 80} className="px-4 py-3 text-center">
+                <dt className="sr-only">{stat.label}</dt>
+                <dd className="font-[family-name:var(--font-ay-head)] text-4xl font-semibold text-ay-navy">
+                  <CountUp value={stat.value} format={stat.format} />
+                </dd>
+                <dd aria-hidden className="mt-1 text-ay-slate">
+                  {stat.label}
+                </dd>
+              </Reveal>
+            ))}
+          </dl>
         </Container>
       </section>
 
@@ -251,14 +302,16 @@ function Landing() {
                 title: "Running costs & vacancy",
                 text: "Management fees, repairs, insurance, property tax, condo fees and empty months typically cost 30–45% of gross rent.",
               },
-            ].map(({ icon: Icon, title, text }) => (
-              <Card key={title}>
-                <span className="inline-flex size-11 items-center justify-center rounded-xl bg-ay-sand text-ay-navy">
-                  <Icon aria-hidden className="size-6" />
-                </span>
-                <h3 className="mt-4 text-lg font-semibold text-ay-ink">{title}</h3>
-                <p className="mt-2 text-ay-slate">{text}</p>
-              </Card>
+            ].map(({ icon: Icon, title, text }, i) => (
+              <Reveal key={title} delay={i * 90}>
+                <Card className="ay-lift group h-full">
+                  <span className="inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-ay-sand to-ay-sand-2 text-ay-navy transition-transform duration-300 group-hover:-rotate-6 motion-reduce:transition-none">
+                    <Icon aria-hidden className="size-6" />
+                  </span>
+                  <h3 className="mt-4 text-lg font-semibold text-ay-ink">{title}</h3>
+                  <p className="mt-2 text-ay-slate">{text}</p>
+                </Card>
+              </Reveal>
             ))}
           </div>
         </Container>
@@ -290,14 +343,25 @@ function Landing() {
                 text: "After-tax returns step by step, US tax impact, best cities, financing and a buying checklist — then meet a vetted expert if you want one.",
               },
             ].map(({ icon: Icon, title, text }, index) => (
-              <li key={title} className="relative rounded-2xl bg-white p-6 ring-1 ring-ay-line">
+              <Reveal
+                as="li"
+                key={title}
+                delay={index * 120}
+                className="ay-lift relative rounded-2xl bg-white p-6 ring-1 ring-ay-line"
+              >
+                {index < 2 ? (
+                  <span
+                    aria-hidden
+                    className="absolute top-1/2 -right-6 hidden h-px w-6 bg-gradient-to-r from-ay-sand-2 to-ay-navy/40 md:block"
+                  />
+                ) : null}
                 <span className="font-[family-name:var(--font-ay-head)] text-sm font-semibold text-ay-gold">
                   Step {index + 1}
                 </span>
                 <Icon aria-hidden className="mt-3 size-7 text-ay-navy" />
                 <h3 className="mt-3 text-xl font-semibold text-ay-ink">{title}</h3>
                 <p className="mt-2 text-ay-slate">{text}</p>
-              </li>
+              </Reveal>
             ))}
           </ol>
           <div className="mt-10">
@@ -377,15 +441,18 @@ function Landing() {
             intro="Guides are free. Your ranking shows which ones fit you."
           />
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {published.map((country) => (
-              <li key={country.id}>
+            {published.map((country, i) => (
+              <Reveal as="li" key={country.id} delay={(i % 4) * 80}>
                 <Link
                   to="/abroadyield/guides/$slug"
                   params={{ slug: country.slug }}
-                  className="group block overflow-hidden rounded-2xl border border-ay-line bg-white transition-shadow hover:shadow-lg"
+                  className="ay-lift group block h-full overflow-hidden rounded-2xl border border-ay-line bg-white"
                 >
-                  <div className="h-28">
-                    <CountryVisual country={country} />
+                  <div className="h-28 overflow-hidden">
+                    <CountryVisual
+                      country={country}
+                      className="transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
+                    />
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-ay-ink group-hover:underline">
@@ -406,7 +473,7 @@ function Landing() {
                     </div>
                   </div>
                 </Link>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>
@@ -419,7 +486,7 @@ function Landing() {
         <Container>
           <SectionHeading id="trust-title" eyebrow="Trust" title="Transparent by design" />
           <div className="mt-10 grid gap-5 md:grid-cols-3">
-            <Card>
+            <Card className="ay-lift">
               <ShieldCheck aria-hidden className="size-7 text-ay-navy" />
               <h3 className="mt-3 text-lg font-semibold">Open methodology</h3>
               <p className="mt-2 text-ay-slate">
@@ -433,7 +500,7 @@ function Landing() {
                 Read the methodology <ArrowRight aria-hidden className="size-4" />
               </Link>
             </Card>
-            <Card>
+            <Card className="ay-lift">
               <FileBarChart2 aria-hidden className="size-7 text-ay-navy" />
               <h3 className="mt-3 text-lg font-semibold">Dated, sourced numbers</h3>
               <p className="mt-2 text-ay-slate">
@@ -441,7 +508,7 @@ function Landing() {
                 national tax authorities, land registries and established market data providers.
               </p>
             </Card>
-            <Card>
+            <Card className="ay-lift">
               <Users aria-hidden className="size-7 text-ay-navy" />
               <h3 className="mt-3 text-lg font-semibold">Independent experts</h3>
               <p className="mt-2 text-ay-slate">
@@ -516,11 +583,13 @@ function YieldBar({
   value,
   max,
   tone,
+  delay = 0,
 }: {
   label: string;
   value: number;
   max: number;
   tone: "sand" | "sky" | "navy";
+  delay?: number;
 }) {
   const colors = { sand: "bg-ay-sand-2", sky: "bg-[#9fb6d6]", navy: "bg-ay-navy" };
   return (
@@ -528,13 +597,18 @@ function YieldBar({
       <div className="flex items-baseline justify-between gap-2">
         <dt className="text-ay-slate">{label}</dt>
         <dd className="font-[family-name:var(--font-ay-head)] text-xl font-semibold tabular-nums text-ay-ink">
-          {formatPct(value)}
+          <CountUp value={value} format={(v) => formatPct(v)} />
         </dd>
       </div>
-      <div className="mt-1.5 h-3 rounded-full bg-ay-mist" aria-hidden>
+      <div className="mt-1.5 h-3 overflow-hidden rounded-full bg-ay-mist" aria-hidden>
         <div
-          className={`h-3 rounded-full ${colors[tone]}`}
-          style={{ width: `${Math.max(2, Math.min(100, (value / max) * 100))}%` }}
+          className={`ay-bar-grow h-3 rounded-full ${colors[tone]}`}
+          style={
+            {
+              width: `${Math.max(2, Math.min(100, (value / max) * 100))}%`,
+              "--ay-delay": `${delay}ms`,
+            } as React.CSSProperties
+          }
         />
       </div>
     </div>
@@ -593,28 +667,39 @@ export function Pricing({ settings }: { settings: Settings }) {
           intro={`No subscription. ${settings.refundDays}-day money-back guarantee on paid reports.`}
         />
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <Card key={plan.name} className={plan.featured ? "border-2 border-ay-navy" : ""}>
-              {plan.featured ? <Pill tone="sand">Most popular</Pill> : null}
-              <h3 className="mt-2 text-xl font-semibold">{plan.name}</h3>
-              <p className="mt-3 font-[family-name:var(--font-ay-head)] text-4xl font-semibold text-ay-ink">
-                {plan.price}{" "}
-                <span className="text-base font-normal text-ay-slate">{plan.note}</span>
-              </p>
-              <ul className="mt-5 space-y-2">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex gap-2 text-ay-ink">
-                    <Check aria-hidden className="mt-1 size-5 shrink-0 text-ay-good" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/abroadyield/start"
-                className={buttonClass(plan.featured ? "primary" : "secondary", "mt-6 w-full")}
+          {plans.map((plan, i) => (
+            <Reveal key={plan.name} delay={i * 100}>
+              <Card
+                className={
+                  plan.featured
+                    ? "ay-glow-border ay-lift relative h-full lg:-translate-y-2"
+                    : "ay-lift h-full"
+                }
               >
-                {plan.cta}
-              </Link>
-            </Card>
+                {plan.featured ? <Pill tone="sand">Most popular</Pill> : null}
+                <h3 className="mt-2 text-xl font-semibold">{plan.name}</h3>
+                <p className="mt-3 font-[family-name:var(--font-ay-head)] text-4xl font-semibold text-ay-ink">
+                  {plan.price}{" "}
+                  <span className="text-base font-normal text-ay-slate">{plan.note}</span>
+                </p>
+                <ul className="mt-5 space-y-2">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex gap-2 text-ay-ink">
+                      <Check aria-hidden className="mt-1 size-5 shrink-0 text-ay-good" /> {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/abroadyield/start"
+                  className={buttonClass(
+                    plan.featured ? "primary" : "secondary",
+                    "ay-shine mt-6 w-full",
+                  )}
+                >
+                  {plan.cta}
+                </Link>
+              </Card>
+            </Reveal>
           ))}
         </div>
         <p className="mt-6 text-sm text-ay-slate">

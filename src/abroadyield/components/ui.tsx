@@ -14,7 +14,7 @@ export function Container({ className, children }: { className?: string; childre
 }
 
 const buttonBase =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60";
+  "ay-btn-arrow inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-[color,background-color,box-shadow,transform] duration-200 active:scale-[0.98] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60";
 const buttonVariants = {
   primary: "bg-ay-navy text-white hover:bg-ay-navy-2 shadow-sm",
   secondary: "border border-ay-navy/25 bg-white text-ay-navy hover:bg-ay-sky",

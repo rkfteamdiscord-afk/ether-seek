@@ -193,7 +193,7 @@ function Questionnaire() {
           aria-valuenow={progress}
         >
           <div
-            className="h-2 rounded-full bg-ay-navy transition-[width] duration-300"
+            className="h-2 rounded-full bg-gradient-to-r from-ay-navy to-ay-navy-2 transition-[width] duration-500 ease-out motion-reduce:transition-none"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -205,7 +205,7 @@ function Questionnaire() {
           e.preventDefault();
           next();
         }}
-        className="ay-fade-in"
+        className="ay-step-in"
         key={current.key}
       >
         {current.key === "citizenship" ? (
@@ -618,10 +618,10 @@ function Choices({
             <label
               key={optionValue}
               className={cn(
-                "flex min-h-14 items-center gap-3 rounded-xl border-2 px-4 py-3 text-lg transition-colors",
+                "flex min-h-14 items-center gap-3 rounded-xl border-2 px-4 py-3 text-lg transition-[border-color,background-color,transform,box-shadow] duration-200 motion-reduce:transition-none",
                 checked
-                  ? "border-ay-navy bg-ay-sky"
-                  : "border-ay-line bg-white hover:border-ay-navy/40",
+                  ? "border-ay-navy bg-ay-sky shadow-[0_6px_18px_-12px_rgb(18_40_75/0.6)]"
+                  : "border-ay-line bg-white hover:-translate-y-0.5 hover:border-ay-navy/40 motion-reduce:hover:translate-y-0",
               )}
             >
               <input
@@ -632,7 +632,8 @@ function Choices({
                 onChange={() => onChange(optionValue)}
                 className="size-5 accent-ay-navy"
               />
-              {label}
+              <span className="flex-1">{label}</span>
+              {checked ? <Check aria-hidden className="ay-check-in size-5 text-ay-navy" /> : null}
             </label>
           );
         })}

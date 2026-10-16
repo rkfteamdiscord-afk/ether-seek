@@ -51,8 +51,18 @@ function Header() {
   const { user } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => setOpen(false), [pathname]);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <header className="ay-no-print sticky top-0 z-40 border-b border-ay-line bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+    <header
+      data-scrolled={scrolled}
+      className="ay-header ay-no-print sticky top-0 transition-shadow duration-300 z-40 border-b border-ay-line bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85"
+    >
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link to="/abroadyield" aria-label="AbroadYield home" className="rounded-md">
           <Logo />

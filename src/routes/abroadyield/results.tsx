@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, ArrowRight, Lock, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
+import { CountUp, Reveal, useInView } from "@/abroadyield/components/motion";
 import { UnlockPanel, recordUnlockClick } from "@/abroadyield/components/Unlock";
 import {
   Button,
@@ -130,8 +131,8 @@ function Results() {
           const why = explainScore(item);
           const owned = (orders.data ?? []).some((o) => orderCovers(o, [item.country.id]));
           return (
-            <li key={item.country.id}>
-              <Card as="article" className="overflow-hidden p-0 sm:p-0">
+            <Reveal as="li" key={item.country.id} delay={Math.min(index, 3) * 90}>
+              <Card as="article" className="ay-lift overflow-hidden p-0 sm:p-0">
                 <div className="grid md:grid-cols-[180px_1fr]">
                   <div className="h-24 md:h-full">
                     <CountryVisual country={item.country} />
@@ -228,7 +229,7 @@ function Results() {
                   </div>
                 </div>
               </Card>
-            </li>
+            </Reveal>
           );
         })}
       </ol>
@@ -304,8 +305,21 @@ function Metric({
 function ScoreMeter({ score }: { score: number }) {
   const r = 22;
   const c = 2 * Math.PI * r;
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const [drawn, setDrawn] = useState(false);
+  useEffect(() => {
+    if (!inView) return;
+    // Next frame, so the ring transitions from empty to its score.
+    const id = requestAnimationFrame(() => setDrawn(true));
+    return () => cancelAnimationFrame(id);
+  }, [inView]);
   return (
-    <div className="relative size-14" role="img" aria-label={`Overall score ${score} out of 100`}>
+    <div
+      ref={ref}
+      className="relative size-14"
+      role="img"
+      aria-label={`Overall score ${score} out of 100`}
+    >
       <svg viewBox="0 0 56 56" className="size-14 -rotate-90" aria-hidden>
         <circle cx="28" cy="28" r={r} fill="none" stroke="#dfe3ea" strokeWidth="6" />
         <circle
@@ -317,14 +331,15 @@ function ScoreMeter({ score }: { score: number }) {
           strokeWidth="6"
           strokeLinecap="round"
           strokeDasharray={c}
-          strokeDashoffset={c * (1 - score / 100)}
+          strokeDashoffset={drawn ? c * (1 - score / 100) : c}
+          className="ay-ring-progress"
         />
       </svg>
       <span
         aria-hidden
         className="absolute inset-0 flex items-center justify-center font-[family-name:var(--font-ay-head)] text-lg font-semibold"
       >
-        {score}
+        <CountUp value={score} format={(v) => String(Math.round(v))} />
       </span>
     </div>
   );
