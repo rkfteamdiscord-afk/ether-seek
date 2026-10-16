@@ -286,6 +286,7 @@ function Portfolio() {
         <HalloweenScene chapter={3} />
         <SwingingLantern className="lantern-left" />
         <DriftingGhost className="ghost-low ghost-reverse" />
+        <DriftingGhost className="ghost-method-top" />
         <RealPumpkin carved className="ground-pumpkin gp-method-a" />
         <ZombieHand className="zh-method" />
         <Cobweb className="web-section-left" />

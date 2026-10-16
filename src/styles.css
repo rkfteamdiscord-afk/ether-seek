@@ -954,6 +954,7 @@ html { scroll-behavior: smooth; }
 .zh-hero { left: 42%; } .zh-services { left: 6%; animation-delay: -3s; } .zh-method { right: 14%; }
 .zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }
 .zh-method .zh-arm, .zh-method .zh-fingers { animation-delay: -6s; }
+.ghost-method-top { left: 8%; top: 12%; animation-delay: -8s; }
 @keyframes zombie-rise { 0%,12% { transform: translateY(105px); } 30% { transform: translateY(8px) rotate(-3deg); } 40% { transform: translateY(0) rotate(4deg); } 62% { transform: translateY(2px) rotate(-5deg); } 74% { transform: translateY(12px); } 88%,100% { transform: translateY(105px); } }
 @keyframes zombie-claw { 0%,32% { transform: scale(1); } 40%,46% { transform: scaleY(.82) skewX(-6deg); } 52% { transform: scale(1); } 58%,62% { transform: scaleY(.8) skewX(5deg); } 70%,100% { transform: scale(1); } }
 .zombie-walker { position: absolute; left: 0; bottom: 2vh; width: 120px; opacity: .85; filter: brightness(.85) drop-shadow(0 0 12px oklch(0.1 0.03 290)); animation: zombie-cross 70s linear infinite 12s; transform: translateX(-160px); }
