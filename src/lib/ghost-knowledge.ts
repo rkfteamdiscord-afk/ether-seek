@@ -34,8 +34,8 @@ export const tours: Record<string, Pointing[]> = {
   ],
   methode: [
     { text: "Étape 1 : vous échangez sur ton idée, tes objectifs et ton budget.", target: guide("etape-0") },
-    { text: "Étape 2 : Ȥrk conçoit, développe et teste la solution avec toi.", target: guide("etape-1") },
-    { text: "Étape 3 : il met ton projet en ligne et reste disponible après la livraison.", target: guide("etape-2") },
+    { text: "Étape 2 : Ȥrk conçoit, développe et teste la solution avec toi, en intégrant un audit de cybersécurité pour protéger tes accès et tes données.", target: guide("etape-1") },
+    { text: "Étape 3 : il met ton projet en ligne, hébergé de façon sécurisée, et reste disponible pour le suivi après la livraison.", target: guide("etape-2") },
   ],
   contact: [
     { text: "Pour lancer ton projet, écris à Ȥrk ici : WhatsApp, Discord ou e-mail.", target: guide("contact-boutons") },
