@@ -1026,7 +1026,7 @@ html { scroll-behavior: smooth; }
 
 /* ───────── Panneau du gardien ───────── */
 .admin-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: oklch(0.75 0.17 145); box-shadow: 0 0 10px oklch(0.75 0.17 145); animation: badge-pulse 1.6s ease-in-out infinite; }
-.admin-bar { flex: 1; min-height: 12%; border-radius: 6px 6px 2px 2px; transition: background 0.3s ease-in-out; } .admin-bar:focus-visible { outline: 2px solid oklch(0.95 0 0); outline-offset: 2px; }
+.admin-bar { flex: 1; min-height: 12%; border-radius: 6px 6px 2px 2px; transition: background 0.3s ease-in-out; } .admin-bar:focus-visible { outline: 3px solid oklch(0.95 0 0); outline-offset: 2px; }
 .admin-bar.is-ok { background: linear-gradient(to top, oklch(0.55 0.13 150), oklch(0.75 0.17 145)); }
 .admin-bar.is-ko { background: linear-gradient(to top, oklch(0.5 0.18 25), oklch(0.68 0.2 27)); }
 @media (prefers-reduced-motion: reduce) { .admin-live-dot { animation: none; } }
