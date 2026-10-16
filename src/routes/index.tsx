@@ -245,6 +245,7 @@ function Portfolio() {
 
       <section id="apropos" className="halloween-stage relative border-y border-border/40 bg-secondary/55 py-24 lg:py-32">
         <HalloweenScene chapter={2} />
+        <SwingingLantern className="lantern-about-left" />
         <RealPumpkin skin="deep" carved className="ground-pumpkin gp-about-a" />
         <RealPumpkin className="ground-pumpkin gp-about-b" />
         <Cobweb className="web-section-right" />
