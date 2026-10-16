@@ -28,7 +28,7 @@ export const tours: Record<string, Pointing[]> = {
   ],
   apropos: [
     { text: "Voici Ȥrk : développeur indépendant et fondateur du studio.", target: guide("apropos-titre") },
-    { text: "Il s’occupe de tout : apparence, fonctionnement, données, mise en ligne et suivi.", target: guide("apropos-metier") },
+    { text: "Il s’occupe de tout : apparence, fonctionnement, données, mise en ligne et suivi. Il accompagne particuliers, créateurs, communautés et entreprises.", target: guide("apropos-metier") },
     { text: "Ses engagements : un seul interlocuteur, du sur mesure, un suivi clair et la sécurité dès le début.", target: guide("apropos-engagements") },
     { text: "Et la solution qu’il te livre t’appartient vraiment !", target: guide("apropos-propriete") },
   ],
