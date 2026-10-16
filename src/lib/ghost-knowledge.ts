@@ -55,6 +55,7 @@ export const faq: Array<{ question: string; keys: string[]; answer: Pointing }> 
   { question: "Le site m’appartient ?", keys: ["appartient", "proprie", "mien", "a moi", "droits"], answer: { text: "Oui : tu reçois une solution qui t’appartient vraiment.", target: guide("apropos-propriete") } },
   { question: "C’est sécurisé ?", keys: ["secur", "cyber", "hack", "protection", "donnees", "fiable"], answer: { text: "Oui, la cybersécurité est intégrée dès la conception : audit, protection des accès et bonnes pratiques sont réfléchis dès le départ pour livrer des produits solides et fiables.", target: guide("service-3") } },
   { question: "Tu as un Discord ?", keys: ["discord", "serveur", "communaute"], answer: { text: "Oui ! Tu peux rejoindre le serveur Discord de Ȥrk via le bouton dédié, c'est le meilleur endroit pour échanger avec la communauté.", target: guide("discord") } },
+  { question: "Tu travailles seul ?", keys: ["seul", "equipe", "equipe", "interlocuteur", "qui fait"], answer: { text: "Oui, Ȥrk est un développeur indépendant. Tu as un seul interlocuteur du premier échange à la livraison, ce qui simplifie la communication et le suivi.", target: guide("apropos-engagements") } },
 ];
 
 export const fallback: Pointing = { text: "Hmm… mes pouvoirs de fantôme ont des limites ! Pose ta question directement à Ȥrk sur WhatsApp.", target: guide("whatsapp") };
