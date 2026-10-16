@@ -54,7 +54,7 @@ export const faq: Array<{ question: string; keys: string[]; answer: Pointing }> 
   { question: "Quels délais ?", keys: ["delai", "temps", "quand", "rapide", "duree", "semaine"], answer: { text: "Ça dépend de ton projet : demande-le à Ȥrk dès le premier échange, il te suit clairement tout du long.", target: guide("whatsapp") } },
   { question: "Le site m’appartient ?", keys: ["appartient", "proprie", "mien", "a moi", "droits"], answer: { text: "Oui : tu reçois une solution qui t’appartient vraiment.", target: guide("apropos-propriete") } },
   { question: "C’est sécurisé ?", keys: ["secur", "cyber", "hack", "protection", "donnees", "fiable"], answer: { text: "Oui, la cybersécurité est intégrée dès la conception : audit, protection des accès et bonnes pratiques sont réfléchis dès le départ pour livrer des produits solides et fiables.", target: guide("service-3") } },
-  { question: "Tu as un Discord ?", keys: ["discord", "serveur", "communaute"], answer: { text: "Oui ! Rejoins le serveur Discord de Ȥrk, le bouton est là, et il y a aussi un serveur Discord à rejoindre.", target: guide("discord") } },
+  { question: "Tu as un Discord ?", keys: ["discord", "serveur", "communaute"], answer: { text: "Oui ! Tu peux rejoindre le serveur Discord de Ȥrk via le bouton dédié, c'est le meilleur endroit pour échanger avec la communauté.", target: guide("discord") } },
 ];
 
 export const fallback: Pointing = { text: "Hmm… mes pouvoirs de fantôme ont des limites ! Pose ta question directement à Ȥrk sur WhatsApp.", target: guide("whatsapp") };
