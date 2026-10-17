@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { bundledPhoto } from "../lib/photos";
 import type { Country } from "../types";
 
 /**
- * Country tile: the admin-provided photo when there is one, otherwise an editorial illustration
+ * Country tile: the admin-provided photo, else the bundled destination photo, else (when the
+ * photo cannot load) an editorial illustration
  * in the brand's champagne line art — arches and tiled roofs for Europe, palms and a sun for
  * Latin America, a skyline for the Gulf.
  */
@@ -12,14 +15,35 @@ const THEMES: Record<string, { from: string; to: string; art: "europe" | "latam"
   "Middle East": { from: "#3b2a12", to: "#8a6224", art: "gulf" },
 };
 
-export function CountryVisual({ country, className }: { country: Country; className?: string }) {
-  if (country.imageUrl) {
+export function CountryVisual({
+  country,
+  className,
+  illustrated = false,
+}: {
+  country: Country;
+  className?: string;
+  /** Skip photos (used where a photo has already failed). */
+  illustrated?: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+  const photo = country.imageUrl
+    ? { src: country.imageUrl, alt: country.imageAlt ?? "" }
+    : (() => {
+        const p = bundledPhoto(country.id);
+        return p ? { src: p.src, alt: p.shows } : undefined;
+      })();
+  if (photo && !failed && !illustrated) {
     return (
       <img
-        src={country.imageUrl}
-        alt={country.imageAlt ?? ""}
+        src={photo.src}
+        alt={photo.alt}
         loading="lazy"
         decoding="async"
+        ref={(img) => {
+          // A photo that failed before hydration never fires onError.
+          if (img?.complete && img.naturalWidth === 0) setFailed(true);
+        }}
+        onError={() => setFailed(true)}
         className={cn("h-full w-full object-cover", className)}
       />
     );

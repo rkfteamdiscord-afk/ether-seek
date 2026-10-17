@@ -13,7 +13,8 @@ import { buttonClass } from "./ui";
  * else from /abroadyield/photos/<slug>.jpg; until a photo exists, the illustrated scene is used.
  *
  * Accessibility: auto-advancing content has a visible pause control (WCAG 2.2.2), pauses while
- * hovered or focused and when off-screen, and never moves with reduced motion.
+ * a mouse hovers it, while it has keyboard focus and when off-screen (a touch tap never freezes
+ * it), and never moves with reduced motion.
  */
 
 export interface Slide {
@@ -41,11 +42,12 @@ export function CinematicHero({
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [visible, setVisible] = useState(true);
   const [reduced, setReduced] = useState(false);
   const [failed, setFailed] = useState<Record<string, boolean>>({});
   const root = useRef<HTMLElement>(null);
-  const running = !paused && !hovering && visible && !reduced && slides.length > 1;
+  const running = !paused && !hovering && !focused && visible && !reduced && slides.length > 1;
 
   useEffect(() => setReduced(prefersReducedMotion()), []);
   // A photo that failed before hydration never reaches onError: catch it here so its frame shows
@@ -79,10 +81,10 @@ export function CinematicHero({
       data-nav-tone="dark"
       aria-roledescription="carousel"
       aria-label="Destinations"
-      onPointerEnter={() => setHovering(true)}
-      onPointerLeave={() => setHovering(false)}
-      onFocusCapture={() => setHovering(true)}
-      onBlurCapture={() => setHovering(false)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHovering(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setHovering(false)}
+      onFocusCapture={(e) => e.target.matches(":focus-visible") && setFocused(true)}
+      onBlurCapture={() => setFocused(false)}
     >
       {/* Film frames */}
       <div aria-hidden className="absolute inset-0 -z-10">
@@ -99,7 +101,7 @@ export function CinematicHero({
               data-running={running}
             >
               {failed[slide.photo] ? (
-                <CountryVisual country={slide.country} className="ay-frame-media" />
+                <CountryVisual country={slide.country} className="ay-frame-media" illustrated />
               ) : (
                 <img
                   src={slide.photo}

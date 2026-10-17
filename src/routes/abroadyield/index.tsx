@@ -18,6 +18,7 @@ import { CountUp, Reveal, RouteMap } from "@/abroadyield/components/motion";
 import { Compass, HeroDecor } from "@/abroadyield/components/Decor";
 import { MobileDock } from "@/abroadyield/components/MobileDock";
 import { CinematicHero, type Slide } from "@/abroadyield/components/CinematicHero";
+import { bundledPhoto } from "@/abroadyield/lib/photos";
 import {
   Card,
   Container,
@@ -113,15 +114,14 @@ function Landing() {
   }, [countries, usTax, exampleId]);
   const heroCtaText = useRef<HTMLParagraphElement>(null);
   const slides = useMemo<Slide[]>(() => {
-    // [country, city, photo file, what the bundled photo shows]
-    const picks: Array<[string, string, string, string]> = [
-      ["pt", "pt-lisbon", "lisbon", "Baixa, Lisbon"],
-      ["es", "es-malaga", "malaga", "A white village in Andalusia"],
-      ["it", "it-rome", "rome", "St. Peter's from the Tiber, Rome"],
-      ["gr", "gr-athens", "athens", "The Acropolis, Athens"],
-      ["mx", "mx-playa", "playa-del-carmen", "The Mexican Caribbean coast"],
-      ["cr", "cr-tamarindo", "tamarindo", "Costa Rica"],
-      ["ae", "ae-marina", "dubai-marina", "Downtown Dubai"],
+    const picks: Array<[string, string]> = [
+      ["pt", "pt-lisbon"],
+      ["es", "es-malaga"],
+      ["it", "it-rome"],
+      ["gr", "gr-athens"],
+      ["mx", "mx-playa"],
+      ["cr", "cr-tamarindo"],
+      ["ae", "ae-marina"],
     ];
     const profile = {
       ...emptyProfile,
@@ -132,18 +132,23 @@ function Landing() {
       financing: "cash" as const,
       strategy: "long" as const,
     };
-    return picks.flatMap(([countryId, cityId, file, shows]) => {
+    return picks.flatMap(([countryId, cityId]) => {
       const country = countries.find((c) => c.id === countryId && c.published);
       const city = cities.find((c) => c.id === cityId);
       if (!country || !city) return [];
       const { result } = runScenario({ country, city, profile, settings, usTax });
+      const bundled = bundledPhoto(country.id);
       return [
         {
           country,
           place: city.name,
-          photo: country.imageUrl || `/abroadyield/photos/${file}.jpg`,
-          alt: country.imageAlt || shows,
-          photoCaption: country.imageUrl ? (country.imageAlt ?? "") : `Photo: ${shows} (Unsplash)`,
+          photo: country.imageUrl || bundled?.src || "",
+          alt: country.imageAlt || bundled?.shows || `${city.name}, ${country.name}`,
+          photoCaption: country.imageUrl
+            ? (country.imageAlt ?? "")
+            : bundled
+              ? `Photo: ${bundled.shows} (Unsplash)`
+              : "",
           gross: result.grossYield,
           afterTax: result.afterTaxYield,
         },
@@ -310,12 +315,30 @@ function Landing() {
         </Container>
       </section>
 
-      {/* Route band */}
+      {/* Route band: flight arcs (wide screens) and a drifting strip of destination photos */}
       <section aria-hidden className="ay-aurora overflow-hidden py-10" data-nav-tone="dark">
         <HeroDecor />
         <Container>
-          <RouteMap className="h-auto w-full opacity-85" />
+          <RouteMap className="hidden h-auto w-full opacity-85 sm:block" />
         </Container>
+        <div className="ay-marquee mt-2 sm:mt-6">
+          <div className="ay-marquee-track">
+            {[...slides, ...slides].map((slide, i) => (
+              <figure key={`${slide.country.id}-${i}`} className="ay-marquee-card">
+                <CountryVisual country={slide.country} className="ay-marquee-media" />
+                <figcaption>
+                  <span className="block text-lg font-semibold tracking-tight text-white">
+                    {slide.place}
+                  </span>
+                  <span className="text-sm text-white/75">
+                    {(slide.gross * 100).toFixed(1)}% →{" "}
+                    <strong className="text-ay-sand-2">{(slide.afterTax * 100).toFixed(1)}%</strong>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Key figures */}
