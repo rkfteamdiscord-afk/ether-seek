@@ -284,7 +284,7 @@ export const Finale: React.FC = () => {
       <Stage intensity={1.2} />
       <AbsoluteFill style={{ perspective: 900 }}>
         {ids.map((id, i) => {
-          const z = interpolate(frame, [i * 1.6, i * 1.6 + 24], [-2800, 900], {
+          const z = interpolate(frame, [i * 1.6, i * 1.6 + 24], [-1700, 900], {
             ...clamp,
             easing: Easing.in(Easing.quad),
           });
@@ -302,7 +302,7 @@ export const Finale: React.FC = () => {
                 objectFit: "cover",
                 borderRadius: 28,
                 transform: `translate(-50%, -50%) translate3d(${Math.cos(ang) * 540}px, ${Math.sin(ang) * 760}px, ${z}px) rotate(${i * 21}deg)`,
-                opacity: interpolate(z, [-2800, -1900, 500, 900], [0, 1, 1, 0]),
+                opacity: interpolate(z, [-1700, -1300, 500, 900], [0, 1, 1, 0]),
               }}
             />
           );

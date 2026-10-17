@@ -746,7 +746,12 @@ export const Numbers: React.FC = () => {
         <H
           size={84}
           weight={700}
-          style={{ marginTop: -10, opacity: enter, letterSpacing: "-0.03em" }}
+          style={{
+            marginTop: -10,
+            opacity: enter,
+            letterSpacing: "-0.03em",
+            textShadow: "0 6px 30px rgba(0,0,0,0.8)",
+          }}
         >
           {label}
         </H>
