@@ -1,6 +1,8 @@
 import React from "react";
 import { Composition, Folder } from "remotion";
 import { Promo } from "./Promo";
+import { Promo45 } from "./v45/Promo45";
+import { TOTAL_FRAMES } from "./v45/timeline";
 import { Costs } from "./scenes/Costs";
 import { Cta } from "./scenes/Cta";
 import { Experts } from "./scenes/Experts";
@@ -95,6 +97,14 @@ export const RemotionRoot: React.FC = () => (
       height={1920}
       fps={30}
       durationInFrames={724}
+    />
+    <Composition
+      id="AbroadYieldPromo45"
+      component={Promo45}
+      width={1080}
+      height={1920}
+      fps={30}
+      durationInFrames={TOTAL_FRAMES}
     />
   </>
 );

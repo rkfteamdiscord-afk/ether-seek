@@ -40,6 +40,12 @@ npx remotion ffmpeg -i out/abroadyield-promo.mp4 -vf scale=720:1280 -c:v libx264
 
 Its figures come from the site's own examples and are labelled as sample data on screen.
 
+A second, 45-second cut (`AbroadYieldPromo45`, sources in `src/v45/`) adds simulated drone shots
+and is not used on the site. Before rendering it: `sh scripts/fetch-assets.sh` (downloads the
+aerial photos) and `python3 scripts/soundtrack45.py`. Optional narration: with
+`ELEVENLABS_API_KEY` set (and `api.elevenlabs.io` reachable), run
+`node --experimental-strip-types scripts/voiceover45.ts`, then render again.
+
 ## Two modes
 
 **Demo mode (default, no configuration).** Everything — accounts, purchases, saved reports,

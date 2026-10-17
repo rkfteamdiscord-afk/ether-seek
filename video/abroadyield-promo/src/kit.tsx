@@ -159,7 +159,7 @@ export const Flash: React.FC<{ at?: number; color?: string }> = ({
     <AbsoluteFill
       style={{
         background: color,
-        opacity: interpolate(frame, [at, at + 5], [0.85, 0], clamp),
+        opacity: interpolate(frame, [at - 1, at, at + 5], [0, 0.85, 0], clamp),
         pointerEvents: "none",
       }}
     />
