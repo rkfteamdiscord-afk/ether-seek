@@ -30,7 +30,7 @@ export function StudioVideo() {
         playsInline
         controls
         preload="metadata"
-        aria-label="Vidéo de présentation du studio Ȥrk : sites web, applications mobiles, bots et cybersécurité"
+        aria-label="Vidéo de présentation du studio Ȥrk : exemples de sites, services, méthode et contact"
       />
     </div>
   );
