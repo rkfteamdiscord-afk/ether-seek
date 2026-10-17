@@ -1601,13 +1601,13 @@ html:has(.ay-root) { background: #fbf9f5; }
 
 /* ---------- Cinematic hero (photo slideshow with slow camera push) ---------- */
 .ay-cinema { background: #0b1424; color: #fff; }
-.ay-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 1400ms ease; overflow: hidden; }
+.ay-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 900ms ease; overflow: hidden; }
 .ay-frame-active { opacity: 1; }
 /* Illustrated stand-in (no photo yet): quieter at hero scale, without its tile label. */
 div.ay-frame-media > svg { opacity: 0.45; }
 div.ay-frame-media > span { display: none; }
 .ay-frame-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 60% 40%; }
-.ay-frame-active .ay-frame-media { animation: ay-kenburns-r 9s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
+.ay-frame-active .ay-frame-media { animation: ay-kenburns-r 5s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
 .ay-kb-left.ay-frame-active .ay-frame-media { animation-name: ay-kenburns-l; }
 .ay-frame[data-running="false"] .ay-frame-media { animation-play-state: paused; }
 @keyframes ay-kenburns-r { from { transform: scale(1.04) translate3d(0, 0, 0); } to { transform: scale(1.16) translate3d(-2.5%, -1.5%, 0); } }
@@ -1632,7 +1632,7 @@ div.ay-frame-media > span { display: none; }
   .ay-cinema button:hover .ay-chapter { background: rgb(255 255 255 / 0.45); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ay-frame { transition: opacity 300ms ease; }
+  .ay-frame { transition: opacity 600ms ease; }
   .ay-frame-active .ay-frame-media { animation: none; transform: scale(1.04); }
   .ay-chapter-now { animation: none; transform: scaleX(1); }
 }

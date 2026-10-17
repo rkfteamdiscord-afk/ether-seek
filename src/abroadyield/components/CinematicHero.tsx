@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { Country } from "../types";
 import { CountryVisual } from "./CountryVisual";
-import { prefersReducedMotion } from "./motion";
 import { buttonClass } from "./ui";
 
 /**
@@ -13,8 +12,8 @@ import { buttonClass } from "./ui";
  * else from /abroadyield/photos/<slug>.jpg; until a photo exists, the illustrated scene is used.
  *
  * Accessibility: auto-advancing content has a visible pause control (WCAG 2.2.2), pauses while
- * a mouse hovers it, while it has keyboard focus and when off-screen (a touch tap never freezes
- * it), and never moves with reduced motion.
+ * it has keyboard focus and when off-screen, and keeps advancing with reduced motion but with a
+ * plain cross-fade and no camera movement.
  */
 
 export interface Slide {
@@ -28,7 +27,7 @@ export interface Slide {
   afterTax: number;
 }
 
-const DURATION = 6500;
+const DURATION = 3800;
 
 export function CinematicHero({
   slides,
@@ -41,15 +40,12 @@ export function CinematicHero({
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [reduced, setReduced] = useState(false);
   const [failed, setFailed] = useState<Record<string, boolean>>({});
   const root = useRef<HTMLElement>(null);
-  const running = !paused && !hovering && !focused && visible && !reduced && slides.length > 1;
+  const running = !paused && !focused && visible && slides.length > 1;
 
-  useEffect(() => setReduced(prefersReducedMotion()), []);
   // A photo that failed before hydration never reaches onError: catch it here so its frame shows
   // the illustrated scene instead of an empty one.
   useEffect(() => {
@@ -81,8 +77,6 @@ export function CinematicHero({
       data-nav-tone="dark"
       aria-roledescription="carousel"
       aria-label="Destinations"
-      onPointerEnter={(e) => e.pointerType === "mouse" && setHovering(true)}
-      onPointerLeave={(e) => e.pointerType === "mouse" && setHovering(false)}
       onFocusCapture={(e) => e.target.matches(":focus-visible") && setFocused(true)}
       onBlurCapture={() => setFocused(false)}
     >
@@ -182,7 +176,7 @@ export function CinematicHero({
                   </li>
                 ))}
               </ol>
-              {!reduced && slides.length > 1 ? (
+              {slides.length > 1 ? (
                 <button
                   type="button"
                   onClick={() => setPaused((p) => !p)}
