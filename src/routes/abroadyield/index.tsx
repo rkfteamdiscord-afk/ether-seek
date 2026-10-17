@@ -113,14 +113,15 @@ function Landing() {
   }, [countries, usTax, exampleId]);
   const heroCtaText = useRef<HTMLParagraphElement>(null);
   const slides = useMemo<Slide[]>(() => {
-    const picks: Array<[string, string, string]> = [
-      ["pt", "pt-lisbon", "lisbon"],
-      ["es", "es-malaga", "malaga"],
-      ["it", "it-rome", "rome"],
-      ["gr", "gr-athens", "athens"],
-      ["mx", "mx-playa", "playa-del-carmen"],
-      ["cr", "cr-tamarindo", "tamarindo"],
-      ["ae", "ae-marina", "dubai-marina"],
+    // [country, city, photo file, what the bundled photo shows]
+    const picks: Array<[string, string, string, string]> = [
+      ["pt", "pt-lisbon", "lisbon", "Baixa, Lisbon"],
+      ["es", "es-malaga", "malaga", "A white village in Andalusia"],
+      ["it", "it-rome", "rome", "St. Peter's from the Tiber, Rome"],
+      ["gr", "gr-athens", "athens", "The Acropolis, Athens"],
+      ["mx", "mx-playa", "playa-del-carmen", "The Mexican Caribbean coast"],
+      ["cr", "cr-tamarindo", "tamarindo", "Costa Rica"],
+      ["ae", "ae-marina", "dubai-marina", "Downtown Dubai"],
     ];
     const profile = {
       ...emptyProfile,
@@ -131,7 +132,7 @@ function Landing() {
       financing: "cash" as const,
       strategy: "long" as const,
     };
-    return picks.flatMap(([countryId, cityId, file]) => {
+    return picks.flatMap(([countryId, cityId, file, shows]) => {
       const country = countries.find((c) => c.id === countryId && c.published);
       const city = cities.find((c) => c.id === cityId);
       if (!country || !city) return [];
@@ -141,7 +142,8 @@ function Landing() {
           country,
           place: city.name,
           photo: country.imageUrl || `/abroadyield/photos/${file}.jpg`,
-          alt: country.imageAlt || `${city.name}, ${country.name}`,
+          alt: country.imageAlt || shows,
+          photoCaption: country.imageUrl ? (country.imageAlt ?? "") : `Photo: ${shows} (Unsplash)`,
           gross: result.grossYield,
           afterTax: result.afterTaxYield,
         },

@@ -21,6 +21,8 @@ export interface Slide {
   place: string;
   photo: string;
   alt: string;
+  /** Says what the photo shows when it is not the city the figures are for. */
+  photoCaption: string;
   gross: number;
   afterTax: number;
 }
@@ -139,7 +141,7 @@ export function CinematicHero({
         {current ? (
           <div className="mt-10 grid gap-4 border-t border-white/15 pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
             <p aria-live={running ? "off" : "polite"} className="text-white/85">
-              <span className="font-[family-name:var(--font-ay-head)] text-2xl text-white italic">
+              <span className="font-[family-name:var(--font-ay-head)] text-2xl font-semibold tracking-tight text-white">
                 {current.place}
               </span>
               <span className="mx-3 text-white/40">·</span>
@@ -149,6 +151,7 @@ export function CinematicHero({
               <strong className="text-ay-sand-2">{(current.afterTax * 100).toFixed(1)}%</strong>
               <span className="block text-sm text-white/55">
                 Example after costs, local and US taxes. Sample data – to be verified.
+                {current.photoCaption && !failed[current.photo] ? ` ${current.photoCaption}.` : ""}
               </span>
             </p>
             <div className="flex items-center gap-3">

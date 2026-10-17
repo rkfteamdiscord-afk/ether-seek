@@ -1042,11 +1042,11 @@ html { scroll-behavior: smooth; }
   --color-ay-warn-bg: #fff4e0;
   --color-ay-bad: #a3261b;
   --color-ay-bad-bg: #fdecea;
-  --font-ay-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-ay-ui: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-ay-head: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-ay-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
-  --font-ay-body: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-ay-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 body:has(.ay-root) {
@@ -1266,7 +1266,8 @@ body:has(.ay-root) {
    AbroadYield — quiet luxury layer (apple-design + emil-design-eng)
    - Custom ease-out curves, press feedback on :active, hover only on fine pointers
    - Translucent materials with reduced-transparency / high-contrast fallbacks
-   - Size-specific tracking and leading for the Fraunces display face
+   - One grotesk family (Inter; its optical-size axis gives the Display cut on large headings),
+     with tracking and leading that tighten as size grows
    ===================================================================== */
 .ay-root {
   background: var(--color-ay-ivory);
@@ -1280,17 +1281,20 @@ body:has(.ay-root) {
 body:has(.ay-root) { background: #fbf9f5; }
 
 /* Type: tracking tightens as size grows; leading tightens too (Apple, "Details of UI Typography"). */
+.ay-root { font-feature-settings: "cv11", "ss03"; letter-spacing: -0.006em; }
 .ay-root :is(h1, h2, h3, h4) {
   font-family: var(--font-ay-head);
   font-optical-sizing: auto;
-  font-weight: 500;
+  font-weight: 600;
 }
-.ay-root h1 { letter-spacing: -0.028em; line-height: 1.04; }
-.ay-root h2 { letter-spacing: -0.02em; line-height: 1.12; }
-.ay-root h3 { letter-spacing: -0.012em; line-height: 1.25; }
-.ay-root h4 { letter-spacing: 0; font-family: var(--font-ay-ui); font-weight: 600; }
-.ay-root .font-semibold:is(h1, h2, h3) { font-weight: 500; }
-.ay-italic-accent { font-family: var(--font-ay-head); font-style: italic; font-weight: 400; color: var(--color-ay-champagne); }
+.ay-root h1 { letter-spacing: -0.032em; line-height: 1.02; }
+.ay-root h2 { letter-spacing: -0.026em; line-height: 1.1; }
+.ay-root h3 { letter-spacing: -0.015em; line-height: 1.25; }
+.ay-root h4 { letter-spacing: -0.01em; font-family: var(--font-ay-ui); font-weight: 600; }
+.ay-root .font-semibold:is(h1, h2, h3) { font-weight: 600; }
+/* Second line of a headline: same face, quieter tone (no decorative italic). */
+.ay-italic-accent { font-style: normal; color: color-mix(in srgb, currentColor 58%, var(--color-ay-ivory)); }
+.ay-cinema .ay-italic-accent { color: #c9d1dd; }
 
 /* Subtle paper grain on the page background (static: no motion). */
 .ay-root::before {
@@ -1523,6 +1527,10 @@ body:has(.ay-root) { background: #fbf9f5; }
 /* Light variant, for ivory sections. */
 .ay-segmented-light { background: rgb(15 31 58 / 0.06); box-shadow: inset 0 0 0 1px rgb(15 31 58 / 0.08); }
 .ay-segmented-light button { color: #3d4a60; }
+@media (max-width: 479px) {
+  .ay-segmented-light { display: flex; width: 100%; }
+  .ay-segmented-light button { flex: 1; padding: 0 0.5rem; }
+}
 @media (hover: hover) and (pointer: fine) {
   .ay-segmented-light button[aria-pressed="false"]:hover { color: #0f1f3a; background: rgb(15 31 58 / 0.06); }
 }
@@ -1607,8 +1615,13 @@ div.ay-frame-media > span { display: none; }
 .ay-cinema-scrim {
   position: absolute; inset: 0;
   background:
-    linear-gradient(180deg, rgb(8 17 31 / 0.55) 0%, rgb(8 17 31 / 0.05) 30%, rgb(8 17 31 / 0.25) 55%, rgb(8 17 31 / 0.88) 100%),
-    linear-gradient(90deg, rgb(8 17 31 / 0.55) 0%, rgb(8 17 31 / 0) 60%);
+    linear-gradient(180deg, rgb(8 17 31 / 0.6) 0%, rgb(8 17 31 / 0.1) 28%, rgb(8 17 31 / 0.35) 55%, rgb(8 17 31 / 0.92) 100%),
+    linear-gradient(90deg, rgb(8 17 31 / 0.78) 0%, rgb(8 17 31 / 0.45) 45%, rgb(8 17 31 / 0) 75%);
+}
+@media (max-width: 639px) {
+  .ay-cinema-scrim {
+    background: linear-gradient(180deg, rgb(8 17 31 / 0.62) 0%, rgb(8 17 31 / 0.5) 35%, rgb(8 17 31 / 0.7) 60%, rgb(8 17 31 / 0.94) 100%);
+  }
 }
 .ay-chapter-fill { transform: scaleX(0); }
 .ay-chapter-done { transform: scaleX(1); }

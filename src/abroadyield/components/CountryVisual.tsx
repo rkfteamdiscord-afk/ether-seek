@@ -74,7 +74,7 @@ export function CountryVisual({ country, className }: { country: Country; classN
         </g>
         <path d="M0,139.5 H320" stroke="#e6d6b8" opacity="0.4" />
       </svg>
-      <span className="absolute top-3 left-4 font-[family-name:var(--font-ay-head)] text-2xl font-medium tracking-wide text-white/90 italic">
+      <span className="absolute top-3 left-4 font-[family-name:var(--font-ay-head)] text-xl font-semibold tracking-tight text-white/90">
         {country.id === "ae" ? "Dubai" : country.name.replace(/\s*\(.*\)$/, "")}
       </span>
     </div>
