@@ -327,7 +327,7 @@ function ScoreMeter({ score }: { score: number }) {
           cy="28"
           r={r}
           fill="none"
-          stroke="#12284b"
+          stroke="#0f1f3a"
           strokeWidth="6"
           strokeLinecap="round"
           strokeDasharray={c}

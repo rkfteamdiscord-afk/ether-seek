@@ -20,7 +20,7 @@ export function CountryVisual({ country, className }: { country: Country; classN
       />
     );
   }
-  const [from, to] = TINTS[country.region] ?? ["#12284b", "#1d3a66"];
+  const [from, to] = TINTS[country.region] ?? ["#0f1f3a", "#1d3a66"];
   const code = country.id.toUpperCase();
   return (
     <div

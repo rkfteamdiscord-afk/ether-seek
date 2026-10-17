@@ -14,11 +14,11 @@ export function Container({ className, children }: { className?: string; childre
 }
 
 const buttonBase =
-  "ay-btn-arrow inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-[color,background-color,box-shadow,transform] duration-200 active:scale-[0.98] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60";
+  "ay-btn ay-btn-arrow inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2.5 text-base font-semibold tracking-[0.005em] disabled:cursor-not-allowed disabled:opacity-60";
 const buttonVariants = {
-  primary: "bg-ay-navy text-white hover:bg-ay-navy-2 shadow-sm",
-  secondary: "border border-ay-navy/25 bg-white text-ay-navy hover:bg-ay-sky",
-  sand: "bg-ay-sand text-ay-ink hover:bg-ay-sand-2",
+  primary: "ay-btn-primary text-white",
+  secondary: "ay-btn-secondary border border-ay-navy/20 bg-white/70 text-ay-navy hover:bg-white",
+  sand: "ay-btn-champagne text-ay-ink",
   ghost: "text-ay-navy hover:bg-ay-sky",
   danger: "border border-ay-bad/30 bg-white text-ay-bad hover:bg-ay-bad-bg",
 };
@@ -48,7 +48,7 @@ export function Card({
   return (
     <Tag
       className={cn(
-        "ay-shadow rounded-2xl border border-ay-line bg-white p-5 shadow-[0_1px_2px_rgb(11_27_51/0.04),0_8px_24px_-12px_rgb(11_27_51/0.12)] sm:p-6",
+        "ay-shadow ay-card rounded-[1.25rem] border border-ay-line bg-white p-5 sm:p-7",
         className,
       )}
     >

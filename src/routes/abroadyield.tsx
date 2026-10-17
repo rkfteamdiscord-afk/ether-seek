@@ -19,12 +19,12 @@ export const Route = createFileRoute("/abroadyield")({
           "After-tax returns, financing options and risks for property abroad, built for US taxpayers.",
       },
       { property: "og:type", content: "website" },
-      { name: "theme-color", content: "#12284b" },
+      { name: "theme-color", content: "#0f1f3a" },
     ],
     links: [
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Source+Sans+3:wght@400;500;600;700&display=swap",
       },
     ],
   }),

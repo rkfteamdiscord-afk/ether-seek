@@ -97,7 +97,7 @@ export function UnlockPanel({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-ay-ink/40 p-0 sm:items-center sm:p-4"
+      className="ay-scrim fixed inset-0 z-50 flex items-end justify-center bg-ay-ink/45 p-0 sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
@@ -106,7 +106,7 @@ export function UnlockPanel({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="ay-fade-in max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl outline-none sm:rounded-2xl"
+        className="ay-sheet max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-[1.5rem] bg-white p-6 shadow-2xl outline-none sm:rounded-[1.5rem] sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">

@@ -16,7 +16,7 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <svg aria-hidden viewBox="0 0 32 32" className="size-8">
-        <circle cx="16" cy="16" r="15" fill="#12284b" />
+        <circle cx="16" cy="16" r="15" fill="#0f1f3a" />
         <path
           d="M4.5 18.5c4-1 7-4.5 11.5-4.5s7.5 3 11.5 2"
           stroke="#eadfcb"

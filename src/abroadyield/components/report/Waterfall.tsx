@@ -16,7 +16,7 @@ import { prefersReducedMotion } from "../motion";
 const TAX_KEYS = new Set(["localTax", "federal", "state"]);
 
 function colorFor(step: WaterfallStep) {
-  if (step.kind !== "deduction") return step.value >= 0 ? "#12284b" : "#a3261b";
+  if (step.kind !== "deduction") return step.value >= 0 ? "#0f1f3a" : "#a3261b";
   if (TAX_KEYS.has(step.key)) return "#b5623c";
   if (step.key === "debt") return "#5b6b85";
   return "#c9a66b";
@@ -115,7 +115,7 @@ export function Waterfall({ steps, title }: { steps: WaterfallStep[]; title: str
         </ResponsiveContainer>
       </div>
       <ul className="mt-4 flex flex-wrap gap-4 text-sm text-ay-slate" aria-hidden>
-        <Legend color="#12284b" label="Income and totals" />
+        <Legend color="#0f1f3a" label="Income and totals" />
         <Legend color="#c9a66b" label="Running costs" />
         <Legend color="#b5623c" label="Taxes" />
         <Legend color="#5b6b85" label="Mortgage" />

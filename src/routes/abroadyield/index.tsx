@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
-import { CountUp, Reveal, RouteMap } from "@/abroadyield/components/motion";
+import { CountUp, Reveal, RouteMap, Spotlight } from "@/abroadyield/components/motion";
 import {
   Card,
   Container,
@@ -143,20 +143,38 @@ function Landing() {
 
       {/* Hero */}
       <section className="ay-aurora overflow-hidden">
+        <Spotlight />
+        <div aria-hidden className="ay-hero-grain" />
         <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-          <div className="ay-fade-in">
+          <div>
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ay-sand-2">
               For US citizens and green card holders
             </p>
-            <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">
-              Where should you invest abroad?{" "}
-              <span className="text-ay-sand-2">Find out what you'll really earn.</span>
+            <h1 className="mt-4 text-[2.6rem] font-medium text-white sm:text-6xl lg:text-[4.1rem]">
+              <span
+                className="ay-rise block"
+                style={{ "--ay-delay": "40ms" } as React.CSSProperties}
+              >
+                Where should you invest abroad?
+              </span>
+              <span
+                className="ay-rise ay-italic-accent mt-1 block"
+                style={{ "--ay-delay": "140ms" } as React.CSSProperties}
+              >
+                Find out what you'll really earn.
+              </span>
             </h1>
-            <p className="mt-5 max-w-xl text-xl text-white/80">
+            <p
+              className="ay-rise mt-6 max-w-xl text-xl text-white/75"
+              style={{ "--ay-delay": "240ms" } as React.CSSProperties}
+            >
               Free country ranking in 3 minutes. After-tax returns, financing options and risks —
               built for US taxpayers.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div
+              className="ay-rise mt-9 flex flex-col gap-3 sm:flex-row"
+              style={{ "--ay-delay": "320ms" } as React.CSSProperties}
+            >
               <Link
                 to="/abroadyield/start"
                 className={buttonClass("sand", "ay-shine ay-btn-arrow px-7 text-lg")}
@@ -166,12 +184,15 @@ function Landing() {
               </Link>
               <a
                 href="#sample-report"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/30 px-7 py-2.5 text-lg font-semibold text-white transition-colors duration-200 hover:bg-white/10"
+                className="ay-btn inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-2.5 text-lg font-semibold text-white backdrop-blur-sm hover:bg-white/12"
               >
                 See a sample report
               </a>
             </div>
-            <ul className="mt-8 grid gap-2 text-white/80 sm:grid-cols-2">
+            <ul
+              className="ay-rise mt-9 grid gap-2 text-white/75 sm:grid-cols-2"
+              style={{ "--ay-delay": "400ms" } as React.CSSProperties}
+            >
               {[
                 "No credit card for the ranking",
                 `${published.length} countries compared`,
@@ -185,7 +206,7 @@ function Landing() {
             </ul>
           </div>
           {example ? (
-            <Card className="ay-fade-in relative text-ay-ink shadow-2xl shadow-black/30">
+            <Card className="ay-materialize relative text-ay-ink shadow-2xl shadow-black/40">
               <p className="text-sm font-semibold uppercase tracking-wider text-ay-gold">
                 Example · {example.country.name}
               </p>
@@ -323,7 +344,7 @@ function Landing() {
       <section
         id="how-it-works"
         aria-labelledby="how-title"
-        className="scroll-mt-20 border-y border-ay-line bg-ay-sand/50 py-20"
+        className="ay-band-sand scroll-mt-20 border-y border-ay-line py-24"
       >
         <Container>
           <SectionHeading id="how-title" eyebrow="How it works" title="Three steps, no jargon" />
@@ -433,7 +454,7 @@ function Landing() {
       {/* Countries */}
       <section
         aria-labelledby="countries-title"
-        className="border-y border-ay-line bg-ay-mist py-20"
+        className="ay-band-sand border-y border-ay-line py-24"
       >
         <Container>
           <SectionHeading

@@ -1023,49 +1023,54 @@ html { scroll-behavior: smooth; }
    Scoped to .ay-root so the studio site above keeps its own look.
    --------------------------------------------------------------------------- */
 @theme {
-  --color-ay-ink: #0b1b33;
-  --color-ay-navy: #12284b;
-  --color-ay-navy-2: #1d3a66;
-  --color-ay-sky: #e8eef7;
-  --color-ay-sand: #f5efe4;
-  --color-ay-sand-2: #eadfcb;
-  --color-ay-gold: #8a5a12;
+  --color-ay-ink: #0b1424;
+  --color-ay-navy: #0f1f3a;
+  --color-ay-navy-2: #1d3557;
+  --color-ay-sky: #eef1f6;
+  --color-ay-sand: #f4ede1;
+  --color-ay-sand-2: #e6d6b8;
+  --color-ay-gold: #8a6224;
+  --color-ay-champagne: #c9a66b;
+  --color-ay-ivory: #fbf9f5;
   --color-ay-paper: #ffffff;
-  --color-ay-mist: #f7f8fa;
-  --color-ay-line: #dfe3ea;
-  --color-ay-slate: #4a5568;
+  --color-ay-mist: #f6f4ef;
+  --color-ay-line: #e5e0d6;
+  --color-ay-slate: #4b5363;
   --color-ay-good: #1d6b45;
   --color-ay-good-bg: #e6f4ec;
   --color-ay-warn: #8a4b00;
   --color-ay-warn-bg: #fff4e0;
   --color-ay-bad: #a3261b;
   --color-ay-bad-bg: #fdecea;
-  --font-ay-head: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-ay-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ay-ui: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
   --font-ay-body: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
 }
 
 body:has(.ay-root) {
   background: #ffffff;
-  color: #0b1b33;
+  color: #0b1424;
   color-scheme: light;
 }
 
 .ay-root {
   color-scheme: light;
   --background: #ffffff;
-  --foreground: #0b1b33;
+  --foreground: #0b1424;
   --card: #ffffff;
-  --card-foreground: #0b1b33;
+  --card-foreground: #0b1424;
   --popover: #ffffff;
-  --popover-foreground: #0b1b33;
-  --primary: #12284b;
+  --popover-foreground: #0b1424;
+  --primary: #0f1f3a;
   --primary-foreground: #ffffff;
   --secondary: #f5efe4;
-  --secondary-foreground: #0b1b33;
+  --secondary-foreground: #0b1424;
   --muted: #f7f8fa;
   --muted-foreground: #4a5568;
   --accent: #e8eef7;
-  --accent-foreground: #0b1b33;
+  --accent-foreground: #0b1424;
   --border: #dfe3ea;
   --input: #c9d0db;
   --ring: #1d3a66;
@@ -1073,7 +1078,7 @@ body:has(.ay-root) {
   font-size: 1.0625rem;
   line-height: 1.6;
   background: #ffffff;
-  color: #0b1b33;
+  color: #0b1424;
 }
 .ay-root :is(h1, h2, h3, h4) {
   font-family: var(--font-ay-head);
@@ -1102,7 +1107,7 @@ body:has(.ay-root) {
   pointer-events: none;
 }
 .ay-map-bg {
-  background-image: radial-gradient(circle at 1px 1px, rgb(18 40 75 / 0.12) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgb(15 31 58 / 0.12) 1px, transparent 0);
   background-size: 18px 18px;
 }
 .ay-prose h2 { font-size: 1.35rem; font-weight: 600; margin: 1.6em 0 0.5em; }
@@ -1187,7 +1192,7 @@ body:has(.ay-root) {
 
 /* Cards and buttons. */
 .ay-lift { transition: transform 220ms ease-out, box-shadow 220ms ease-out, border-color 220ms ease-out; }
-.ay-lift:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgb(11 27 51 / 0.05), 0 18px 36px -18px rgb(11 27 51 / 0.32); }
+.ay-lift:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgb(11 20 36 / 0.05), 0 18px 36px -18px rgb(11 20 36 / 0.32); }
 .ay-btn-arrow svg:last-child { transition: transform 200ms ease-out; }
 .ay-btn-arrow:hover svg:last-child { transform: translateX(3px); }
 .ay-shine { position: relative; overflow: hidden; }
@@ -1203,12 +1208,12 @@ body:has(.ay-root) {
 .ay-glow-border {
   background:
     linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(135deg, #12284b, #c9a66b 55%, #12284b) border-box;
+    linear-gradient(135deg, #0f1f3a, #c9a66b 55%, #0f1f3a) border-box;
   border: 2px solid transparent;
 }
 
 /* Header gains a soft shadow once the page scrolls. */
-.ay-header[data-scrolled="true"] { box-shadow: 0 6px 24px -16px rgb(11 27 51 / 0.45); }
+.ay-header[data-scrolled="true"] { box-shadow: 0 6px 24px -16px rgb(11 20 36 / 0.45); }
 
 /* Questionnaire step and choice feedback. */
 .ay-step-in { animation: ay-step 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
@@ -1235,7 +1240,7 @@ body:has(.ay-root) {
   .ay-ring-progress { transition: none; }
 }
 @media print {
-  .ay-aurora { background: #fff; color: #0b1b33; }
+  .ay-aurora { background: #fff; color: #0b1424; }
   .ay-aurora::before, .ay-aurora::after, .ay-route-map { display: none; }
 }
 
@@ -1251,8 +1256,195 @@ body:has(.ay-root) {
   width: 3rem;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #12284b, #c9a66b);
+  background: linear-gradient(90deg, #0f1f3a, #c9a66b);
 }
 @media print {
   .ay-root #ay-main { background: #fff; }
+}
+
+/* =====================================================================
+   AbroadYield — quiet luxury layer (apple-design + emil-design-eng)
+   - Custom ease-out curves, press feedback on :active, hover only on fine pointers
+   - Translucent materials with reduced-transparency / high-contrast fallbacks
+   - Size-specific tracking and leading for the Fraunces display face
+   ===================================================================== */
+.ay-root {
+  background: var(--color-ay-ivory);
+  --background: #fbf9f5;
+  --card: #ffffff;
+  --border: #e5e0d6;
+  --primary: #0f1f3a;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body:has(.ay-root) { background: #fbf9f5; }
+
+/* Type: tracking tightens as size grows; leading tightens too (Apple, "Details of UI Typography"). */
+.ay-root :is(h1, h2, h3, h4) {
+  font-family: var(--font-ay-head);
+  font-optical-sizing: auto;
+  font-weight: 500;
+}
+.ay-root h1 { letter-spacing: -0.028em; line-height: 1.04; }
+.ay-root h2 { letter-spacing: -0.02em; line-height: 1.12; }
+.ay-root h3 { letter-spacing: -0.012em; line-height: 1.25; }
+.ay-root h4 { letter-spacing: 0; font-family: var(--font-ay-ui); font-weight: 600; }
+.ay-root .font-semibold:is(h1, h2, h3) { font-weight: 500; }
+.ay-italic-accent { font-family: var(--font-ay-head); font-style: italic; font-weight: 400; color: var(--color-ay-champagne); }
+
+/* Subtle paper grain on the page background (static: no motion). */
+.ay-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ay-root > * { position: relative; z-index: 1; }
+.ay-root .ay-header { z-index: 40; }
+
+/* Buttons: instant press feedback; fast, strong ease-out. */
+.ay-btn {
+  transition:
+    transform 160ms var(--ease-out-strong),
+    box-shadow 220ms var(--ease-out-strong),
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease;
+  will-change: transform;
+}
+.ay-btn:active:not(:disabled) { transform: scale(0.97); }
+.ay-btn-primary {
+  background: linear-gradient(180deg, #1d3557 0%, #0f1f3a 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 1px 2px rgb(11 20 36 / 0.2),
+    0 8px 22px -12px rgb(11 20 36 / 0.6);
+}
+.ay-btn-champagne {
+  background: linear-gradient(180deg, #e9d7b2 0%, #c9a66b 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 1px 2px rgb(11 20 36 / 0.18),
+    0 10px 26px -12px rgb(201 166 107 / 0.7);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ay-btn-primary:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 2px 4px rgb(11 20 36 / 0.2), 0 14px 30px -12px rgb(11 20 36 / 0.65); }
+  .ay-btn-champagne:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6), 0 2px 4px rgb(11 20 36 / 0.18), 0 16px 34px -12px rgb(201 166 107 / 0.85); }
+}
+
+/* Cards: hairline, long soft shadow; champagne hairline appears on hover (fine pointers only). */
+.ay-card {
+  box-shadow: 0 1px 1px rgb(11 20 36 / 0.03), 0 12px 32px -18px rgb(11 20 36 / 0.18);
+}
+.ay-lift {
+  transition: transform 260ms var(--ease-out-strong), box-shadow 260ms var(--ease-out-strong), border-color 260ms ease;
+}
+.ay-lift:hover { transform: none; box-shadow: inherit; }
+@media (hover: hover) and (pointer: fine) {
+  .ay-lift:hover {
+    transform: translateY(-4px);
+    border-color: rgb(201 166 107 / 0.55);
+    box-shadow: 0 2px 4px rgb(11 20 36 / 0.04), 0 26px 50px -24px rgb(11 20 36 / 0.32);
+  }
+}
+.ay-lift:active { transform: scale(0.99); transition-duration: 120ms; }
+
+/* Header: translucent material; a soft scroll-edge shadow instead of a hard divider. */
+.ay-root .ay-header {
+  background: rgb(251 249 245 / 0.72);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom-color: transparent;
+}
+.ay-root .ay-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -14px 0;
+  height: 14px;
+  pointer-events: none;
+  background: linear-gradient(rgb(11 20 36 / 0.08), transparent);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+.ay-root .ay-header[data-scrolled="true"] { box-shadow: none; }
+.ay-root .ay-header[data-scrolled="true"]::after { opacity: 1; }
+
+/* Hero: midnight base, static light pools, and a pointer-following spotlight (spring-driven in JS). */
+.ay-aurora { background: radial-gradient(120% 90% at 50% 0%, #16294a 0%, #0b1730 55%, #08111f 100%); }
+.ay-aurora::before {
+  background:
+    radial-gradient(38% 50% at 80% 18%, rgb(201 166 107 / 0.22), transparent 70%),
+    radial-gradient(40% 55% at 10% 90%, rgb(47 90 143 / 0.35), transparent 70%);
+  animation: none;
+}
+.ay-aurora::after { display: none; }
+.ay-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(520px circle at var(--x, 70%) var(--y, 30%), rgb(233 215 178 / 0.13), transparent 60%);
+}
+.ay-hero-grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The hero example card "materializes": blur + slight scale, never from scale(0). */
+.ay-materialize { animation: ay-materialize 700ms var(--ease-out-strong) both; animation-delay: var(--ay-delay, 120ms); }
+@keyframes ay-materialize {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+/* Headline lines rise in sequence (short stagger, marketing moment only). */
+.ay-rise { animation: ay-rise 650ms var(--ease-out-strong) both; animation-delay: var(--ay-delay, 0ms); }
+@keyframes ay-rise { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } }
+
+/* Reveals use the strong ease-out curve. */
+.ay-revealed { transition: opacity 560ms var(--ease-out-strong), transform 560ms var(--ease-out-strong); }
+
+/* Dialogs: scrim dims the page; the sheet materializes from the centre. */
+.ay-scrim { animation: ay-scrim 220ms ease-out both; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@keyframes ay-scrim { from { opacity: 0; } }
+.ay-sheet { animation: ay-materialize 320ms var(--ease-out-strong) both; animation-delay: 0ms; }
+
+/* Choices and chips press like real buttons. */
+.ay-root label:has(> input[type="radio"]),
+.ay-root label:has(> input[type="checkbox"]) { transition: transform 160ms var(--ease-out-strong), border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease; }
+.ay-root label:has(> input[type="radio"]):active,
+.ay-root label:has(> input[type="checkbox"]):active { transform: scale(0.985); }
+
+/* Inputs: calmer focus ring in champagne + navy. */
+.ay-root input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+.ay-root select:focus,
+.ay-root textarea:focus { box-shadow: 0 0 0 4px rgb(201 166 107 / 0.25); border-color: #1d3557; }
+
+/* Section backgrounds: ivory and warm sand bands. */
+.ay-band-sand { background: linear-gradient(180deg, #f4ede1, #f7f2e9); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ay-materialize, .ay-rise, .ay-sheet, .ay-scrim { animation: ay-fade-only 200ms ease both; }
+  .ay-btn:active:not(:disabled), .ay-lift:active, .ay-root label:active { transform: none; }
+  .ay-spotlight { display: none; }
+}
+@keyframes ay-fade-only { from { opacity: 0; } }
+@media (prefers-reduced-transparency: reduce) {
+  .ay-root .ay-header { background: #fbf9f5; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .ay-scrim { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .ay-root .ay-header { background: #ffffff; border-bottom-color: #0b1424; }
+  .ay-card { border-color: #4b5363; }
+  .ay-root::before { display: none; }
+}
+@media print {
+  .ay-root::before, .ay-spotlight, .ay-hero-grain { display: none; }
 }

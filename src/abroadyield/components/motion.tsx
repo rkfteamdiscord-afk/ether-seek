@@ -232,3 +232,54 @@ export function RouteMap({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * Decorative spotlight that follows a fine pointer through a critically damped spring
+ * (Apple: damping 1.0, response ≈ 0.4s). It starts from the current on-screen position, so it
+ * can be redirected at any moment, and it writes only to its own element's style.
+ */
+export function Spotlight({ className }: { className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    const host = el?.parentElement;
+    if (!el || !host || prefersReducedMotion()) return;
+    if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return;
+    const response = 0.4;
+    const omega = (2 * Math.PI) / response;
+    const pos = { x: host.clientWidth * 0.7, y: host.clientHeight * 0.3 };
+    const vel = { x: 0, y: 0 };
+    const target = { ...pos };
+    let frame = 0;
+    let last = 0;
+    const step = (now: number) => {
+      const dt = Math.min(0.032, last ? (now - last) / 1000 : 0.016);
+      last = now;
+      for (const axis of ["x", "y"] as const) {
+        // x'' = −ω²(x − target) − 2ω·x'  (critically damped: no overshoot)
+        const acc = -omega * omega * (pos[axis] - target[axis]) - 2 * omega * vel[axis];
+        vel[axis] += acc * dt;
+        pos[axis] += vel[axis] * dt;
+      }
+      el.style.setProperty("--x", `${pos.x}px`);
+      el.style.setProperty("--y", `${pos.y}px`);
+      const settled =
+        Math.abs(pos.x - target.x) + Math.abs(pos.y - target.y) < 0.5 &&
+        Math.abs(vel.x) + Math.abs(vel.y) < 0.5;
+      frame = settled ? 0 : requestAnimationFrame(step);
+      if (settled) last = 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      const rect = host.getBoundingClientRect();
+      target.x = e.clientX - rect.left;
+      target.y = e.clientY - rect.top;
+      if (!frame) frame = requestAnimationFrame(step);
+    };
+    host.addEventListener("pointermove", onMove);
+    return () => {
+      host.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  return <div ref={ref} aria-hidden className={cn("ay-spotlight", className)} />;
+}
