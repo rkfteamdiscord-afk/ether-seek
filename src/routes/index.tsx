@@ -27,6 +27,7 @@ import { PumpkinDefs, RealPumpkin } from "@/components/RealPumpkin";
 import { ZombieHand } from "@/components/Zombies";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
+import { StudioVideo } from "@/components/StudioVideo";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
@@ -313,6 +314,17 @@ function Portfolio() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="video" className="halloween-stage relative py-20 lg:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1fr_auto] lg:px-10">
+          <div className="rise-in max-w-xl">
+            <p className="eyebrow">Le studio en 30 secondes</p>
+            <h2 className="moon-text mt-5 font-display text-4xl font-bold sm:text-6xl">Tout Ȥrk, en une vidéo.</h2>
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">Sites web, applications mobiles, bots et cybersécurité : un aperçu rapide de ce que je crée, en format vertical.</p>
+          </div>
+          <StudioVideo />
         </div>
       </section>
 
