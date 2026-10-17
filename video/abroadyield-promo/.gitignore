@@ -24,3 +24,7 @@ public/photos/la-serrana.jpg
 public/photos/punta-cana.jpg
 public/photos/krabi.jpg
 public/photos/kyoto.jpg
+
+# Launch film: generated soundtrack and timeline (scripts/soundtrack-launch.py, timeline-launch.ts)
+public/launch/soundtrack-launch.wav
+public/launch/timeline.json

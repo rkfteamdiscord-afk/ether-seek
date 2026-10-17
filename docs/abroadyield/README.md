@@ -46,6 +46,11 @@ aerial photos) and `python3 scripts/soundtrack45.py`. Optional narration: with
 `ELEVENLABS_API_KEY` set (and `api.elevenlabs.io` reachable), run
 `node --experimental-strip-types scripts/voiceover45.ts`, then render again.
 
+A third cut, the ~76-second launch film (`AbroadYieldLaunch`, sources in `src/launch/`), presents
+every feature to an English voice-over; its script, on-screen phrases and render steps are in
+`video/abroadyield-promo/LAUNCH-SCRIPT.md`. Each shot is timed to its narration line, and the
+music (the 45-second track, re-cut by `scripts/soundtrack-launch.py`) follows the edit.
+
 ## Two modes
 
 **Demo mode (default, no configuration).** Everything — accounts, purchases, saved reports,
