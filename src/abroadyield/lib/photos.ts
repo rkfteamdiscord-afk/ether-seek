@@ -22,7 +22,15 @@ const PHOTOS: Record<string, { file: string; shows: string }> = {
   jp: { file: "kyoto", shows: "Yasaka Pagoda, Kyoto" },
 };
 
-export function bundledPhoto(countryId: string): { src: string; shows: string } | undefined {
+export function bundledPhoto(
+  countryId: string,
+): { src: string; thumb: string; shows: string } | undefined {
   const photo = PHOTOS[countryId];
-  return photo ? { src: `/abroadyield/photos/${photo.file}.jpg`, shows: photo.shows } : undefined;
+  return photo
+    ? {
+        src: `/abroadyield/photos/${photo.file}.jpg`, // 2000px
+        thumb: `/abroadyield/photos/thumbs/${photo.file}.jpg`, // 800px, for cards
+        shows: photo.shows,
+      }
+    : undefined;
 }

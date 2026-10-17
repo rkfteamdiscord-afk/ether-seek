@@ -538,6 +538,42 @@ export function SettingsAdmin() {
         </div>
       </AdminSection>
 
+      <AdminSection title="Landing page figures">
+        <p className="mb-4 text-sm text-ay-slate">
+          The four numbers under the hero. Only publish figures you can prove (customers served,
+          reports sold, savings found): invented statistics are misleading advertising under FTC
+          rules. Numbers count up on screen; text such as “Free” is shown as is.
+        </p>
+        <div className="grid gap-4 md:grid-cols-2">
+          {draft.homeStats.map((stat, i) => (
+            <div key={i} className="grid grid-cols-[7rem_1fr] gap-3">
+              <AField label={`Figure ${i + 1}`}>
+                <TextIn
+                  value={stat.value}
+                  onChange={(v) =>
+                    setDraft({
+                      ...draft,
+                      homeStats: draft.homeStats.map((s, j) => (j === i ? { ...s, value: v } : s)),
+                    })
+                  }
+                />
+              </AField>
+              <AField label="Label">
+                <TextIn
+                  value={stat.label}
+                  onChange={(v) =>
+                    setDraft({
+                      ...draft,
+                      homeStats: draft.homeStats.map((s, j) => (j === i ? { ...s, label: v } : s)),
+                    })
+                  }
+                />
+              </AField>
+            </div>
+          ))}
+        </div>
+      </AdminSection>
+
       <div className="flex items-center gap-3">
         <Button disabled={!dirty} onClick={() => void save("config", draft)}>
           Save settings

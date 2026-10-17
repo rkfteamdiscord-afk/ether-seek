@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Pause, Play } from "lucide-react";
+import { ArrowRight, ChevronRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { Country } from "../types";
@@ -84,6 +84,11 @@ export function CinematicHero({
       <div aria-hidden className="absolute inset-0 -z-10">
         {slides.map((slide, i) => {
           const active = i === index;
+          // Only the current photo and its neighbours are mounted, so 17 destinations never
+          // download at once.
+          const n = slides.length;
+          const near = active || i === (index + 1) % n || i === (index - 1 + n) % n;
+          if (!near) return null;
           return (
             <div
               key={slide.country.id}
@@ -104,7 +109,6 @@ export function CinematicHero({
                   className="ay-frame-media"
                   decoding="async"
                   fetchPriority={i === 0 ? "high" : "low"}
-                  loading={i === 0 ? "eager" : "lazy"}
                   onError={() => setFailed((f) => ({ ...f, [slide.photo]: true }))}
                 />
               )}
@@ -135,7 +139,7 @@ export function CinematicHero({
 
         {/* Caption + chapter bar */}
         {current ? (
-          <div className="mt-10 grid gap-4 border-t border-white/15 pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div className="mt-10 grid gap-4 border-t border-white/15 pt-5 lg:grid-cols-[1fr_auto] lg:items-end">
             <p aria-live={running ? "off" : "polite"} className="text-white/85">
               <span className="font-[family-name:var(--font-ay-head)] text-2xl font-semibold tracking-tight text-white">
                 {current.place}
@@ -151,7 +155,18 @@ export function CinematicHero({
               </span>
             </p>
             <div className="flex items-center gap-3">
-              <ol className="flex gap-1.5" aria-label="Choose a destination">
+              <p className="text-sm font-semibold text-white/80 tabular-nums sm:hidden" aria-hidden>
+                {index + 1} / {slides.length}
+              </p>
+              <button
+                type="button"
+                onClick={() => setIndex((i) => (i + 1) % slides.length)}
+                aria-label="Next destination"
+                className="ay-btn inline-flex size-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-md sm:hidden"
+              >
+                <ChevronRight aria-hidden className="size-5" />
+              </button>
+              <ol className="hidden flex-wrap gap-1 sm:flex" aria-label="Choose a destination">
                 {slides.map((slide, i) => (
                   <li key={slide.country.id}>
                     <button
@@ -159,7 +174,7 @@ export function CinematicHero({
                       onClick={() => setIndex(i)}
                       aria-current={i === index}
                       aria-label={`Show ${slide.place}`}
-                      className="group flex h-11 w-9 items-center sm:w-12"
+                      className="group flex h-11 w-5 items-center lg:w-7"
                     >
                       <span className="ay-chapter relative block h-[3px] w-full overflow-hidden rounded-full bg-white/25">
                         <span

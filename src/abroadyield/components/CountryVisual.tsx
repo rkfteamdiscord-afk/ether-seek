@@ -20,23 +20,30 @@ export function CountryVisual({
   country,
   className,
   illustrated = false,
+  sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw",
 }: {
   country: Country;
   className?: string;
+  /** How wide the image is drawn, so phones download the small version. */
+  sizes?: string;
   /** Skip photos (used where a photo has already failed). */
   illustrated?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
   const photo = country.imageUrl
-    ? { src: country.imageUrl, alt: country.imageAlt ?? "" }
+    ? { src: country.imageUrl, srcSet: undefined, alt: country.imageAlt ?? "" }
     : (() => {
         const p = bundledPhoto(country.id);
-        return p ? { src: p.src, alt: p.shows } : undefined;
+        return p
+          ? { src: p.src, srcSet: `${p.thumb} 800w, ${p.src} 2000w`, alt: p.shows }
+          : undefined;
       })();
   if (photo && !failed && !illustrated) {
     return (
       <img
         src={photo.src}
+        srcSet={photo.srcSet}
+        sizes={photo.srcSet ? sizes : undefined}
         alt={photo.alt}
         loading="lazy"
         decoding="async"

@@ -127,7 +127,7 @@ function GuidePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="h-40 sm:h-56">
-        <CountryVisual country={country} />
+        <CountryVisual country={country} sizes="100vw" />
       </div>
       <Container className="py-10 sm:py-14">
         <nav aria-label="Breadcrumb" className="text-sm text-ay-slate">

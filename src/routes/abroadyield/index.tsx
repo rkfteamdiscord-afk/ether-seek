@@ -44,6 +44,21 @@ import { track } from "@/abroadyield/lib/analytics";
 import { useSiteData } from "@/abroadyield/store/hooks";
 import type { Settings } from "@/abroadyield/types";
 
+/** Splits an admin-entered figure ("1,200+", "$0", "4.5x") so its number can count up. */
+function parseStat(raw: string): { value: number; format: (v: number) => string } {
+  const m = /^(\D*?)(\d[\d,]*(?:\.\d+)?)(.*)$/.exec(raw.trim());
+  if (!m) return { value: 0, format: () => raw };
+  const prefix = m[1] ?? "";
+  const num = m[2] ?? "0";
+  const suffix = m[3] ?? "";
+  const decimals = num.includes(".") ? (num.split(".")[1]?.length ?? 0) : 0;
+  return {
+    value: Number(num.replace(/,/g, "")),
+    format: (v) =>
+      `${prefix}${v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}${suffix}`,
+  };
+}
+
 const FAQ = (settings: Settings) => [
   {
     q: "Is this tax advice?",
@@ -115,14 +130,25 @@ function Landing() {
   }, [countries, usTax, exampleId]);
   const heroCtaText = useRef<HTMLParagraphElement>(null);
   const slides = useMemo<Slide[]>(() => {
+    // One city per destination, alternating regions so consecutive frames differ.
     const picks: Array<[string, string]> = [
       ["pt", "pt-lisbon"],
-      ["es", "es-malaga"],
-      ["it", "it-rome"],
-      ["gr", "gr-athens"],
+      ["fr", "fr-paris"],
       ["mx", "mx-playa"],
-      ["cr", "cr-tamarindo"],
+      ["it", "it-rome"],
+      ["jp", "jp-kyoto"],
+      ["gb", "gb-london"],
+      ["es", "es-malaga"],
+      ["do", "do-punta-cana"],
+      ["gr", "gr-athens"],
+      ["hr", "hr-dubrovnik"],
       ["ae", "ae-marina"],
+      ["co", "co-medellin"],
+      ["de", "de-berlin"],
+      ["cr", "cr-tamarindo"],
+      ["th", "th-bangkok"],
+      ["ie", "ie-dublin"],
+      ["pa", "pa-panama-city"],
     ];
     const profile = {
       ...emptyProfile,
@@ -238,7 +264,7 @@ function Landing() {
             <ul className="mt-8 grid gap-2 text-ay-slate sm:grid-cols-2">
               {[
                 "No credit card for the ranking",
-                `${published.length} countries compared`,
+                "Built for all 50 states + DC",
                 "Foreign + US federal + state tax",
                 "Sources and dates on every number",
               ].map((item) => (
@@ -363,7 +389,7 @@ function Landing() {
           <RouteMap className="hidden h-auto w-full opacity-85 sm:block" />
         </Container>
         <div className="ay-marquee mt-2 sm:mt-6">
-          <div className="ay-marquee-track">
+          <div className="ay-marquee-track" style={{ animationDuration: `${slides.length * 7}s` }}>
             {[...slides, ...slides].map((slide, i) => (
               <figure key={`${slide.country.id}-${i}`} className="ay-marquee-card">
                 <CountryVisual country={slide.country} className="ay-marquee-media" />
@@ -386,38 +412,22 @@ function Landing() {
       <section aria-label="AbroadYield in numbers" className="border-b border-ay-line bg-white">
         <Container>
           <dl className="grid grid-cols-2 divide-ay-line py-8 md:grid-cols-4 md:divide-x">
-            {[
-              {
-                value: published.length,
-                label: "countries compared",
-                format: (v: number) => String(Math.round(v)),
-              },
-              {
-                value: cities.length,
-                label: "cities with rents and prices",
-                format: (v: number) => String(Math.round(v)),
-              },
-              {
-                value: 3,
-                label: "tax layers: local, federal, state",
-                format: (v: number) => String(Math.round(v)),
-              },
-              {
-                value: 3,
-                label: "minutes to your free ranking",
-                format: (v: number) => String(Math.round(v)),
-              },
-            ].map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 80} className="px-4 py-3 text-center">
-                <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-[family-name:var(--font-ay-head)] text-4xl font-semibold text-ay-navy">
-                  <CountUp value={stat.value} format={stat.format} />
-                </dd>
-                <dd aria-hidden className="mt-1 text-ay-slate">
-                  {stat.label}
-                </dd>
-              </Reveal>
-            ))}
+            {settings.homeStats
+              .map((stat) => ({
+                label: stat.label,
+                ...parseStat(stat.value),
+              }))
+              .map((stat, i) => (
+                <Reveal key={stat.label} delay={i * 80} className="px-4 py-3 text-center">
+                  <dt className="sr-only">{stat.label}</dt>
+                  <dd className="font-[family-name:var(--font-ay-head)] text-4xl font-semibold text-ay-navy">
+                    <CountUp value={stat.value} format={stat.format} />
+                  </dd>
+                  <dd aria-hidden className="mt-1 text-ay-slate">
+                    {stat.label}
+                  </dd>
+                </Reveal>
+              ))}
           </dl>
         </Container>
       </section>
@@ -589,7 +599,7 @@ function Landing() {
           <SectionHeading
             id="countries-title"
             eyebrow="Destinations"
-            title={`${published.length} countries compared side by side`}
+            title="Where Americans buy abroad"
             intro="Guides are free. Your ranking shows which ones fit you."
           />
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -710,7 +720,7 @@ function Landing() {
                   <span className="ay-italic-accent">before you sign anything.</span>
                 </h2>
                 <p className="mt-5 max-w-xl text-lg text-white/75">
-                  Rank {published.length} destinations for your taxes, budget and lifestyle, then
+                  Rank the top destinations for your taxes, budget and lifestyle, then
                   unlock the full report only if it helps.
                 </p>
               </div>

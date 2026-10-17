@@ -214,6 +214,8 @@ export interface Settings {
   };
   ai: { messagesPerHour: number };
   siteLastUpdated: string;
+  /** The four figures on the landing page. Only publish claims you can substantiate. */
+  homeStats: Array<{ value: string; label: string }>;
 }
 
 export type IncomeBracket = "lt75" | "75to150" | "150to250" | "250to500" | "gt500" | "skip";

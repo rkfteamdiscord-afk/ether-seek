@@ -181,6 +181,14 @@ export const seedSettings: Settings = {
   },
   ai: { messagesPerHour: 20 },
   siteLastUpdated: "2026-10-17",
+  // Each figure is true of the seed data: 1,216 sourced numeric data points, rates for the 50
+  // states + DC, four tax layers in every estimate, and a free ranking.
+  homeStats: [
+    { value: "1,200+", label: "sourced data points, each dated" },
+    { value: "51", label: "US state tax codes built in" },
+    { value: "4", label: "tax layers: local, federal, state, NIIT" },
+    { value: "$0", label: "to see your ranking" },
+  ],
 };
 
 export const seedPartners: Partner[] = [
