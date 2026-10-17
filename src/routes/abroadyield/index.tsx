@@ -720,8 +720,8 @@ function Landing() {
                   <span className="ay-italic-accent">before you sign anything.</span>
                 </h2>
                 <p className="mt-5 max-w-xl text-lg text-white/75">
-                  Rank the top destinations for your taxes, budget and lifestyle, then
-                  unlock the full report only if it helps.
+                  Rank the top destinations for your taxes, budget and lifestyle, then unlock the
+                  full report only if it helps.
                 </p>
               </div>
               <div className="flex flex-col gap-3 lg:items-end">
