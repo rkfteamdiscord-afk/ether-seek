@@ -49,15 +49,27 @@ async function loadSiteData(): Promise<SiteData> {
   ]);
   const settings = config?.find((c): c is Settings => c.id === "settings");
   const usTax = config?.find((c): c is UsTaxParams => c.id === "us_tax");
+  // Destinations seeded after an admin first saved the list are appended (with their cities),
+  // so new seed countries appear without overwriting saved edits. Unpublish to hide one.
+  const savedIds = new Set(countries?.map((c) => c.id));
+  const addedCountries = countries ? SEED.countries.filter((c) => !savedIds.has(c.id)) : [];
+  const addedIds = new Set(addedCountries.map((c) => c.id));
   return {
-    countries: countries ?? SEED.countries,
-    cities: cities ?? SEED.cities,
+    countries: countries ? [...countries, ...addedCountries] : SEED.countries,
+    cities: cities
+      ? [...cities, ...SEED.cities.filter((c) => addedIds.has(c.countryId))]
+      : SEED.cities,
     // New settings fields added in later versions fall back to their seed defaults.
     settings: settings
       ? {
           ...SEED.settings,
           ...settings,
           pricing: { ...SEED.settings.pricing, ...settings.pricing },
+          fx: {
+            ...SEED.settings.fx,
+            ...settings.fx,
+            usdPerUnit: { ...SEED.settings.fx.usdPerUnit, ...settings.fx?.usdPerUnit },
+          },
         }
       : SEED.settings,
     usTax: usTax ?? SEED.usTax,

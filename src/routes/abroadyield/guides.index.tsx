@@ -11,7 +11,7 @@ export const Route = createFileRoute("/abroadyield/guides/")({
       {
         name: "description",
         content:
-          "Free guides for US buyers: ownership rules, closing costs, rental yields, taxes and risks in Portugal, Spain, Italy, Greece, Mexico, Costa Rica and Dubai.",
+          "Free guides for US buyers: ownership rules, closing costs, rental yields, taxes and risks in 17 destinations, from Portugal, Mexico and Costa Rica to France, Japan and Thailand.",
       },
     ],
   }),

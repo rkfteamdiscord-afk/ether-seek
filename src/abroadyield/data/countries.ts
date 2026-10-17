@@ -1,4 +1,5 @@
 import type { City, Country, SectionMeta, Source } from "../types";
+import { moreCities, moreCountries } from "./countries-more";
 
 /**
  * SAMPLE DATA – TO BE VERIFIED.
@@ -61,7 +62,7 @@ const commonRisksMitigation = {
   liquidity: "Assume a resale can take 6–12 months; avoid money you may need at short notice.",
 };
 
-export const seedCountries: Country[] = [
+const coreCountries: Country[] = [
   {
     id: "pt",
     slug: "portugal",
@@ -1177,7 +1178,7 @@ const city = (c: Omit<City, "dataStatus" | "meta">): City => ({
   meta: meta(S.numbeo, S.gpg),
 });
 
-export const seedCities: City[] = [
+const coreCities: City[] = [
   city({
     id: "pt-lisbon",
     countryId: "pt",
@@ -1569,3 +1570,7 @@ export const seedCities: City[] = [
     highlight: "Central, popular with young professionals.",
   }),
 ];
+
+/** All seeded destinations: the original seven plus ten more (countries-more.ts). */
+export const seedCountries: Country[] = [...coreCountries, ...moreCountries];
+export const seedCities: City[] = [...coreCities, ...moreCities];

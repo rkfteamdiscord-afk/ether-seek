@@ -13,6 +13,7 @@ const THEMES: Record<string, { from: string; to: string; art: "europe" | "latam"
   Europe: { from: "#14284a", to: "#2b4f7e", art: "europe" },
   "Latin America": { from: "#123a37", to: "#2a6a5f", art: "latam" },
   "Middle East": { from: "#3b2a12", to: "#8a6224", art: "gulf" },
+  Asia: { from: "#2a1630", to: "#7a3b5a", art: "gulf" },
 };
 
 export function CountryVisual({

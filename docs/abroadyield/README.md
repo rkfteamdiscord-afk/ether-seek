@@ -10,7 +10,7 @@ the existing studio site, which it does not touch.
 | --- | --- |
 | Pages (TanStack Start routes) | `src/routes/abroadyield*.tsx`, `src/routes/abroadyield/` |
 | Calculation engine (pure, unit-tested) | `src/abroadyield/engine/` |
-| Seed data — **SAMPLE DATA – TO BE VERIFIED** | `src/abroadyield/data/` |
+| Seed data — **SAMPLE DATA – TO BE VERIFIED** (17 destinations: `countries.ts` + `countries-more.ts`) | `src/abroadyield/data/` |
 | Storage/auth adapters (demo + Supabase) | `src/abroadyield/store/` |
 | UI components, report, admin | `src/abroadyield/components/` |
 | Report assistant (grounded answers) | `src/abroadyield/lib/assistant.ts` |

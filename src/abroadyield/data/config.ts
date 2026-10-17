@@ -163,13 +163,24 @@ export const seedSettings: Settings = {
     possibleMin: 50,
   },
   fx: {
-    usdPerUnit: { USD: 1, EUR: 1.16, MXN: 0.054, CRC: 0.00198, AED: 0.2723 },
+    usdPerUnit: {
+      USD: 1,
+      EUR: 1.16,
+      MXN: 0.054,
+      CRC: 0.00198,
+      AED: 0.2723,
+      GBP: 1.33,
+      COP: 0.00025,
+      DOP: 0.0162,
+      THB: 0.0305,
+      JPY: 0.0067,
+    },
     sourceUrl: "https://open.er-api.com/v6/latest/USD",
     updatedAt: "2026-10-01",
     sourceLabel: "Sample rates (refresh from the configured source in the admin panel)",
   },
   ai: { messagesPerHour: 20 },
-  siteLastUpdated: "2026-10-01",
+  siteLastUpdated: "2026-10-17",
 };
 
 export const seedPartners: Partner[] = [
