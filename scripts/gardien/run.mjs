@@ -15,12 +15,14 @@ const env = process.env;
 const SITE_URL = env.SITE_URL || "https://www.zrk.lol";
 const REPO = env.GITHUB_REPOSITORY;
 const TOKEN = env.GITHUB_TOKEN;
-// A second key (another Groq account) gives the guardian its own quota, apart from the ghost's.
-const GROQ_KEY = env.GROQ_API_KEY_2 || env.GROQ_API_KEY || "";
+// Every Groq key (one per account) has its own free quota: the guardian uses them in turn.
+const GROQ_ACCOUNTS = [["GROQ_API_KEY_2", env.GROQ_API_KEY_2], ["GROQ_API_KEY", env.GROQ_API_KEY]].filter(([, key], i, all) => key && all.findIndex(([, other]) => other === key) === i);
+const GROQ_KEYS = GROQ_ACCOUNTS.map(([, key]) => key);
+const GROQ_KEY = GROQ_KEYS[0] || "";
 // Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
 const PREFERRED_MODELS = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "qwen/qwen3-32b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.1-8b-instant"];
-let chosenModel = env.GROQ_MODEL || "";
-const exhausted = new Set(); // models whose quota is used up for now
+const blockedUntil = new Map(); // "key#model" → time its quota comes back
+let offeredModels = null; // models Groq still offers, read once per run
 const GITHUB_API = env.GITHUB_API_URL || "https://api.github.com";
 const GROQ_API = env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
 const DRY_RUN = env.GARDIEN_DRY_RUN === "1"; // tout faire sauf publier (pour les tests)
@@ -43,7 +45,7 @@ const MAX_LINES = 20;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const now = () => new Date().toISOString();
-const clean = (text, max = 3500) => String(text ?? "").split(GROQ_KEY || "\u0000").join("[secret]").split(TOKEN || "\u0000").join("[secret]").slice(-max);
+const clean = (text, max = 3500) => [...GROQ_KEYS, TOKEN].filter(Boolean).reduce((out, secret) => out.split(secret).join("[secret]"), String(text ?? "")).slice(-max);
 const encode = (data) => Buffer.from(JSON.stringify(data), "utf8").toString("base64");
 
 async function github(path, options = {}, retry = true) {
@@ -108,41 +110,67 @@ function run(command) {
 
 const verify = () => [run("npx tsc --noEmit -p ."), run("npx vite build"), run("bun test src/lib/seasonal-offer.test.js")];
 
-async function pickModel() {
-  if (chosenModel && !exhausted.has(chosenModel)) return chosenModel;
+async function listModels() {
+  if (env.GROQ_MODEL) return [env.GROQ_MODEL];
+  if (offeredModels) return offeredModels;
   const response = await fetch(`${GROQ_API}/models`, { headers: { authorization: `Bearer ${GROQ_KEY}` }, signal: AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error(`Groq modèles → ${response.status}`);
   const ids = ((await response.json()).data ?? []).map((model) => model.id);
-  const usable = PREFERRED_MODELS.filter((id) => ids.includes(id));
-  chosenModel = usable.find((id) => !exhausted.has(id)) ?? "";
-  if (!chosenModel) throw new Error("aucun modèle Groq disponible");
-  return chosenModel;
+  offeredModels = PREFERRED_MODELS.filter((id) => ids.includes(id));
+  return offeredModels;
 }
 
+/** Seconds Groq asks us to wait, read from its error message ("try again in 12m3.5s") or headers. */
+function retryAfter(response, message) {
+  const match = /try again in (?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/i.exec(message);
+  if (match && (match[1] || match[2] || match[3])) return Number(match[1] ?? 0) * 3600 + Number(match[2] ?? 0) * 60 + Number(match[3] ?? 0);
+  return Number(response.headers.get("retry-after")) || 600;
+}
+
+let lastModelUsed = "";
+const calmUntil = () => Math.min(...[...blockedUntil.values()].filter((until) => until > Date.now()), Date.now() + 10 * 60000);
+
 async function groq(system, user) {
-  if (!GROQ_KEY) return null;
-  if (Date.now() < groqPauseUntil) throw new Error("quota Groq atteint, pause en cours");
-  const MODEL = await pickModel();
-  const response = await fetch(`${GROQ_API}/chat/completions`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${GROQ_KEY}`, "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 900, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
-    signal: AbortSignal.timeout(60000),
-  });
-  if (response.status === 429 || response.status === 400 || response.status === 413) {
-    // Each Groq model has its own free quota: switch to the next one; pause only when all are used up.
-    exhausted.add(MODEL);
-    if (!env.GROQ_MODEL && exhausted.size < 6) {
-      chosenModel = "";
-      try { await pickModel(); return groq(system, user); } catch { /* every model exhausted */ }
+  if (!GROQ_KEYS.length) return null;
+  if (Date.now() < groqPauseUntil) throw new Error(`IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq du jour atteint)`);
+  const models = await listModels();
+  const body = (model) => JSON.stringify({ model, temperature: 0.2, max_tokens: 800, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] });
+  const reasons = [];
+  // Try each model with each key: a quota used up on one account is still free on the other.
+  for (const model of models) {
+    for (const [index, key] of GROQ_KEYS.entries()) {
+      const slot = `${index}#${model}`;
+      if ((blockedUntil.get(slot) ?? 0) > Date.now()) continue;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const response = await fetch(`${GROQ_API}/chat/completions`, { method: "POST", headers: { authorization: `Bearer ${key}`, "content-type": "application/json" }, body: body(model), signal: AbortSignal.timeout(60000) }).catch(() => null);
+        if (!response) { reasons.push(`${model} : réseau`); break; }
+        if (response.ok) {
+          lastModelUsed = `${model} (${GROQ_ACCOUNTS[index][0]})`;
+          const payload = await response.json();
+          return JSON.parse(payload.choices?.[0]?.message?.content ?? "{}");
+        }
+        const message = clean(await response.text().catch(() => ""), 400);
+        if (response.status === 429) {
+          const wait = retryAfter(response, message);
+          // A per-minute limit clears quickly: wait once and retry the same model.
+          if (wait <= 20 && attempt === 0) { await sleep((wait + 1) * 1000); continue; }
+          blockedUntil.set(slot, Date.now() + wait * 1000);
+          reasons.push(`${model} : quota (${Math.ceil(wait / 60)} min)`);
+        } else if (response.status === 413) {
+          reasons.push(`${model} : demande trop longue`); // this model's per-minute limit is too small for this request only
+        } else if (response.status === 400 || response.status === 404) {
+          blockedUntil.set(slot, Date.now() + 6 * 3600000);
+          reasons.push(`${model} : refusé (${response.status})`);
+        } else {
+          reasons.push(`${model} : erreur ${response.status}`);
+        }
+        break;
+      }
     }
-    groqPauseUntil = Date.now() + 10 * 60000;
-    setTimeout(() => exhausted.clear(), 10 * 60000).unref();
-    throw new Error(response.status === 429 ? "quota Groq atteint sur tous les modèles, pause de 10 minutes" : `aucun modèle Groq n’a accepté la demande (${response.status}), pause de 10 minutes`);
   }
-  if (!response.ok) throw new Error(`Groq (${MODEL}) → ${response.status}`);
-  const payload = await response.json();
-  return JSON.parse(payload.choices?.[0]?.message?.content ?? "{}");
+  if (!reasons.length || (reasons.some((reason) => reason.includes("quota")) && reasons.every((reason) => /quota|trop longue|refusé/.test(reason)))) groqPauseUntil = calmUntil();
+  if (!reasons.length) throw new Error(`IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq du jour atteint)`);
+  throw new Error(`aucun modèle Groq disponible (${[...new Set(reasons)].slice(0, 4).join(" ; ")})`);
 }
 
 /** Lines around each TypeScript error, so the AI can see the code it would fix. */
@@ -215,9 +243,13 @@ function themeContext(theme) {
   }
   if (theme === "detail") {
     const css = readFileSync("src/styles.css", "utf8");
-    return `--- fin de src/styles.css\n${css.slice(-2500)}`;
+    return `--- fin de src/styles.css\n${css.slice(-2000)}`;
   }
-  return `--- src/lib/ghost-knowledge.ts\n${readFileSync("src/lib/ghost-knowledge.ts", "utf8")}`;
+  // The ghost's file keeps growing: show a 5 000-character window that moves at each pass.
+  const ghost = readFileSync("src/lib/ghost-knowledge.ts", "utf8");
+  const start = ghost.length <= 5000 ? 0 : (Math.floor(Date.now() / ANALYSE_EVERY) * 3000) % (ghost.length - 4000);
+  const from = ghost.lastIndexOf("\n", start) + 1;
+  return `--- extrait de src/lib/ghost-knowledge.ts\n${ghost.slice(from, from + 5000)}`;
 }
 
 async function deepAnalysis(issue, commentId, state, reason) {
@@ -227,7 +259,7 @@ async function deepAnalysis(issue, commentId, state, reason) {
   try { execSync("git pull --ff-only -q origin main", { stdio: "pipe" }); } catch { /* keep the current copy */ }
   const results = verify();
   const entry = { at: now(), reason, checks: state.checks.slice(-5), results: results.map(({ command, ok }) => ({ command, ok })), pensee: "", constats: [], correction: null, decision: "" };
-  if (!GROQ_KEY) {
+  if (!GROQ_KEYS.length) {
     entry.pensee = "Pas de clé GROQ_API_KEY dans les secrets GitHub : j’ai seulement fait les vérifications automatiques.";
   } else {
     try {
@@ -243,8 +275,9 @@ async function deepAnalysis(issue, commentId, state, reason) {
         `Vérifications du site en ligne : ${JSON.stringify(state.checks.slice(-5))}`,
         ...results.map((result) => `$ ${result.command} → ${result.ok ? "OK" : "ÉCHEC"}\n${result.ok ? "" : result.output}`),
         broken ? errorContext(results) : themeContext(theme),
-        theme === "fantome" ? "" : `--- fiche du site (siteFacts)\n${knowledge.slice(knowledge.indexOf("siteFacts"))}`,
+        theme === "fantome" ? "" : `--- fiche du site (siteFacts)\n${knowledge.slice(knowledge.indexOf("siteFacts")).slice(0, 2500)}`,
       ].join("\n\n"));
+      entry.modele = lastModelUsed;
       entry.pensee = clean(analysis?.pensee, 2500);
       entry.constats = (Array.isArray(analysis?.constats) ? analysis.constats : []).slice(0, 8).map((item) => clean(item, 300));
       const fixes = Array.isArray(analysis?.corrections) ? analysis.corrections : analysis?.correction ? [analysis.correction] : [];
@@ -257,7 +290,7 @@ async function deepAnalysis(issue, commentId, state, reason) {
         entry.correction = entry.corrections[0];
         state.activity = "⚖️ le relecteur vérifie la modification";
         await writeStatus(issue, commentId, state);
-        const review = await groq(reviewerPrompt, `Raison : ${raison}\n\n${fixes.map((fix, i) => `Remplacement ${i + 1} dans ${fix.fichier}\nAvant :\n${fix.chercher}\n\nAprès :\n${fix.remplacer}`).join("\n\n")}\n\nFiche du site :\n${knowledge.slice(knowledge.indexOf("siteFacts"))}`);
+        const review = await groq(reviewerPrompt, `Raison : ${raison}\n\n${fixes.map((fix, i) => `Remplacement ${i + 1} dans ${fix.fichier}\nAvant :\n${fix.chercher}\n\nAprès :\n${fix.remplacer}`).join("\n\n")}\n\nFiche du site :\n${knowledge.slice(knowledge.indexOf("siteFacts")).slice(0, 2500)}`);
         entry.relecture = clean(review?.raison, 600);
         if (review?.approuve !== true) {
           entry.decision = "Modification refusée par le relecteur.";
@@ -288,8 +321,9 @@ async function deepAnalysis(issue, commentId, state, reason) {
         }
       }
     } catch (error) {
-      entry.pensee ||= "Je n’ai pas pu joindre l’IA cette fois-ci.";
-      entry.decision = `Analyse IA interrompue : ${clean(error.message, 200)}`;
+      const paused = error.message.startsWith("IA en pause");
+      entry.pensee ||= paused ? "Le quota gratuit de l’IA est épuisé pour l’instant : j’ai fait les vérifications sans l’IA." : "Je n’ai pas pu joindre l’IA cette fois-ci.";
+      entry.decision = paused ? `${clean(error.message, 200)} ; vérifications faites.` : `Analyse IA interrompue : ${clean(error.message, 300)}`;
     }
   }
   const icon = reason.startsWith("incident") ? "🚨" : "🛡️";
