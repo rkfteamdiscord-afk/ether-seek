@@ -112,15 +112,15 @@ function Portfolio() {
       <GhostGuide phase={phase} />
       <CursorSparkles />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/60 backdrop-blur-xl">
-        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-10">
+      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6">
+        <div className="liquid-bar mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full pl-6 pr-2.5">
           <a href="#accueil" data-header-logo className="font-brand text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
             Ȥrk<span className="text-seasonal">.</span>
           </a>
-          <nav className="hidden items-center gap-9 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigation principale">
-            <a className="transition-colors hover:text-seasonal" href="#services">Services</a>
-            <a className="transition-colors hover:text-seasonal" href="#apropos">À propos</a>
-            <a className="transition-colors hover:text-seasonal" href="#methode">Méthode</a>
+          <nav className="liquid-nav hidden items-center gap-1 rounded-full p-1 text-sm font-medium md:flex" aria-label="Navigation principale">
+            <a className="nav-pill" href="#services">Services</a>
+            <a className="nav-pill" href="#apropos">À propos</a>
+            <a className="nav-pill" href="#methode">Méthode</a>
           </nav>
           <Button asChild className="halloween-button ember-button h-11 rounded-full bg-seasonal px-5 font-semibold text-seasonal-foreground hover:bg-seasonal/90">
             <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> Commander un site <ArrowRight className="h-4 w-4" /></a>

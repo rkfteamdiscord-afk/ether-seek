@@ -46,6 +46,7 @@
   /* Halloween night: deep violet sky, pumpkin light and moon glow. */
   color-scheme: dark;
   --radius: 0.75rem;
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
   --background: oklch(0.15 0.03 290);
   --foreground: oklch(0.95 0.015 80);
   --card: oklch(0.2 0.035 290);
@@ -57,7 +58,7 @@
   --secondary: oklch(0.19 0.035 290);
   --secondary-foreground: oklch(0.93 0.015 80);
   --muted: oklch(0.23 0.035 290);
-  --muted-foreground: oklch(0.76 0.03 290);
+  --muted-foreground: oklch(0.8 0.03 290);
   --accent: oklch(0.27 0.05 295);
   --accent-foreground: oklch(0.95 0.015 80);
   --destructive: oklch(0.64 0.2 27);
@@ -641,9 +642,60 @@ html { scroll-behavior: smooth; }
 .glass { background: color-mix(in oklab, var(--card) 62%, transparent); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent); }
 .ember-text { background: linear-gradient(100deg, oklch(0.86 0.14 75), var(--seasonal) 45%, oklch(0.64 0.2 35)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .moon-text { background: linear-gradient(180deg, var(--foreground), oklch(0.8 0.06 300)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.ember-button { box-shadow: 0 0 0 1px oklch(0.85 0.14 70 / 0.5) inset, 0 10px 30px -6px color-mix(in oklab, var(--seasonal) 70%, transparent); transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
-.ember-button:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px oklch(0.9 0.14 75 / 0.7) inset, 0 16px 44px -6px color-mix(in oklab, var(--seasonal) 90%, transparent); }
-.eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--seasonal); }
+/* Molten ember buttons: a lit top edge, a darker base and a warm glow, with a springy press. */
+.ember-button {
+  background-image: linear-gradient(105deg, transparent 38%, oklch(1 0 0 / .45) 50%, transparent 62%), linear-gradient(180deg, oklch(0.87 0.13 78) 0%, var(--seasonal) 46%, oklch(0.66 0.19 42) 100%);
+  background-size: 260% 100%, 100% 100%; background-position: 130% 0, 0 0; background-repeat: no-repeat;
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / .55), inset 0 -3px 8px oklch(0.48 0.17 35 / .45), 0 0 0 1px oklch(0.85 0.14 70 / .55), 0 12px 32px -8px color-mix(in oklab, var(--seasonal) 75%, transparent);
+  text-shadow: 0 1px 0 oklch(1 0 0 / .3);
+  transition: transform .5s var(--spring), box-shadow .3s ease, filter .3s ease, background-position .9s cubic-bezier(.2,.8,.2,1);
+}
+.ember-button:hover { background-position: -30% 0, 0 0; transform: translateY(-2px); filter: saturate(1.1) brightness(1.04); box-shadow: inset 0 1px 0 oklch(1 0 0 / .65), inset 0 -3px 8px oklch(0.48 0.17 35 / .45), 0 0 0 1px oklch(0.9 0.14 75 / .75), 0 18px 46px -8px color-mix(in oklab, var(--seasonal) 95%, transparent); }
+.ember-button:active { transform: scale(.97); transition-duration: .12s; }
+.eyebrow { display: inline-flex; align-items: center; gap: .6rem; font-size: .75rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--seasonal); }
+.eyebrow::before { content: ""; width: 1.6rem; height: 1px; background: linear-gradient(90deg, transparent, currentColor); }
+
+/* Liquid glass on the clickable glass surfaces only: a refracting frosted body over the night scene,
+   a bright top edge, a soft inner rim and a springy press. Labels and panels keep the plain .glass. */
+:is(a, button).glass {
+  background: linear-gradient(105deg, transparent 38%, oklch(1 0 0 / .22) 50%, transparent 62%) 130% 0 / 260% 100% no-repeat, linear-gradient(180deg, oklch(1 0 0 / .16), oklch(1 0 0 / .03) 55%, oklch(1 0 0 / .08)), color-mix(in oklab, var(--card) 40%, transparent);
+  backdrop-filter: blur(18px) saturate(1.8) brightness(1.08); -webkit-backdrop-filter: blur(18px) saturate(1.8) brightness(1.08);
+  border: 1px solid oklch(1 0 0 / .2);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / .38), inset 0 -1px 1px oklch(1 0 0 / .08), inset 0 0 20px oklch(1 0 0 / .04), 0 10px 30px -12px oklch(0.08 0.03 290 / .6);
+  transition: transform .5s var(--spring), box-shadow .3s ease, border-color .3s ease, background-position .9s cubic-bezier(.2,.8,.2,1);
+}
+:is(a, button).glass:hover { background-position: -30% 0, 0 0, 0 0; transform: translateY(-2px); border-color: oklch(1 0 0 / .32); box-shadow: inset 0 1px 0 oklch(1 0 0 / .5), inset 0 -1px 1px oklch(1 0 0 / .1), inset 0 0 24px color-mix(in oklab, var(--seasonal) 12%, transparent), 0 14px 36px -12px color-mix(in oklab, var(--seasonal) 45%, transparent); }
+:is(a, button).glass:active { transform: scale(.97); transition-duration: .12s; }
+:is(.ember-button, a.glass, button.glass):focus-visible { outline: 3px solid var(--foreground); outline-offset: 3px; }
+@media (prefers-reduced-transparency: reduce) { :is(a, button).glass { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--card); } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { :is(a, button).glass { background: var(--card); } }
+
+/* Floating liquid-glass header: content scrolls under a frosted capsule with a lit top edge. */
+.liquid-bar {
+  background: linear-gradient(180deg, oklch(1 0 0 / .12), oklch(1 0 0 / .03)), color-mix(in oklab, var(--background) 45%, transparent);
+  backdrop-filter: blur(24px) saturate(1.9); -webkit-backdrop-filter: blur(24px) saturate(1.9);
+  border: 1px solid oklch(1 0 0 / .14);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / .3), inset 0 -1px 0 oklch(1 0 0 / .05), 0 18px 50px -20px oklch(0.06 0.03 290 / .85);
+}
+.liquid-nav { background: oklch(0.1 0.03 290 / .35); box-shadow: inset 0 1px 2px oklch(0.05 0.02 290 / .6), inset 0 -1px 0 oklch(1 0 0 / .06); }
+.nav-pill { position: relative; padding: .55rem 1.1rem; border-radius: 999px; color: var(--muted-foreground); transition: color .25s ease, background-color .25s ease, box-shadow .25s ease, transform .4s var(--spring); }
+.nav-pill:hover { color: var(--foreground); background: oklch(1 0 0 / .1); box-shadow: inset 0 1px 0 oklch(1 0 0 / .25), 0 6px 18px -8px color-mix(in oklab, var(--seasonal) 60%, transparent); }
+.nav-pill:active { transform: scale(.95); transition-duration: .1s; }
+.nav-pill:focus-visible { outline: 2px solid var(--seasonal); outline-offset: 2px; }
+
+/* Cards are bigger surfaces, so their glass reads thicker: more blur, a lit rim and a deeper shadow. */
+.spell-card.glass { background: linear-gradient(180deg, oklch(1 0 0 / .08), oklch(1 0 0 / .015) 40%), color-mix(in oklab, var(--card) 55%, transparent); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); border-color: oklch(1 0 0 / .12); box-shadow: inset 0 1px 0 oklch(1 0 0 / .22), 0 30px 60px -30px oklch(0.05 0.02 290 / .9); }
+@media (prefers-reduced-transparency: reduce) { .liquid-bar, .spell-card.glass { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--card); } }
+
+/* Type: tracking tightens as text grows, leading loosens as it shrinks. */
+h1.font-display { letter-spacing: -0.035em; line-height: 1.02; }
+section p.text-lg, section p.leading-7, section p.leading-8 { line-height: 1.7; }
+
+/* Type: balanced headings, no lonely last words, a warm glow on the ember words. */
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
+.ember-text { filter: drop-shadow(0 2px 22px color-mix(in oklab, var(--seasonal) 35%, transparent)); }
 
 .portrait-halo { position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, color-mix(in oklab, var(--seasonal) 38%, transparent), transparent 62%); filter: blur(30px); animation: halo-breathe 6s ease-in-out infinite alternate; }
 @keyframes halo-breathe { from { opacity: .6; transform: scale(.95); } to { opacity: 1; transform: scale(1.05); } }
@@ -672,7 +724,9 @@ html { scroll-behavior: smooth; }
 @keyframes rise-in { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .night-stars, .portrait-halo { animation: none; }
-  .spell-card, .ember-button { transition: none; }
+  .spell-card, .ember-button, a.glass, button.glass { transition: none; }
+  .nav-pill, .nav-pill:active { transition: none; transform: none; }
+  .ember-button:hover, .ember-button:active, a.glass:hover, a.glass:active, button.glass:hover, button.glass:active { transform: none; }
 }
 @media (max-width: 1023px) { .night-moon { top: 12vh; left: auto; right: 8vw; opacity: .7; } }
 
