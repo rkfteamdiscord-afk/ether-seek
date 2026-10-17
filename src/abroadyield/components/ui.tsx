@@ -59,7 +59,10 @@ export function Card({
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-ay-gold">{children}</p>
+    <p className="flex items-center gap-3 text-sm font-semibold tracking-[0.14em] text-ay-gold uppercase">
+      <span aria-hidden className="h-px w-8 bg-gradient-to-r from-transparent to-ay-champagne" />
+      {children}
+    </p>
   );
 }
 

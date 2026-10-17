@@ -58,63 +58,94 @@ function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  // Liquid-glass rule: small floating chrome flips light/dark with the content scrolling under it.
+  const [tone, setTone] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    const update = () => {
+      // Sample just under the capsule's vertical centre.
+      const header = document.querySelector<HTMLElement>(".ay-header .ay-glass-nav");
+      const box = header?.getBoundingClientRect();
+      const probe = box ? box.top + box.height / 2 : 44;
+      const dark = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-nav-tone='dark']"),
+      ).some((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= probe && r.bottom >= probe;
+      });
+      setTone(dark ? "dark" : "light");
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [pathname]);
   return (
     <header
       data-scrolled={scrolled}
-      className="ay-header ay-no-print sticky top-0 transition-shadow duration-300 z-40 border-b border-ay-line bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85"
+      data-tone={tone}
+      className="ay-header ay-no-print pointer-events-none sticky top-0 z-40 -mb-[88px] px-3 pt-3 sm:px-4"
     >
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <Link to="/abroadyield" aria-label="AbroadYield home" className="rounded-md">
-          <Logo />
-        </Link>
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              {...("hash" in item ? { hash: item.hash } : {})}
-              className="rounded-md px-3 py-2 text-[0.98rem] font-medium text-ay-slate transition-colors hover:bg-ay-mist hover:text-ay-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2">
-          <Link
-            to="/abroadyield/account"
-            className="hidden min-h-11 items-center gap-2 rounded-lg px-3 font-medium text-ay-navy hover:bg-ay-sky sm:inline-flex"
-          >
-            <UserRound aria-hidden className="size-5" />
-            {user ? "My account" : "Log in"}
+      <div className="ay-glass-nav pointer-events-auto mx-auto w-full max-w-6xl rounded-[1.75rem]">
+        <div className="flex h-16 items-center justify-between gap-4 pr-2 pl-4 sm:pl-5">
+          <Link to="/abroadyield" aria-label="AbroadYield home" className="rounded-full">
+            <Logo className="ay-nav-ink" />
           </Link>
-          <Link to="/abroadyield/start" className={buttonClass("primary", "hidden sm:inline-flex")}>
-            Get my free ranking
-          </Link>
-          <button
-            type="button"
-            className="inline-flex size-11 items-center justify-center rounded-lg text-ay-ink hover:bg-ay-mist lg:hidden"
-            aria-expanded={open}
-            aria-controls="ay-mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X aria-hidden className="size-6" /> : <Menu aria-hidden className="size-6" />}
-          </button>
-        </div>
-      </Container>
-      {open ? (
-        <nav
-          id="ay-mobile-nav"
-          aria-label="Mobile"
-          className="border-t border-ay-line bg-white lg:hidden"
-        >
-          <Container className="flex flex-col py-3">
+          <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
             {NAV.map((item) => (
               <Link
                 key={item.label}
                 to={item.to}
                 {...("hash" in item ? { hash: item.hash } : {})}
-                className="rounded-md px-2 py-3 text-lg font-medium text-ay-ink hover:bg-ay-mist"
+                className="ay-nav-link rounded-full px-3.5 py-2 text-[0.96rem] font-medium"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-1.5">
+            <Link
+              to="/abroadyield/account"
+              className="ay-nav-link hidden min-h-11 items-center gap-2 rounded-full px-3.5 font-medium sm:inline-flex"
+            >
+              <UserRound aria-hidden className="size-5" />
+              {user ? "My account" : "Log in"}
+            </Link>
+            <Link
+              to="/abroadyield/start"
+              className={buttonClass(
+                tone === "dark" ? "sand" : "primary",
+                "hidden min-h-11 sm:inline-flex",
+              )}
+            >
+              Get my free ranking
+            </Link>
+            <button
+              type="button"
+              className="ay-nav-link inline-flex size-11 items-center justify-center rounded-full lg:hidden"
+              aria-expanded={open}
+              aria-controls="ay-mobile-nav"
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? (
+                <X aria-hidden className="size-6" />
+              ) : (
+                <Menu aria-hidden className="size-6" />
+              )}
+            </button>
+          </div>
+        </div>
+        {open ? (
+          <nav id="ay-mobile-nav" aria-label="Mobile" className="ay-nav-panel px-3 pb-4 lg:hidden">
+            {NAV.map((item) => (
+              <Link
+                key={item.label}
+                to={item.to}
+                {...("hash" in item ? { hash: item.hash } : {})}
+                className="ay-nav-link block rounded-2xl px-3 py-3 text-lg font-medium"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
@@ -122,16 +153,16 @@ function Header() {
             ))}
             <Link
               to="/abroadyield/account"
-              className="rounded-md px-2 py-3 text-lg font-medium text-ay-ink hover:bg-ay-mist"
+              className="ay-nav-link block rounded-2xl px-3 py-3 text-lg font-medium"
             >
               {user ? "My account" : "Log in / Sign up"}
             </Link>
-            <Link to="/abroadyield/start" className={buttonClass("primary", "mt-2")}>
+            <Link to="/abroadyield/start" className={buttonClass("sand", "mt-2 w-full")}>
               Get my free ranking
             </Link>
-          </Container>
-        </nav>
-      ) : null}
+          </nav>
+        ) : null}
+      </div>
     </header>
   );
 }
@@ -146,7 +177,7 @@ function Footer() {
     ["partner-disclosure", "Partner Disclosure"],
   ] as const;
   return (
-    <footer className="ay-no-print mt-24 border-t border-ay-line bg-ay-sand/60">
+    <footer className="ay-footer ay-no-print mt-24">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Logo />

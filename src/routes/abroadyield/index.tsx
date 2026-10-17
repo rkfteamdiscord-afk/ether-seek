@@ -12,9 +12,11 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
 import { CountUp, Reveal, RouteMap, Spotlight } from "@/abroadyield/components/motion";
+import { Compass, HeroDecor } from "@/abroadyield/components/Decor";
+import { MobileDock } from "@/abroadyield/components/MobileDock";
 import {
   Card,
   Container,
@@ -80,9 +82,13 @@ function Landing() {
   const { countries, cities, settings, usTax } = useSiteData();
   useEffect(() => track("landing_view"), []);
 
-  // Live illustration from the engine: an apartment advertised at 7% gross.
+  // Live illustration from the engine: an apartment advertised at 7% gross, per country.
+  const [exampleId, setExampleId] = useState("pt");
+  const exampleChoices = ["pt", "es", "mx", "ae"]
+    .map((id) => countries.find((c) => c.id === id && c.published))
+    .filter((c): c is NonNullable<typeof c> => !!c);
   const example = useMemo(() => {
-    const pt = countries.find((c) => c.id === "pt") ?? countries[0];
+    const pt = countries.find((c) => c.id === exampleId) ?? countries[0];
     if (!pt) return null;
     const result = computeScenario({
       priceUsd: 250000,
@@ -103,7 +109,8 @@ function Landing() {
       us: { params: usTax, filing: "mfj", baseIncomeUsd: 200000, state: "NY" },
     });
     return { country: pt, result };
-  }, [countries, usTax]);
+  }, [countries, usTax, exampleId]);
+  const heroCta = useRef<HTMLDivElement>(null);
 
   const previewSentence = useMemo(() => {
     const pt = countries.find((c) => c.id === "pt");
@@ -142,7 +149,8 @@ function Landing() {
       />
 
       {/* Hero */}
-      <section className="ay-aurora overflow-hidden">
+      <section className="ay-aurora ay-under-nav overflow-hidden" data-nav-tone="dark">
+        <HeroDecor />
         <Spotlight />
         <div aria-hidden className="ay-hero-grain" />
         <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
@@ -172,6 +180,7 @@ function Landing() {
               built for US taxpayers.
             </p>
             <div
+              ref={heroCta}
               className="ay-rise mt-9 flex flex-col gap-3 sm:flex-row"
               style={{ "--ay-delay": "320ms" } as React.CSSProperties}
             >
@@ -206,47 +215,69 @@ function Landing() {
             </ul>
           </div>
           {example ? (
-            <Card className="ay-materialize relative text-ay-ink shadow-2xl shadow-black/40">
-              <p className="text-sm font-semibold uppercase tracking-wider text-ay-gold">
-                Example · {example.country.name}
-              </p>
-              <p className="mt-2 text-lg text-ay-ink">
-                A $250,000 apartment advertised at a 7% yield
-              </p>
-              <dl className="mt-5 space-y-3">
-                <YieldBar
-                  label="Advertised (gross) yield"
-                  value={example.result.grossYield}
-                  max={0.08}
-                  tone="sand"
-                  delay={300}
-                />
-                <YieldBar
-                  label="After running costs"
-                  value={example.result.netYieldBeforeTax}
-                  max={0.08}
-                  tone="sky"
-                  delay={550}
-                />
-                <YieldBar
-                  label="After local + US taxes"
-                  value={example.result.afterTaxYield}
-                  max={0.08}
-                  tone="navy"
-                  delay={800}
-                />
-              </dl>
-              <p className="mt-5 rounded-lg bg-ay-sand p-3 text-ay-ink">
-                You'd keep about <strong>{formatPct(example.result.afterTaxYield)}</strong> per
-                year, or roughly{" "}
-                <strong>{formatUsd(roughly(example.result.afterTaxIncomeUsd))}</strong> — not the{" "}
-                {formatUsd(17500)} the listing implies.
-              </p>
-              <p className="mt-3 text-sm text-ay-slate">
-                Married couple in New York earning $200k, all-cash purchase. Sample data – to be
-                verified.
-              </p>
-            </Card>
+            <div className="relative">
+              {exampleChoices.length > 1 ? (
+                <div className="mb-4 flex justify-center lg:justify-start">
+                  <div
+                    role="group"
+                    aria-label="Show the example for"
+                    className="ay-glass ay-glass-dark ay-segmented"
+                  >
+                    {exampleChoices.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        aria-pressed={c.id === example.country.id}
+                        onClick={() => setExampleId(c.id)}
+                      >
+                        {c.name.replace(/\s*\(.*\)$/, "").replace("United Arab Emirates", "Dubai")}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              <Card className="ay-materialize relative text-ay-ink shadow-2xl shadow-black/40">
+                <p className="text-sm font-semibold uppercase tracking-wider text-ay-gold">
+                  Example · {example.country.name}
+                </p>
+                <p className="mt-2 text-lg text-ay-ink">
+                  A $250,000 apartment advertised at a 7% yield
+                </p>
+                <dl className="mt-5 space-y-3">
+                  <YieldBar
+                    label="Advertised (gross) yield"
+                    value={example.result.grossYield}
+                    max={0.08}
+                    tone="sand"
+                    delay={300}
+                  />
+                  <YieldBar
+                    label="After running costs"
+                    value={example.result.netYieldBeforeTax}
+                    max={0.08}
+                    tone="sky"
+                    delay={550}
+                  />
+                  <YieldBar
+                    label="After local + US taxes"
+                    value={example.result.afterTaxYield}
+                    max={0.08}
+                    tone="navy"
+                    delay={800}
+                  />
+                </dl>
+                <p className="mt-5 rounded-lg bg-ay-sand p-3 text-ay-ink">
+                  You'd keep about <strong>{formatPct(example.result.afterTaxYield)}</strong> per
+                  year, or roughly{" "}
+                  <strong>{formatUsd(roughly(example.result.afterTaxIncomeUsd))}</strong> — not the{" "}
+                  {formatUsd(17500)} the listing implies.
+                </p>
+                <p className="mt-3 text-sm text-ay-slate">
+                  Married couple in New York earning $200k, all-cash purchase. Sample data – to be
+                  verified.
+                </p>
+              </Card>
+            </div>
           ) : null}
         </Container>
         <Container className="relative -mt-4 pb-8 sm:-mt-6 lg:-mt-10">
@@ -295,7 +326,8 @@ function Landing() {
       </section>
 
       {/* Hidden costs */}
-      <section aria-labelledby="hidden-costs" className="py-20">
+      <section aria-labelledby="hidden-costs" className="relative overflow-hidden py-24">
+        <Compass className="absolute -top-10 -right-16 hidden md:block" size={360} />
         <Container>
           <SectionHeading
             id="hidden-costs"
@@ -566,6 +598,42 @@ function Landing() {
         </Container>
       </section>
 
+      {/* Final call to action */}
+      <section aria-labelledby="final-cta" className="py-10 sm:py-16">
+        <Container>
+          <Reveal className="ay-cta-band px-6 py-14 sm:px-14 sm:py-20" data-nav-tone="dark">
+            <HeroDecor />
+            <div className="relative grid items-center gap-10 lg:grid-cols-[1.3fr_0.7fr]">
+              <div>
+                <p className="text-sm font-semibold tracking-[0.14em] text-ay-sand-2 uppercase">
+                  Three minutes. No credit card.
+                </p>
+                <h2 id="final-cta" className="mt-4 text-4xl text-white sm:text-5xl">
+                  Know your real return{" "}
+                  <span className="ay-italic-accent">before you sign anything.</span>
+                </h2>
+                <p className="mt-5 max-w-xl text-lg text-white/75">
+                  Rank {published.length} destinations for your taxes, budget and lifestyle, then
+                  unlock the full report only if it helps.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 lg:items-end">
+                <Link
+                  to="/abroadyield/start"
+                  className={buttonClass("sand", "ay-shine px-8 text-lg")}
+                  onClick={() => track("questionnaire_start", { from: "final-cta" })}
+                >
+                  Get my free ranking <ArrowRight aria-hidden className="size-5" />
+                </Link>
+                <p className="text-sm text-white/60">
+                  {settings.refundDays}-day money-back guarantee on paid reports
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
       {/* FAQ */}
       <section
         id="faq"
@@ -597,6 +665,7 @@ function Landing() {
           <Disclaimer className="mt-8" />
         </Container>
       </section>
+      <MobileDock watch={heroCta} />
     </>
   );
 }
@@ -625,10 +694,11 @@ function YieldBar({
       </div>
       <div className="mt-1.5 h-3 overflow-hidden rounded-full bg-ay-mist" aria-hidden>
         <div
-          className={`ay-bar-grow h-3 rounded-full ${colors[tone]}`}
+          className={`ay-bar-grow h-3 w-full origin-left rounded-full ${colors[tone]}`}
           style={
             {
-              width: `${Math.max(2, Math.min(100, (value / max) * 100))}%`,
+              transform: `scaleX(${Math.max(0.02, Math.min(1, value / max))})`,
+              transition: "transform 520ms cubic-bezier(0.23, 1, 0.32, 1)",
               "--ay-delay": `${delay}ms`,
             } as React.CSSProperties
           }

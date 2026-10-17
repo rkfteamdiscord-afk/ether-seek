@@ -1,13 +1,17 @@
 import { cn } from "@/lib/utils";
 import type { Country } from "../types";
 
-const TINTS: Record<string, [string, string]> = {
-  Europe: ["#1d3a66", "#2f5a8f"],
-  "Latin America": ["#1d5a52", "#2e7a6c"],
-  "Middle East": ["#7a5a1f", "#a3782b"],
+/**
+ * Country tile: the admin-provided photo when there is one, otherwise an editorial illustration
+ * in the brand's champagne line art — arches and tiled roofs for Europe, palms and a sun for
+ * Latin America, a skyline for the Gulf.
+ */
+const THEMES: Record<string, { from: string; to: string; art: "europe" | "latam" | "gulf" }> = {
+  Europe: { from: "#14284a", to: "#2b4f7e", art: "europe" },
+  "Latin America": { from: "#123a37", to: "#2a6a5f", art: "latam" },
+  "Middle East": { from: "#3b2a12", to: "#8a6224", art: "gulf" },
 };
 
-/** Country tile: the admin-provided photo when there is one, otherwise a calm illustrated card. */
 export function CountryVisual({ country, className }: { country: Country; className?: string }) {
   if (country.imageUrl) {
     return (
@@ -20,32 +24,58 @@ export function CountryVisual({ country, className }: { country: Country; classN
       />
     );
   }
-  const [from, to] = TINTS[country.region] ?? ["#0f1f3a", "#1d3a66"];
-  const code = country.id.toUpperCase();
+  const theme = THEMES[country.region] ?? THEMES["Europe"]!;
   return (
     <div
       aria-hidden
       className={cn("relative h-full w-full overflow-hidden", className)}
-      style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
+      style={{
+        background: `radial-gradient(120% 120% at 85% 0%, ${theme.to} 0%, ${theme.from} 70%)`,
+      }}
     >
       <svg
-        viewBox="0 0 200 100"
+        viewBox="0 0 320 140"
         preserveAspectRatio="xMidYMax slice"
-        className="absolute inset-x-0 bottom-0 h-3/4 w-full opacity-30"
+        className="absolute inset-0 h-full w-full"
+        fill="none"
       >
-        <path d="M0 80 Q40 60 80 72 T160 66 T200 70 V100 H0Z" fill="#eadfcb" />
-        <g fill="#ffffff">
-          <rect x="20" y="52" width="10" height="30" />
-          <rect x="34" y="40" width="12" height="42" />
-          <rect x="50" y="58" width="8" height="24" />
-          <rect x="120" y="46" width="12" height="36" />
-          <rect x="136" y="34" width="9" height="48" />
-          <rect x="149" y="56" width="14" height="26" />
+        <circle cx="262" cy="34" r="16" fill="#e6d6b8" opacity="0.85" />
+        <circle cx="262" cy="34" r="26" stroke="#e6d6b8" opacity="0.25" />
+        <g stroke="#e6d6b8" strokeWidth="1.1" opacity="0.7">
+          {theme.art === "europe" ? (
+            <>
+              {[20, 70, 120, 170].map((x, i) => (
+                <path key={x} d={`M${x},140 V${96 - (i % 2) * 10} a20,20 0 0 1 40,0 V140`} />
+              ))}
+              <path d="M210,140 V92 L240,70 L270,92 V140" />
+              <path d="M236,140 v-22 h10 v22" />
+            </>
+          ) : theme.art === "latam" ? (
+            <>
+              {[40, 110, 190].map((x, i) => (
+                <g key={x}>
+                  <path
+                    d={`M${x},140 C${x + 4},${110 - i * 6} ${x + 2},${90 - i * 6} ${x + 8},${74 - i * 6}`}
+                  />
+                  <path
+                    d={`M${x + 8},${74 - i * 6} c-18,-2 -26,6 -30,12 M${x + 8},${74 - i * 6} c16,-6 26,0 32,6 M${x + 8},${74 - i * 6} c-6,-14 -18,-18 -26,-16 M${x + 8},${74 - i * 6} c8,-12 20,-14 28,-10`}
+                  />
+                </g>
+              ))}
+              <path d="M0,126 C60,118 120,132 180,124 S280,118 320,124" opacity="0.6" />
+            </>
+          ) : (
+            <>
+              <path d="M30,140 V96 h18 V140 M58,140 V70 h14 V140 M82,140 V104 h20 V140" />
+              <path d="M128,140 V40 l8,-18 l8,18 V140" />
+              <path d="M160,140 V82 h22 V140 M192,140 V60 q10,-14 20,0 V140 M222,140 V98 h26 V140" />
+            </>
+          )}
         </g>
-        <circle cx="170" cy="24" r="9" fill="#eadfcb" />
+        <path d="M0,139.5 H320" stroke="#e6d6b8" opacity="0.4" />
       </svg>
-      <span className="absolute left-4 top-3 font-[family-name:var(--font-ay-head)] text-3xl font-semibold tracking-wider text-white/90">
-        {code}
+      <span className="absolute top-3 left-4 font-[family-name:var(--font-ay-head)] text-2xl font-medium tracking-wide text-white/90 italic">
+        {country.id === "ae" ? "Dubai" : country.name.replace(/\s*\(.*\)$/, "")}
       </span>
     </div>
   );
