@@ -1520,6 +1520,12 @@ body:has(.ay-root) { background: #fbf9f5; }
 @media (hover: hover) and (pointer: fine) {
   .ay-segmented button[aria-pressed="false"]:hover { color: #ffffff; background: rgb(255 255 255 / 0.1); }
 }
+/* Light variant, for ivory sections. */
+.ay-segmented-light { background: rgb(15 31 58 / 0.06); box-shadow: inset 0 0 0 1px rgb(15 31 58 / 0.08); }
+.ay-segmented-light button { color: #3d4a60; }
+@media (hover: hover) and (pointer: fine) {
+  .ay-segmented-light button[aria-pressed="false"]:hover { color: #0f1f3a; background: rgb(15 31 58 / 0.06); }
+}
 
 /* Mobile action dock: appears once the hero CTA scrolls away. */
 .ay-dock {
@@ -1584,3 +1590,37 @@ html:has(.ay-root) { background: #fbf9f5; }
   .ay-orb { opacity: 0.32; transform: scale(0.6); }
   .ay-arches { width: 120vw; opacity: 0.14; }
 }
+
+/* ---------- Cinematic hero (photo slideshow with slow camera push) ---------- */
+.ay-cinema { background: #0b1424; color: #fff; }
+.ay-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 1400ms ease; overflow: hidden; }
+.ay-frame-active { opacity: 1; }
+/* Illustrated stand-in (no photo yet): quieter at hero scale, without its tile label. */
+div.ay-frame-media > svg { opacity: 0.45; }
+div.ay-frame-media > span { display: none; }
+.ay-frame-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 60% 40%; }
+.ay-frame-active .ay-frame-media { animation: ay-kenburns-r 9s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
+.ay-kb-left.ay-frame-active .ay-frame-media { animation-name: ay-kenburns-l; }
+.ay-frame[data-running="false"] .ay-frame-media { animation-play-state: paused; }
+@keyframes ay-kenburns-r { from { transform: scale(1.04) translate3d(0, 0, 0); } to { transform: scale(1.16) translate3d(-2.5%, -1.5%, 0); } }
+@keyframes ay-kenburns-l { from { transform: scale(1.16) translate3d(-2%, 0, 0); } to { transform: scale(1.04) translate3d(1.5%, -1%, 0); } }
+.ay-cinema-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgb(8 17 31 / 0.55) 0%, rgb(8 17 31 / 0.05) 30%, rgb(8 17 31 / 0.25) 55%, rgb(8 17 31 / 0.88) 100%),
+    linear-gradient(90deg, rgb(8 17 31 / 0.55) 0%, rgb(8 17 31 / 0) 60%);
+}
+.ay-chapter-fill { transform: scaleX(0); }
+.ay-chapter-done { transform: scaleX(1); }
+.ay-chapter-now { animation: ay-chapter linear forwards; }
+.ay-chapter-fill[data-running="false"].ay-chapter-now { animation-play-state: paused; }
+@keyframes ay-chapter { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (hover: hover) and (pointer: fine) {
+  .ay-cinema button:hover .ay-chapter { background: rgb(255 255 255 / 0.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ay-frame { transition: opacity 300ms ease; }
+  .ay-frame-active .ay-frame-media { animation: none; transform: scale(1.04); }
+  .ay-chapter-now { animation: none; transform: scaleX(1); }
+}
+@media print { .ay-cinema { color: #0b1424; background: #fff; } .ay-frame, .ay-cinema-scrim { display: none; } }

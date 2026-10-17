@@ -14,9 +14,10 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
-import { CountUp, Reveal, RouteMap, Spotlight } from "@/abroadyield/components/motion";
+import { CountUp, Reveal, RouteMap } from "@/abroadyield/components/motion";
 import { Compass, HeroDecor } from "@/abroadyield/components/Decor";
 import { MobileDock } from "@/abroadyield/components/MobileDock";
+import { CinematicHero, type Slide } from "@/abroadyield/components/CinematicHero";
 import {
   Card,
   Container,
@@ -110,7 +111,43 @@ function Landing() {
     });
     return { country: pt, result };
   }, [countries, usTax, exampleId]);
-  const heroCta = useRef<HTMLDivElement>(null);
+  const heroCtaText = useRef<HTMLParagraphElement>(null);
+  const slides = useMemo<Slide[]>(() => {
+    const picks: Array<[string, string, string]> = [
+      ["pt", "pt-lisbon", "lisbon"],
+      ["es", "es-malaga", "malaga"],
+      ["it", "it-rome", "rome"],
+      ["gr", "gr-athens", "athens"],
+      ["mx", "mx-playa", "playa-del-carmen"],
+      ["cr", "cr-tamarindo", "tamarindo"],
+      ["ae", "ae-marina", "dubai-marina"],
+    ];
+    const profile = {
+      ...emptyProfile,
+      residence: "us" as const,
+      usState: "NY",
+      income: "150to250" as const,
+      filingStatus: "mfj" as const,
+      financing: "cash" as const,
+      strategy: "long" as const,
+    };
+    return picks.flatMap(([countryId, cityId, file]) => {
+      const country = countries.find((c) => c.id === countryId && c.published);
+      const city = cities.find((c) => c.id === cityId);
+      if (!country || !city) return [];
+      const { result } = runScenario({ country, city, profile, settings, usTax });
+      return [
+        {
+          country,
+          place: city.name,
+          photo: country.imageUrl || `/abroadyield/photos/${file}.jpg`,
+          alt: country.imageAlt || `${city.name}, ${country.name}`,
+          gross: result.grossYield,
+          afterTax: result.afterTaxYield,
+        },
+      ];
+    });
+  }, [countries, cities, settings, usTax]);
 
   const previewSentence = useMemo(() => {
     const pt = countries.find((c) => c.id === "pt");
@@ -148,60 +185,49 @@ function Landing() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      {/* Hero */}
-      <section className="ay-aurora ay-under-nav overflow-hidden" data-nav-tone="dark">
-        <HeroDecor />
-        <Spotlight />
-        <div aria-hidden className="ay-hero-grain" />
-        <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+      {/* Cinematic hero */}
+      <CinematicHero slides={slides} onStart={() => track("questionnaire_start", { from: "hero" })}>
+        <p className="ay-rise text-sm font-semibold tracking-[0.16em] text-ay-sand-2 uppercase">
+          For US citizens and green card holders
+        </p>
+        <h1 className="mt-4 text-[2.7rem] font-medium text-white sm:text-6xl lg:text-[4.4rem]">
+          <span className="ay-rise block" style={{ "--ay-delay": "60ms" } as React.CSSProperties}>
+            Where should you invest abroad?
+          </span>
+          <span
+            className="ay-rise ay-italic-accent mt-1 block"
+            style={{ "--ay-delay": "160ms" } as React.CSSProperties}
+          >
+            Find out what you'll really earn.
+          </span>
+        </h1>
+        <p
+          ref={heroCtaText}
+          className="ay-rise mt-6 max-w-xl text-xl text-white/80"
+          style={{ "--ay-delay": "260ms" } as React.CSSProperties}
+        >
+          Free country ranking in 3 minutes. After-tax returns, financing options and risks — built
+          for US taxpayers.
+        </p>
+      </CinematicHero>
+
+      {/* Live example */}
+      <section
+        id="example"
+        aria-labelledby="example-title"
+        className="scroll-mt-24 bg-ay-ivory py-20 sm:py-28"
+      >
+        <Container className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-ay-sand-2">
-              For US citizens and green card holders
+            <Eyebrow>The real number</Eyebrow>
+            <h2 id="example-title" className="mt-3 text-4xl sm:text-5xl">
+              A 7% listing rarely pays 7%.
+            </h2>
+            <p className="mt-5 max-w-lg text-lg text-ay-slate">
+              Pick a country. We run the same $250,000 apartment through running costs, the local
+              tax on rent and your US federal and state tax — the way your accountant would.
             </p>
-            <h1 className="mt-4 text-[2.6rem] font-medium text-white sm:text-6xl lg:text-[4.1rem]">
-              <span
-                className="ay-rise block"
-                style={{ "--ay-delay": "40ms" } as React.CSSProperties}
-              >
-                Where should you invest abroad?
-              </span>
-              <span
-                className="ay-rise ay-italic-accent mt-1 block"
-                style={{ "--ay-delay": "140ms" } as React.CSSProperties}
-              >
-                Find out what you'll really earn.
-              </span>
-            </h1>
-            <p
-              className="ay-rise mt-6 max-w-xl text-xl text-white/75"
-              style={{ "--ay-delay": "240ms" } as React.CSSProperties}
-            >
-              Free country ranking in 3 minutes. After-tax returns, financing options and risks —
-              built for US taxpayers.
-            </p>
-            <div
-              ref={heroCta}
-              className="ay-rise mt-9 flex flex-col gap-3 sm:flex-row"
-              style={{ "--ay-delay": "320ms" } as React.CSSProperties}
-            >
-              <Link
-                to="/abroadyield/start"
-                className={buttonClass("sand", "ay-shine ay-btn-arrow px-7 text-lg")}
-                onClick={() => track("questionnaire_start", { from: "hero" })}
-              >
-                Get my free ranking <ArrowRight aria-hidden className="size-5" />
-              </Link>
-              <a
-                href="#sample-report"
-                className="ay-btn inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-2.5 text-lg font-semibold text-white backdrop-blur-sm hover:bg-white/12"
-              >
-                See a sample report
-              </a>
-            </div>
-            <ul
-              className="ay-rise mt-9 grid gap-2 text-white/75 sm:grid-cols-2"
-              style={{ "--ay-delay": "400ms" } as React.CSSProperties}
-            >
+            <ul className="mt-8 grid gap-2 text-ay-slate sm:grid-cols-2">
               {[
                 "No credit card for the ranking",
                 `${published.length} countries compared`,
@@ -209,7 +235,7 @@ function Landing() {
                 "Sources and dates on every number",
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
-                  <Check aria-hidden className="size-5 text-ay-sand-2" /> {item}
+                  <Check aria-hidden className="size-5 text-ay-gold" /> {item}
                 </li>
               ))}
             </ul>
@@ -221,7 +247,7 @@ function Landing() {
                   <div
                     role="group"
                     aria-label="Show the example for"
-                    className="ay-glass ay-glass-dark ay-segmented"
+                    className="ay-segmented ay-segmented-light"
                   >
                     {exampleChoices.map((c) => (
                       <button
@@ -280,8 +306,13 @@ function Landing() {
             </div>
           ) : null}
         </Container>
-        <Container className="relative -mt-4 pb-8 sm:-mt-6 lg:-mt-10">
-          <RouteMap className="h-auto w-full opacity-80" />
+      </section>
+
+      {/* Route band */}
+      <section aria-hidden className="ay-aurora overflow-hidden py-10" data-nav-tone="dark">
+        <HeroDecor />
+        <Container>
+          <RouteMap className="h-auto w-full opacity-85" />
         </Container>
       </section>
 
@@ -665,7 +696,7 @@ function Landing() {
           <Disclaimer className="mt-8" />
         </Container>
       </section>
-      <MobileDock watch={heroCta} />
+      <MobileDock watch={heroCtaText} />
     </>
   );
 }
