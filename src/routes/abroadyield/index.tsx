@@ -19,6 +19,7 @@ import { Compass, HeroDecor } from "@/abroadyield/components/Decor";
 import { MobileDock } from "@/abroadyield/components/MobileDock";
 import { CinematicHero, type Slide } from "@/abroadyield/components/CinematicHero";
 import { bundledPhoto } from "@/abroadyield/lib/photos";
+import { PromoVideo } from "@/abroadyield/components/PromoVideo";
 import {
   Card,
   Container,
@@ -312,6 +313,46 @@ function Landing() {
               </Card>
             </div>
           ) : null}
+        </Container>
+      </section>
+
+      {/* The 24-second film */}
+      <section aria-labelledby="film-title" className="overflow-hidden bg-white py-20 sm:py-28">
+        <Container>
+          <div className="grid items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-20">
+            <div className="max-w-xl">
+              <Eyebrow>In 24 seconds</Eyebrow>
+              <h2 id="film-title" className="mt-3 text-4xl sm:text-5xl">
+                See AbroadYield <span className="ay-italic-accent">in action.</span>
+              </h2>
+              <p className="mt-5 text-lg text-ay-slate">
+                Seven destinations, the number a listing doesn't show you, and everything you get:
+                the free ranking, the dollar-by-dollar breakdown, the US tax module and vetted
+                experts.
+              </p>
+              <ul className="mt-8 grid gap-3 text-ay-ink sm:grid-cols-2">
+                {[
+                  "Free ranking in 3 minutes",
+                  "Every dollar explained",
+                  "Built for US taxpayers",
+                  "PDF report and vetted experts",
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-2 font-semibold">
+                    <Check aria-hidden className="size-4 text-ay-gold" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/abroadyield/start"
+                className={buttonClass("primary", "mt-10 px-7 text-lg")}
+                onClick={() => track("questionnaire_start", { from: "film" })}
+              >
+                Get my free ranking <ArrowRight aria-hidden className="size-5" />
+              </Link>
+            </div>
+            <PromoVideo />
+          </div>
         </Container>
       </section>
 

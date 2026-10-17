@@ -17,10 +17,28 @@ the existing studio site, which it does not touch.
 | Database schema, RLS, encryption, audit | `supabase/migrations/` |
 | Stripe, refunds, AI assistant, account deletion | `supabase/functions/` |
 | Sitemap generator | `scripts/abroadyield/sitemap.ts` (`bun run ay:sitemap`) |
+| Destination photos (Unsplash License, credits inside) | `public/abroadyield/photos/` |
+| 9:16 promo film (Remotion project, own `package.json`) | `video/abroadyield-promo/` → `public/abroadyield/video/` |
 
 Routes: `/abroadyield` (landing), `/start` (questionnaire), `/results` (free ranking),
 `/report?countries=pt,es` (paid report), `/checkout`, `/account`, `/experts`, `/guides`,
 `/guides/:slug`, `/methodology`, `/blog`, `/blog/:slug`, `/legal/:page`, `/admin`.
+
+## Promo film
+
+`video/abroadyield-promo` is a separate Remotion project (not part of the site build). Its
+soundtrack is synthesized by `scripts/soundtrack.py` (original, no samples). To re-render:
+
+```bash
+cd video/abroadyield-promo && npm install
+python3 scripts/soundtrack.py
+npx remotion render AbroadYieldPromo out/abroadyield-promo.mp4 --codec=h264
+# web copy used by the landing page (720×1280, fast start)
+npx remotion ffmpeg -i out/abroadyield-promo.mp4 -vf scale=720:1280 -c:v libx264 -pix_fmt yuv420p \
+  -crf 25 -movflags +faststart -c:a aac -b:a 128k ../../public/abroadyield/video/abroadyield-promo.mp4
+```
+
+Its figures come from the site's own examples and are labelled as sample data on screen.
 
 ## Two modes
 
