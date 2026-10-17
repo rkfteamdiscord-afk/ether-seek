@@ -206,6 +206,7 @@ function outcome(entry: GuardianEntry) {
   if (decision.includes("plus tard") || decision.includes("à blanc")) return { label: "💡 idée gardée", tone: "bg-primary/20" };
   if (decision.includes("Rien")) return { label: "😌 rien à faire", tone: "bg-muted" };
   if (decision.includes("refusée") || decision.includes("annulée")) return { label: "🛑 refusée", tone: "bg-destructive/20" };
+  if (decision.startsWith("IA en pause")) return { label: "😴 IA en pause (quota)", tone: "bg-muted" };
   if (decision.includes("interrompue") || decision.includes("quota")) return { label: "⚠️ IA indisponible", tone: "bg-seasonal/20" };
   return { label: "🔎 vérifications", tone: "bg-muted" };
 }
