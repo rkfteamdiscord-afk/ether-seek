@@ -164,7 +164,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 150,
       strFriendliness: 4,
       strRules:
-        "Furnished tourist lets must be registered with the town hall. Large cities limit main homes to 120 nights a year (90 where councils choose) and require change-of-use authorisation for second homes.",
+        "Furnished tourist lets must be registered. Main homes may be let at most 120 nights a year, or 90 where the council decides (Paris since 2025); second homes in large cities need change-of-use authorisation. Under the loi Le Meur, tourist lets other than main homes must reach energy class A–D by 2034.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -175,9 +175,9 @@ export const moreCountries: Country[] = [
       notes:
         "Unfurnished rent under €15,000 a year gets a flat 30% allowance; the rest is taxed at the 20% non-resident minimum rate plus 17.2% social charges. Above the threshold, or by choice, actual expenses are deducted (régime réel).",
       treatyNotes:
-        "US–France tax treaty in force; French income tax on French property income is creditable against US tax. Whether the social charges are creditable should be confirmed with a cross-border adviser.",
+        "US–France tax treaty in force; the US gives a Foreign Tax Credit for French tax on French property income. Since 2019 the IRS accepts CSG and CRDS as creditable (confirmed in its 2025 practice unit). The credit cannot offset the 3.8% Net Investment Income Tax.",
       capitalGainsNotes:
-        "Non-residents pay 19% plus social charges on property gains, reduced by holding-period allowances; a fiscal representative may be required for larger sales.",
+        "Non-residents pay 19% income tax plus 17.2% social charges on property gains, plus a 2–6% surtax on gains above €50,000. Holding-period allowances exempt income tax after 22 years and social charges after 30. Sellers outside the EU/EEA need an accredited fiscal representative above €150,000.",
       meta: meta(S.frTax, S.pwc, S.irsTreaties),
     },
     risks: {
@@ -249,7 +249,7 @@ export const moreCountries: Country[] = [
           low: 0.08,
           high: 0.12,
           notes:
-            "England: standard rates plus 5% for an additional home and 2% for non-residents. Scotland and Wales use their own taxes.",
+            "England & NI: bands of 0/2/5/10/12% plus 5% if you own any other home worldwide (such as your US home) and 2% for non-residents. Scotland: LBTT plus an 8% Additional Dwelling Supplement on the whole price. Wales: LTT higher rates.",
         },
         { label: "Solicitor (conveyancing)", kind: "pct", low: 0.005, high: 0.01 },
         { label: "Survey and searches", kind: "fixed", low: 800, high: 2000 },
@@ -288,7 +288,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 180,
       strFriendliness: 5,
       strRules:
-        "London caps whole-home short lets at 90 nights a year without planning permission; Scotland requires a short-term let licence.",
+        "London caps whole-home short lets at 90 nights a year without planning permission. Scotland requires a short-term let licence, and Edinburgh (a city-wide control area) also requires planning permission for homes that are not your main residence, plus a 5% visitor levy from July 2026.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -296,13 +296,13 @@ export const moreCountries: Country[] = [
       basis: "net",
       rate: 0.2,
       brackets: [
-        { upTo: 67000, rate: 0.2 },
-        { upTo: 167000, rate: 0.4 },
+        { upTo: 50141, rate: 0.2 },
+        { upTo: 166436, rate: 0.4 },
         { upTo: null, rate: 0.45 },
       ],
       taxableShareOfGross: 1,
       notes:
-        "Rental profit is taxed at 20%, 40% and 45% (bands shown in USD). Register with HMRC to receive rent gross; otherwise the agent withholds 20%. Mortgage interest only earns a 20% tax credit. Council tax is normally paid by the tenant.",
+        "Rental profit is taxed at 20%, 40% and 45% in 2026/27 (22%, 42% and 47% from April 2027); bands shown in USD. US citizens generally get no UK personal allowance, so tax starts on the first pound. Apply on form NRL1 to receive rent gross; otherwise the agent (or a tenant paying over £100 a week) withholds basic-rate tax. Mortgage interest only earns a basic-rate credit. Council tax is normally paid by the tenant.",
       treatyNotes:
         "US–UK tax treaty in force; UK tax on UK rent is creditable against US tax on the same income.",
       capitalGainsNotes:
@@ -317,7 +317,7 @@ export const moreCountries: Country[] = [
         risk(
           "political",
           3,
-          "Landlord rules are tightening (no-fault evictions ending, higher standards).",
+          "Renters' Rights Act in force in England since May 2026: no-fault evictions abolished, all tenancies periodic, one rent rise a year; property income tax rises 2 points from April 2027.",
         ),
         risk("str", 3, "90-night cap in London; licensing in Scotland."),
         risk("natural", 1, "Low; check flood maps near rivers and coasts."),
@@ -370,7 +370,8 @@ export const moreCountries: Country[] = [
           kind: "pct",
           low: 0.01,
           high: 0.02,
-          notes: "1% up to €1 million, 2% above (higher for bulk purchases).",
+          notes:
+            "1% up to €1 million, 2% up to €1.5 million and 6% above (higher for bulk purchases).",
         },
         { label: "Solicitor", kind: "pct", low: 0.01, high: 0.015 },
         { label: "Survey, searches and registration", kind: "fixed", low: 900, high: 1800 },
@@ -417,7 +418,7 @@ export const moreCountries: Country[] = [
       basis: "net",
       rate: 0.2,
       brackets: [
-        { upTo: 51000, rate: 0.2 },
+        { upTo: 49280, rate: 0.2 },
         { upTo: null, rate: 0.4 },
       ],
       taxableShareOfGross: 1,
@@ -532,7 +533,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 200,
       strFriendliness: 2,
       strRules:
-        "Berlin, Munich, Hamburg and Frankfurt require permits to use a home for short stays; whole-apartment holiday lets are largely banned in Berlin.",
+        "Berlin, Munich, Hamburg, Frankfurt and (since 2024) Leipzig restrict short stays: permits are needed beyond 8 weeks a year (Munich, Frankfurt) or 12 weeks (Leipzig), and whole-apartment holiday lets are largely banned in Berlin.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -540,13 +541,14 @@ export const moreCountries: Country[] = [
       basis: "net",
       rate: 0.25,
       brackets: [
-        { upTo: 15000, rate: 0.18 },
-        { upTo: 70000, rate: 0.3 },
-        { upTo: null, rate: 0.42 },
+        { upTo: 14500, rate: 0.22 },
+        { upTo: 67500, rate: 0.35 },
+        { upTo: 297400, rate: 0.42 },
+        { upTo: null, rate: 0.45 },
       ],
       taxableShareOfGross: 1,
       notes:
-        "Non-residents file a German return; tax is progressive from about 14% with no basic allowance (bands shown in USD are simplified). Building depreciation of 2–3% a year, interest and running costs are deductible. Part of the building charges (Hausgeld) is passed on to tenants.",
+        "Non-residents file a German return. Under §50 EStG the basic allowance is added back, so tax starts at 14% on the first euro of rent and rises to 42%–45% (bands shown in USD are averaged from the 2026 tariff). Building depreciation is 2% a year (2.5% before 1925, 3% from 2023, optional 5% declining-balance for new builds started Oct 2023–Sep 2029); interest and running costs are deductible. Part of the building charges (Hausgeld) is passed on to tenants.",
       treatyNotes:
         "US–Germany tax treaty in force; German tax on German rent is creditable against US tax.",
       capitalGainsNotes:
@@ -708,7 +710,7 @@ export const moreCountries: Country[] = [
     flightHoursFromNyc: 5.5,
     lifestyle: { beach: 9, city: 7, lowCost: 7, english: 6, shortFlight: 8, warm: 10 },
     residencyNotes:
-      "The Pensionado visa needs a lifetime pension of about $1,000 a month and brings local discounts; a qualified investor visa exists for larger property investments.",
+      "The Pensionado visa needs a lifetime pension of about $1,000 a month ($750 if you also buy property worth $100,000+) and brings local discounts. The Qualified Investor visa requires $300,000 in a new property or $500,000 in a resale property (Executive Decree 17 of September 2026).",
     ownership: {
       status: "allowed",
       summary:
@@ -769,7 +771,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 250,
       strFriendliness: 3,
       strRules:
-        "Rentals under 45 days are restricted in much of Panama City outside designated tourist zones and need a tourism licence.",
+        "Law 80 of 2012 bans rentals under 45 days in the District of Panamá without an ATP lodging permit (fines $5,000–$50,000); tourist zones such as Casco Viejo allow them with a licence if the building's rules permit. A bill to replace the rule is pending.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -783,11 +785,11 @@ export const moreCountries: Country[] = [
       ],
       taxableShareOfGross: 1,
       notes:
-        "Rental profit is taxed at 0%, 15% and 25%. New homes can have temporary property-tax exemptions; the annual property tax is progressive above a threshold.",
+        "Rental profit is taxed at 0%, 15% and 25%. Non-primary homes pay no property tax on the first $30,000 of registered value, then 0.6% up to $250,000, 0.8% up to $500,000 and 1% above.",
       treatyNotes:
         "No US–Panama income tax treaty; Panamanian income tax is generally creditable against US tax.",
       capitalGainsNotes:
-        "Capital gains on real estate are taxed at 10%; 3% of the price is withheld as an advance at closing.",
+        "Capital gains on real estate are taxed at 10%; the seller pays an advance of 3% of the higher of price or cadastral value before registration (any excess is refundable), or may elect 10% on the actual gain.",
       meta: meta(S.paTax, S.pwc),
     },
     risks: {
@@ -1122,7 +1124,7 @@ export const moreCountries: Country[] = [
       managementShort: 0.25,
       maintenancePctOfPrice: 0.008,
       insurancePctOfPrice: 0.002,
-      propertyTaxPctOfPrice: 0.0003,
+      propertyTaxPctOfPrice: 0.0002,
       hoaMonthlyUsd: 80,
       strFriendliness: 2,
       strRules:
@@ -1134,18 +1136,18 @@ export const moreCountries: Country[] = [
       basis: "gross",
       rate: 0.1,
       brackets: [
-        { upTo: 4600, rate: 0 },
-        { upTo: 9200, rate: 0.05 },
-        { upTo: 15300, rate: 0.1 },
-        { upTo: 22900, rate: 0.15 },
-        { upTo: 30500, rate: 0.2 },
-        { upTo: 61000, rate: 0.25 },
-        { upTo: 152500, rate: 0.3 },
+        { upTo: 4490, rate: 0 },
+        { upTo: 8970, rate: 0.05 },
+        { upTo: 14950, rate: 0.1 },
+        { upTo: 22430, rate: 0.15 },
+        { upTo: 29900, rate: 0.2 },
+        { upTo: 59800, rate: 0.25 },
+        { upTo: 149500, rate: 0.3 },
         { upTo: null, rate: 0.35 },
       ],
       taxableShareOfGross: 0.7,
       notes:
-        "Rent is taxed at progressive rates (0–35%, bands shown in USD) after a 30% standard deduction. Companies paying rent withhold 5%.",
+        "Rent is taxed at progressive rates (0–35%, bands shown in USD) after a 30% standard deduction. When the owner is not a Thai tax resident, tenants must withhold 15% of the rent (creditable on the owner's Thai return); the 5% rate applies only to resident owners paid by companies. Since 2024, foreign income brought into Thailand by Thai tax residents (180+ days a year) is taxable when remitted.",
       treatyNotes:
         "US–Thailand tax treaty in force; Thai tax on Thai rent is creditable against US tax.",
       capitalGainsNotes:
@@ -1156,7 +1158,11 @@ export const moreCountries: Country[] = [
       items: [
         risk("currency", 3, "Rent and resale value are in baht."),
         risk("legal", 3, "Foreign quota and condo-only rules; land 'nominee' set-ups are illegal."),
-        risk("liquidity", 4, "Foreign-quota units can usually only be resold to foreigners."),
+        risk(
+          "liquidity",
+          4,
+          "Resale relies mostly on foreign buyers, who need free quota and funds from abroad.",
+        ),
         risk("political", 4, "Coups and protests have recurred."),
         risk("str", 5, "Short lets illegal without a hotel licence."),
         risk("natural", 3, "Floods in the rainy season; tsunami risk on the Andaman coast."),
@@ -1217,7 +1223,12 @@ export const moreCountries: Country[] = [
           notes: "Levied on the assessed value, which is below the price.",
         },
         { label: "Registration tax and judicial scrivener", kind: "pct", low: 0.005, high: 0.01 },
-        { label: "Agent commission (3% + ¥60,000 + VAT)", kind: "pct", low: 0.03, high: 0.036 },
+        {
+          label: "Agent commission (3% + ¥60,000, plus 10% consumption tax)",
+          kind: "pct",
+          low: 0.033,
+          high: 0.036,
+        },
       ],
       meta: meta(S.jpTax, S.gpg),
     },
@@ -1261,12 +1272,12 @@ export const moreCountries: Country[] = [
       basis: "net",
       rate: 0.1,
       brackets: [
-        { upTo: 13000, rate: 0.05 },
-        { upTo: 22100, rate: 0.1 },
-        { upTo: 46600, rate: 0.2 },
-        { upTo: 60300, rate: 0.23 },
-        { upTo: 120600, rate: 0.33 },
-        { upTo: 268000, rate: 0.4 },
+        { upTo: 12300, rate: 0.05 },
+        { upTo: 20900, rate: 0.1 },
+        { upTo: 44000, rate: 0.2 },
+        { upTo: 57000, rate: 0.23 },
+        { upTo: 113900, rate: 0.33 },
+        { upTo: 253200, rate: 0.4 },
         { upTo: null, rate: 0.45 },
       ],
       taxableShareOfGross: 1,
@@ -1327,7 +1338,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 150,
     shortTermOccupancy: 0.75,
     strAllowed: "restricted",
-    strRules: "120 nights a year for a main home; second homes need change-of-use approval.",
+    strRules:
+      "90 nights a year for a main home since 2025; second homes need change-of-use approval with compensation.",
     highlight: "Rent control and the lowest yields; very liquid.",
   }),
   city({
@@ -1511,8 +1523,9 @@ export const moreCities: City[] = [
     longTermRentMonthlyLocal: 600,
     shortTermNightlyLocal: 85,
     shortTermOccupancy: 0.65,
-    strAllowed: "yes",
-    strRules: "Fewer limits than Berlin; registration may apply.",
+    strAllowed: "restricted",
+    strRules:
+      "Since September 2024, letting a flat to tourists for more than 12 weeks a year needs a city permit.",
     highlight: "Fast-growing, the best yields here.",
   }),
   city({
@@ -1590,7 +1603,7 @@ export const moreCities: City[] = [
     typicalUnitSqm: 85,
     longTermRentMonthlyLocal: 1150,
     shortTermNightlyLocal: 110,
-    shortTermOccupancy: 0.6,
+    shortTermOccupancy: 0.5,
     strAllowed: "restricted",
     strRules: "Under-45-day rentals limited outside tourist zones.",
     highlight: "Oversupplied towers: negotiate hard.",
@@ -1602,8 +1615,8 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 1500,
     typicalUnitSqm: 110,
     longTermRentMonthlyLocal: 1000,
-    shortTermNightlyLocal: 90,
-    shortTermOccupancy: 0.45,
+    shortTermNightlyLocal: 125,
+    shortTermOccupancy: 0.37,
     strAllowed: "yes",
     strRules: "Few restrictions; tourism licence for regular lets.",
     highlight: "Cool mountain town, popular with US retirees.",
@@ -1615,8 +1628,8 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 1800,
     typicalUnitSqm: 100,
     longTermRentMonthlyLocal: 1100,
-    shortTermNightlyLocal: 140,
-    shortTermOccupancy: 0.45,
+    shortTermNightlyLocal: 175,
+    shortTermOccupancy: 0.3,
     strAllowed: "yes",
     strRules: "Few restrictions; weekend demand from the city.",
     highlight: "Beach town an hour from Panama City.",
@@ -1851,7 +1864,7 @@ export const moreCities: City[] = [
     id: "mx-san-miguel",
     countryId: "mx",
     name: "San Miguel de Allende",
-    pricePerSqmLocal: 55000,
+    pricePerSqmLocal: 42000,
     typicalUnitSqm: 110,
     longTermRentMonthlyLocal: 30000,
     shortTermNightlyLocal: 3500,
@@ -1864,7 +1877,7 @@ export const moreCities: City[] = [
     id: "mx-tulum",
     countryId: "mx",
     name: "Tulum",
-    pricePerSqmLocal: 50000,
+    pricePerSqmLocal: 45000,
     typicalUnitSqm: 65,
     longTermRentMonthlyLocal: 22000,
     shortTermNightlyLocal: 3000,
@@ -1890,7 +1903,7 @@ export const moreCities: City[] = [
     id: "pt-madeira",
     countryId: "pt",
     name: "Funchal (Madeira)",
-    pricePerSqmLocal: 3300,
+    pricePerSqmLocal: 4050,
     typicalUnitSqm: 70,
     longTermRentMonthlyLocal: 1150,
     shortTermNightlyLocal: 110,

@@ -99,9 +99,11 @@ const niitThreshold = (params: UsTaxParams, filing: FilingStatus) =>
 /**
  * Estimated US tax on foreign rental income.
  * 1. Schedule E net = NOI − mortgage interest − depreciation (basis × building share ÷ recovery years).
- * 2. Federal tax on the rent = tax(base taxable + net) − tax(base taxable): the incremental tax.
- * 3. Foreign Tax Credit = min(foreign tax paid, US tax on that income) — the Form 1116 limitation.
- *    Any excess is a carryforward, not a refund.
+ * 2. Federal tax on the rent = tax(taxable income with the rent) − tax(taxable income without it),
+ *    where taxable income = income − standard deduction (an unused deduction shelters rent).
+ * 3. Foreign Tax Credit = min(foreign tax paid, §904 limitation). The limitation (Form 1116) is
+ *    total US tax × foreign-source taxable income ÷ worldwide taxable income, with the standard
+ *    deduction apportioned by income (Form 1116 line 3). Any excess is a carryforward, not a refund.
  * 4. NIIT (3.8%) on the lesser of net rent and MAGI above the threshold; the FTC does not offset it.
  * 5. State tax = state rate × net rent; most states give no credit for foreign tax.
  */
@@ -113,10 +115,25 @@ export function usRentalTax(input: UsTaxInput): UsTaxResult {
     params.depreciation.foreignResidentialYears;
   const scheduleENetUsd = input.netOperatingIncomeUsd - input.mortgageInterestUsd - depreciationUsd;
   const taxableNet = Math.max(0, scheduleENetUsd);
-  const baseTaxable = Math.max(0, input.baseIncomeUsd - deductionFor(params, filing));
-  const federalBeforeCreditUsd =
-    progressiveTax(baseTaxable + taxableNet, brackets) - progressiveTax(baseTaxable, brackets);
-  const foreignTaxCreditUsd = Math.min(input.foreignTaxPaidUsd, federalBeforeCreditUsd);
+  const deduction = deductionFor(params, filing);
+  const baseIncome = Math.max(0, input.baseIncomeUsd);
+  const baseTaxable = Math.max(0, baseIncome - deduction);
+  const totalTaxable = Math.max(0, baseIncome + taxableNet - deduction);
+  const totalTaxUsd = progressiveTax(totalTaxable, brackets);
+  const federalBeforeCreditUsd = totalTaxUsd - progressiveTax(baseTaxable, brackets);
+  // §904 limitation: the deduction is apportioned to the rent pro rata to income.
+  const grossIncome = baseIncome + taxableNet;
+  const foreignTaxable = Math.max(
+    0,
+    taxableNet - (grossIncome > 0 ? (deduction * taxableNet) / grossIncome : 0),
+  );
+  const ftcLimitUsd =
+    totalTaxable > 0 ? totalTaxUsd * Math.min(1, foreignTaxable / totalTaxable) : 0;
+  const foreignTaxCreditUsd = Math.min(
+    input.foreignTaxPaidUsd,
+    ftcLimitUsd,
+    federalBeforeCreditUsd,
+  );
   const excessForeignTaxUsd = Math.max(0, input.foreignTaxPaidUsd - foreignTaxCreditUsd);
   const magi = input.baseIncomeUsd + taxableNet;
   const niitUsd =
@@ -133,7 +150,7 @@ export function usRentalTax(input: UsTaxInput): UsTaxResult {
     additionalFederalUsd: federalBeforeCreditUsd - foreignTaxCreditUsd + niitUsd,
     stateTaxUsd,
     stateRate,
-    marginalFederalRate: marginalRate(baseTaxable + taxableNet, brackets),
+    marginalFederalRate: marginalRate(totalTaxable, brackets),
     passiveLossUsd: Math.max(0, -scheduleENetUsd),
   };
 }

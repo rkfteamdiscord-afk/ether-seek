@@ -447,7 +447,7 @@ function Landing() {
               {
                 icon: Landmark,
                 title: "US worldwide taxation",
-                text: "The US taxes citizens on income from anywhere. Foreign tax credits help, but rarely make the US bill disappear — and most states give no credit at all.",
+                text: "The US taxes citizens on income from anywhere. In high-tax countries the Foreign Tax Credit often wipes out the federal tax on the rent, but not always — and the 3.8% NIIT and most state taxes can still apply.",
               },
               {
                 icon: Building2,

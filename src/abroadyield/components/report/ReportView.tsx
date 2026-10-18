@@ -543,7 +543,9 @@ export function ReportView({
               <td>{formatUsd(result.us.federalBeforeCreditUsd)}</td>
             </tr>
             <tr>
-              <th scope="row">− Foreign Tax Credit (Form 1116), limited to the US tax above</th>
+              <th scope="row">
+                − Foreign Tax Credit (Form 1116), capped by the Form 1116 limitation
+              </th>
               <td>{formatUsd(result.us.foreignTaxCreditUsd)}</td>
             </tr>
             <tr>
@@ -571,7 +573,9 @@ export function ReportView({
         {result.us.passiveLossUsd > 0 ? (
           <p className="mt-3 text-ay-slate">
             This scenario shows a passive loss of {formatUsd(result.us.passiveLossUsd)} on paper.
-            Passive losses are generally carried forward rather than offsetting wages.
+            Passive losses generally cannot offset wages and are carried forward; with active
+            participation and modified AGI under $150,000, up to $25,000 may be deductible (phased
+            out from $100,000).
           </p>
         ) : null}
         <div className="mt-6 grid gap-4 md:grid-cols-2">

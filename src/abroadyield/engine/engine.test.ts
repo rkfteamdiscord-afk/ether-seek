@@ -249,11 +249,29 @@ describe("US tax on foreign rent", () => {
     expect(result.federalBeforeCreditUsd).toBeCloseTo(expected, 6);
     expect(result.additionalFederalUsd).toBeCloseTo(expected, 6); // no foreign tax, no credit, below NIIT threshold
   });
-  test("FTC is limited to the US tax on that income; excess carries forward", () => {
+  test("FTC follows the §904 limitation (Form 1116); excess carries forward", () => {
     const result = usRentalTax({ ...base, foreignTaxPaidUsd: 50000 });
-    expect(result.foreignTaxCreditUsd).toBeCloseTo(result.federalBeforeCreditUsd, 6);
-    expect(result.excessForeignTaxUsd).toBeCloseTo(50000 - result.federalBeforeCreditUsd, 6);
-    expect(result.additionalFederalUsd).toBeCloseTo(0, 6);
+    // Hand computation: deduction apportioned to the rent pro rata to income (Form 1116 line 3).
+    const ded = seedUsTax.standardDeduction.single;
+    const net = result.scheduleENetUsd;
+    const totalTaxable = 100000 + net - ded;
+    const foreignTaxable = net - (ded * net) / (100000 + net);
+    const totalTax = progressiveTax(totalTaxable, seedUsTax.federalBrackets.single);
+    const limit = (totalTax * foreignTaxable) / totalTaxable;
+    expect(result.foreignTaxCreditUsd).toBeCloseTo(limit, 6);
+    expect(result.excessForeignTaxUsd).toBeCloseTo(50000 - limit, 6);
+    // The average-rate limit is below the incremental tax, so some US tax can remain.
+    expect(result.foreignTaxCreditUsd).toBeLessThanOrEqual(result.federalBeforeCreditUsd);
+    expect(result.additionalFederalUsd).toBeCloseTo(result.federalBeforeCreditUsd - limit, 6);
+  });
+  test("an unused standard deduction shelters part of the rent", () => {
+    const low = usRentalTax({ ...base, baseIncomeUsd: 5000 });
+    const ded = seedUsTax.standardDeduction.single;
+    const expected = progressiveTax(
+      Math.max(0, 5000 + low.scheduleENetUsd - ded),
+      seedUsTax.federalBrackets.single,
+    );
+    expect(low.federalBeforeCreditUsd).toBeCloseTo(expected, 6);
   });
   test("partial credit leaves the difference to pay", () => {
     const full = usRentalTax(base).federalBeforeCreditUsd;
@@ -263,7 +281,12 @@ describe("US tax on foreign rent", () => {
   test("NIIT applies above the threshold and is not offset by the credit", () => {
     const rich = usRentalTax({ ...base, baseIncomeUsd: 400000, foreignTaxPaidUsd: 1e6 });
     expect(rich.niitUsd).toBeCloseTo(seedUsTax.niit.rate * rich.scheduleENetUsd, 6);
-    expect(rich.additionalFederalUsd).toBeCloseTo(rich.niitUsd, 6);
+    // The credit reduces regular tax only; the NIIT is always still owed.
+    expect(rich.additionalFederalUsd).toBeCloseTo(
+      rich.federalBeforeCreditUsd - rich.foreignTaxCreditUsd + rich.niitUsd,
+      6,
+    );
+    expect(rich.additionalFederalUsd).toBeGreaterThanOrEqual(rich.niitUsd);
   });
   test("losses create no tax and are reported as passive losses", () => {
     const result = usRentalTax({
@@ -400,9 +423,10 @@ describe("scenario defaults", () => {
   test("city metrics convert local prices with the configured rate", () => {
     const lisbon = seedCities.find((c) => c.id === "pt-lisbon")!;
     const m = cityMetrics(lisbon, country("pt"), seedSettings);
-    expect(m.pricePerSqmUsd).toBeCloseTo(5600 * seedSettings.fx.usdPerUnit["EUR"]!, 6);
-    expect(m.unitPriceUsd).toBeCloseTo(m.pricePerSqmUsd * 70, 6);
-    expect(m.grossYieldLong).toBeCloseTo((1700 * 12) / (5600 * 70), 6);
+    const { pricePerSqmLocal: price, typicalUnitSqm: sqm, longTermRentMonthlyLocal: rent } = lisbon;
+    expect(m.pricePerSqmUsd).toBeCloseTo(price * seedSettings.fx.usdPerUnit["EUR"]!, 6);
+    expect(m.unitPriceUsd).toBeCloseTo(m.pricePerSqmUsd * sqm, 6);
+    expect(m.grossYieldLong).toBeCloseTo((rent * 12) / (price * sqm), 6);
     expect(m.netYieldLong).toBeLessThan(m.grossYieldLong);
   });
   test("mortgage profiles get a down payment from the country's LTV cap", () => {

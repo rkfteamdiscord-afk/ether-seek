@@ -103,9 +103,10 @@ const coreCountries: Country[] = [
         {
           label: "Property transfer tax (IMT)",
           kind: "pct",
-          low: 0.05,
+          low: 0.075,
           high: 0.075,
-          notes: "Progressive; secondary homes pay more.",
+          notes:
+            "Flat 7.5% for buyers who are not Portuguese tax residents (Decree-Law 97/2026, from May 2026); refundable if you become resident within 2 years or let at a moderate rent for 36 months.",
         },
         { label: "Stamp duty (Imposto do Selo)", kind: "pct", low: 0.008, high: 0.008 },
         { label: "Notary and land registry", kind: "pct", low: 0.003, high: 0.006 },
@@ -156,11 +157,11 @@ const coreCountries: Country[] = [
       rate: 0.25,
       taxableShareOfGross: 1,
       notes:
-        "Non-residents are taxed at a flat rate on rental income after deductible expenses (maintenance, condo fees, IMI).",
+        "Non-residents pay a flat 25% on long-term rental income after deductible expenses (IMI, condo fees, maintenance; not mortgage interest or depreciation). Short-term (AL) income follows different rules, and a 10% rate exists for moderate-rent leases from 2026.",
       treatyNotes:
         "US–Portugal tax treaty in force; Portuguese tax paid is generally creditable against US tax on the same income.",
       capitalGainsNotes:
-        "Non-resident capital gains on property are taxed in Portugal; US also taxes the gain with a credit for Portuguese tax.",
+        "Since 2023 non-residents are taxed like residents: 50% of the gain is added to income and taxed at progressive rates (about 12.5%–48%), with no buyer withholding. The US taxes the gain with a foreign tax credit.",
       meta: meta(S.ptTax, S.pwc, S.irsTreaties),
     },
     risks: {
@@ -193,7 +194,8 @@ const coreCountries: Country[] = [
           key: "str",
           level: 4,
           summary: "AL licence freezes in Lisbon, Porto and some coastal towns.",
-          mitigation: "Confirm the licence transfers with the property before signing.",
+          mitigation:
+            "Confirm the licence transfers with the property before signing; in Lisbon containment zones an AL registration lapses on sale.",
         },
         {
           key: "natural",
@@ -260,8 +262,9 @@ const coreCountries: Country[] = [
           label: "Transfer tax (ITP, resale)",
           kind: "pct",
           low: 0.06,
-          high: 0.1,
-          notes: "Set by region; new builds pay VAT + stamp duty instead.",
+          high: 0.13,
+          notes:
+            "Set by region (Madrid 6%, Andalusia 7%, Valencia 9%/11%, Catalonia 10–13%). New builds pay 10% VAT plus regional stamp duty instead.",
         },
         { label: "Notary and land registry", kind: "pct", low: 0.01, high: 0.015 },
         { label: "Lawyer", kind: "pct", low: 0.01, high: 0.01 },
@@ -306,7 +309,7 @@ const coreCountries: Country[] = [
       hoaMonthlyUsd: 100,
       strFriendliness: 3,
       strRules:
-        "A national short-term rental registry applies from 2025; Barcelona plans to phase out tourist flats and many cities restrict new licences.",
+        "Regional tourist licences are required, and since April 2025 a new tourist let needs approval from 3/5 of the owners' community. The national registry was annulled by the Supreme Court in May 2026. Barcelona ends tourist licences by November 2028; Málaga, Alicante, Valencia and Madrid restrict new ones.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -315,7 +318,7 @@ const coreCountries: Country[] = [
       rate: 0.24,
       taxableShareOfGross: 1,
       notes:
-        "Non-EU/EEA residents pay a flat rate on gross rental income with no deductions. EU residents pay 19% on net income.",
+        "Non-EU/EEA residents pay 24% on gross rent with no deductions (a July 2025 court ruling allows refund claims for deductions). EU/EEA residents pay 19% on net. A vacant or owner-used home is taxed on imputed income: 24% of 1.1%–2% of cadastral value a year. File Modelo 210.",
       treatyNotes: "US–Spain tax treaty in force; Spanish tax is generally creditable in the US.",
       capitalGainsNotes:
         "Non-residents pay 19% on gains; the buyer withholds 3% of the price as a prepayment.",
@@ -476,10 +479,10 @@ const coreCountries: Country[] = [
       shortTermRate: 0.26,
       taxableShareOfGross: 1,
       notes:
-        "Optional flat tax on gross rent instead of progressive IRPEF. 26% applies to short-term rentals from the second property.",
+        "Optional flat tax (cedolare secca) on gross rent instead of progressive IRPEF: 21% on free-market leases (10% on canone concordato). Short lets: 21% on one chosen unit, 26% on the others. From 2026, short-letting three or more units counts as a business (VAT number, ordinary rates, no flat tax).",
       treatyNotes: "US–Italy tax treaty in force; Italian tax is generally creditable in the US.",
       capitalGainsNotes:
-        "Gains on property held more than five years are generally not taxed in Italy; the US still taxes the gain.",
+        "Gains on property held more than five years are generally not taxed in Italy. Within five years the gain is taxed at IRPEF rates or, by choice, a 26% substitute tax collected by the notary; homes renovated with the Superbonus are taxable if sold within 10 years of the works. The US still taxes the gain.",
       meta: meta(S.itTax, S.pwc, S.irsTreaties),
     },
     risks: {
@@ -551,13 +554,14 @@ const coreCountries: Country[] = [
     tagline: "Low entry prices and solid yields, with progressive rental tax.",
     summary:
       "Greece has low transfer costs and some of the highest yields in Southern Europe, especially in Athens. Rental income is taxed progressively up to 45%, and local mortgages for non-residents are rare.",
-    keyRisk: "Rental tax reaches 35–45% once rent passes €12,000 a year.",
+    keyRisk:
+      "Rental tax rises to 25% above €12,000 of rent a year, 35% above €24,000 and 45% above €35,000.",
     minEntryPriceUsd: 100000,
     stability: 6,
     flightHoursFromNyc: 9.5,
     lifestyle: { beach: 10, city: 7, lowCost: 7, english: 7, shortFlight: 5, warm: 9 },
     residencyNotes:
-      "The Golden Visa is available above €250,000–€800,000 depending on location (higher in Athens and islands).",
+      "The Golden Visa needs one property of at least 120 m² worth €800,000 in Attica, Thessaloniki, Mykonos, Santorini and large islands, or €400,000 elsewhere (€250,000 only for conversions to residential or listed-building restorations). Golden Visa homes may not be let short-term.",
     ownership: {
       status: "allowed",
       summary:
@@ -626,7 +630,7 @@ const coreCountries: Country[] = [
       hoaMonthlyUsd: 50,
       strFriendliness: 6,
       strRules:
-        "Short-term rentals need an AMA registry number; new licences are frozen in central Athens districts.",
+        "Short-term rentals need an AMA registry number. New registrations are frozen in Athens' 1st, 2nd and 3rd municipal districts (reported extended to the end of 2027), a registration lapses on sale, Golden Visa homes may not be let short-term, and a climate resilience fee of €8 a night (April–October) applies.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -634,17 +638,18 @@ const coreCountries: Country[] = [
       basis: "gross",
       rate: 0.15,
       brackets: [
-        { upTo: 14000, rate: 0.15 },
-        { upTo: 40500, rate: 0.35 },
+        { upTo: 13440, rate: 0.15 },
+        { upTo: 26880, rate: 0.25 },
+        { upTo: 39200, rate: 0.35 },
         { upTo: null, rate: 0.45 },
       ],
       taxableShareOfGross: 0.95,
       notes:
-        "Rent is taxed on gross income minus a 5% flat deduction, at 15% up to €12,000, 35% up to €35,000 and 45% above (thresholds stored in USD).",
+        "Rent is taxed separately on gross income minus a 5% flat deduction: 15% up to €12,000, 25% up to €24,000, 35% up to €35,000 and 45% above (Law 5246/2025, from 2026 income; thresholds stored in USD). From 2026 rent must be paid electronically for the 5% deduction to apply.",
       treatyNotes:
         "US–Greece tax treaty in force (1950); Greek tax is generally creditable in the US.",
       capitalGainsNotes:
-        "Capital gains tax on property sales is suspended in Greece until further notice; the US taxes the gain.",
+        "Greek capital gains tax (15%) on property sold by individuals is suspended until 31 December 2026; an extension is not yet confirmed. The US taxes the gain.",
       meta: meta(S.grTax, S.pwc, S.irsTreaties),
     },
     risks: {
@@ -746,7 +751,7 @@ const coreCountries: Country[] = [
           label: "Acquisition tax (ISAI)",
           kind: "pct",
           low: 0.02,
-          high: 0.045,
+          high: 0.05,
           notes: "Varies by state/municipality.",
         },
         { label: "Notary, registry and appraisal", kind: "pct", low: 0.01, high: 0.02 },
@@ -807,7 +812,7 @@ const coreCountries: Country[] = [
       rate: 0.25,
       taxableShareOfGross: 1,
       notes:
-        "Non-residents pay a flat rate on gross rent without deductions (an alternative 35% on net income requires a legal representative). Lodging taxes may also apply.",
+        "Non-residents pay 25% on gross rent without deductions (or 35% on net income through a Mexican legal representative). Short-term lets also owe 16% VAT (IVA) and a state lodging tax; platforms withhold for registered hosts.",
       treatyNotes:
         "US–Mexico tax treaty in force; Mexican income tax is generally creditable in the US.",
       capitalGainsNotes:
@@ -888,7 +893,7 @@ const coreCountries: Country[] = [
     flightHoursFromNyc: 5.5,
     lifestyle: { beach: 10, city: 4, lowCost: 6, english: 7, shortFlight: 9, warm: 10 },
     residencyNotes:
-      "Investor residency requires USD 150,000+ in property; pensionado residency requires USD 1,000/month pension income.",
+      "Pensionado: USD 1,000/month lifetime pension. Rentista: USD 2,500/month for 2 years or a USD 60,000 deposit. Investor: the USD 150,000 route (Law 9996) expired on 14 July 2026 and the threshold is reported to revert to USD 200,000; confirm with immigration (DGME).",
     ownership: {
       status: "allowed",
       summary:
@@ -908,7 +913,7 @@ const coreCountries: Country[] = [
     acquisition: {
       items: [
         { label: "Transfer tax", kind: "pct", low: 0.015, high: 0.015 },
-        { label: "Registry and stamps", kind: "pct", low: 0.008, high: 0.01 },
+        { label: "Registry and stamps", kind: "pct", low: 0.005, high: 0.008 },
         { label: "Notary / attorney", kind: "pct", low: 0.0125, high: 0.0125 },
         { label: "Escrow and due diligence", kind: "fixed", low: 1000, high: 2500 },
       ],
@@ -951,7 +956,7 @@ const coreCountries: Country[] = [
       hoaMonthlyUsd: 180,
       strFriendliness: 8,
       strRules:
-        "Short-term rentals are allowed and taxed (13% VAT on lodging plus registration with the tourism board for some properties).",
+        "Short-term rentals are allowed. Law 9742 requires every non-traditional lodging to register with the tourism board (ICT) and hold a municipal licence, and 13% VAT applies to stays.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -960,11 +965,11 @@ const coreCountries: Country[] = [
       rate: 0.15,
       taxableShareOfGross: 0.85,
       notes:
-        "15% applied to 85% of gross rent (effective 12.75%). Short-term rentals may also owe VAT on lodging.",
+        "15% applied to 85% of gross rent (effective 12.75%), filed monthly. Short-term lodging owes 13% VAT. A luxury home tax (0.25%–0.55%) applies when construction value exceeds about ₡143 million (2026).",
       treatyNotes:
         "No comprehensive US–Costa Rica income tax treaty; the US still allows a Foreign Tax Credit for Costa Rican income tax.",
       capitalGainsNotes:
-        "15% on gains for properties acquired after July 2019 (2.25% of price option); the US taxes the gain.",
+        "15% on the net gain. For property bought before 1 July 2019 the seller may instead pay 2.25% of the price, on the first sale only. For non-resident sellers the buyer withholds 2.5% of the price. The US also taxes the gain.",
       meta: meta(S.crTax, S.pwc),
     },
     risks: {
@@ -1040,7 +1045,7 @@ const coreCountries: Country[] = [
     flightHoursFromNyc: 12.5,
     lifestyle: { beach: 8, city: 10, lowCost: 3, english: 10, shortFlight: 1, warm: 10 },
     residencyNotes:
-      "Property worth AED 750,000+ can support a 2-year residence visa; AED 2 million+ can qualify for a 10-year Golden Visa.",
+      "Since April 2026 the sole owner of a completed, title-deeded property can apply for the 2-year investor visa whatever its value (joint owners need AED 400,000 each; off-plan does not qualify). AED 2 million+ can qualify for a 10-year Golden Visa.",
     ownership: {
       status: "allowed",
       summary:
@@ -1101,7 +1106,8 @@ const coreCountries: Country[] = [
       propertyTaxPctOfPrice: 0,
       hoaMonthlyUsd: 350,
       strFriendliness: 8,
-      strRules: "Holiday homes need a DTCM permit; tourism dirham fees apply per night.",
+      strRules:
+        "Holiday homes need a DET (Department of Economy and Tourism, formerly DTCM) permit, Dubai-licensed insurance and an approved lock; a Tourism Dirham fee applies per occupied room per night, and the owner pays the 5% DEWA housing fee on short lets.",
       meta: meta(S.dld, S.gpg),
     },
     localTax: {
@@ -1145,7 +1151,7 @@ const coreCountries: Country[] = [
         {
           key: "str",
           level: 2,
-          summary: "Permitted with a DTCM licence.",
+          summary: "Permitted with a DET holiday-home permit.",
           mitigation: "Check building rules and fees.",
         },
         {
@@ -1164,7 +1170,7 @@ const coreCountries: Country[] = [
         "Obtain the developer's NOC (resales).",
         "Arrange mortgage approval or transfer funds.",
         "Transfer at a registration trustee office and receive the title deed.",
-        "Apply for a DTCM holiday-home permit if renting short term.",
+        "Apply for a DET holiday-home permit if renting short term.",
         "Report the foreign account and full rental income in the US (no foreign tax credit).",
       ],
       meta: meta(S.dld),
@@ -1183,20 +1189,21 @@ const coreCities: City[] = [
     id: "pt-lisbon",
     countryId: "pt",
     name: "Lisbon",
-    pricePerSqmLocal: 5600,
+    pricePerSqmLocal: 6250,
     typicalUnitSqm: 70,
     longTermRentMonthlyLocal: 1700,
     shortTermNightlyLocal: 120,
     shortTermOccupancy: 0.72,
     strAllowed: "restricted",
-    strRules: "New AL licences suspended in central parishes.",
+    strRules:
+      "New AL registrations barred in parishes with 10%+ AL (exceptional at 5–10%); licences in containment zones lapse on sale.",
     highlight: "Deepest rental market; prices high.",
   }),
   city({
     id: "pt-porto",
     countryId: "pt",
     name: "Porto",
-    pricePerSqmLocal: 3600,
+    pricePerSqmLocal: 4300,
     typicalUnitSqm: 70,
     longTermRentMonthlyLocal: 1250,
     shortTermNightlyLocal: 95,
@@ -1209,7 +1216,7 @@ const coreCities: City[] = [
     id: "pt-algarve",
     countryId: "pt",
     name: "Faro & Algarve",
-    pricePerSqmLocal: 3300,
+    pricePerSqmLocal: 4000,
     typicalUnitSqm: 75,
     longTermRentMonthlyLocal: 1100,
     shortTermNightlyLocal: 130,
@@ -1222,7 +1229,7 @@ const coreCities: City[] = [
     id: "pt-braga",
     countryId: "pt",
     name: "Braga",
-    pricePerSqmLocal: 2100,
+    pricePerSqmLocal: 2400,
     typicalUnitSqm: 80,
     longTermRentMonthlyLocal: 850,
     shortTermNightlyLocal: 70,
@@ -1235,20 +1242,21 @@ const coreCities: City[] = [
     id: "es-madrid",
     countryId: "es",
     name: "Madrid",
-    pricePerSqmLocal: 5000,
+    pricePerSqmLocal: 6450,
     typicalUnitSqm: 70,
     longTermRentMonthlyLocal: 1650,
     shortTermNightlyLocal: 115,
     shortTermOccupancy: 0.75,
     strAllowed: "restricted",
-    strRules: "Tourist flats need a separate street entrance in the centre.",
+    strRules:
+      "No new tourist flats in residential buildings in the historic centre (Plan Reside); elsewhere independent access is required, plus regional and municipal licences.",
     highlight: "Strong long-term demand.",
   }),
   city({
     id: "es-barcelona",
     countryId: "es",
     name: "Barcelona",
-    pricePerSqmLocal: 4700,
+    pricePerSqmLocal: 5450,
     typicalUnitSqm: 70,
     longTermRentMonthlyLocal: 1500,
     shortTermNightlyLocal: 140,
@@ -1261,13 +1269,14 @@ const coreCities: City[] = [
     id: "es-valencia",
     countryId: "es",
     name: "Valencia",
-    pricePerSqmLocal: 2800,
+    pricePerSqmLocal: 3450,
     typicalUnitSqm: 80,
-    longTermRentMonthlyLocal: 1150,
+    longTermRentMonthlyLocal: 1300,
     shortTermNightlyLocal: 100,
     shortTermOccupancy: 0.65,
     strAllowed: "restricted",
-    strRules: "Moratorium on new tourist licences in many districts.",
+    strRules:
+      "Permanent caps replaced the 2024 moratorium: tourist places at most 8% of neighbourhood population and 2% of housing; stricter in Ciutat Vella.",
     highlight: "Good balance of price and rent.",
   }),
   city({
@@ -1280,20 +1289,22 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 120,
     shortTermOccupancy: 0.68,
     strAllowed: "restricted",
-    strRules: "New tourist licences restricted in saturated districts.",
+    strRules:
+      "Citywide three-year moratorium on new tourist-rental licences since July 2026; existing licences stay valid.",
     highlight: "Popular with North-European and US buyers.",
   }),
   city({
     id: "es-alicante",
     countryId: "es",
     name: "Alicante",
-    pricePerSqmLocal: 2400,
+    pricePerSqmLocal: 2700,
     typicalUnitSqm: 80,
     longTermRentMonthlyLocal: 950,
     shortTermNightlyLocal: 90,
     shortTermOccupancy: 0.6,
-    strAllowed: "yes",
-    strRules: "Regional registration required.",
+    strAllowed: "restricted",
+    strRules:
+      "Moratorium on new tourist-flat licences in Alicante city until at least January 2027; owners' community approval also needed.",
     highlight: "Lower entry prices on the coast.",
   }),
   city({
@@ -1306,7 +1317,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 130,
     shortTermOccupancy: 0.7,
     strAllowed: "yes",
-    strRules: "CIN code required; key-box rules apply.",
+    strRules:
+      "CIN code required; keyboxes on public ground banned since January 2026 and guests must be identified in person.",
     highlight: "Italy's most liquid market.",
   }),
   city({
@@ -1331,8 +1343,9 @@ const coreCities: City[] = [
     longTermRentMonthlyLocal: 1300,
     shortTermNightlyLocal: 150,
     shortTermOccupancy: 0.72,
-    strAllowed: "no",
-    strRules: "New tourist rentals banned in the UNESCO historic centre.",
+    strAllowed: "restricted",
+    strRules:
+      "New tourist rentals banned in the UNESCO historic centre (existing ones need five-year permits); limits are being extended to nine outer zones.",
     highlight: "Long-term and student lets.",
   }),
   city({
@@ -1432,7 +1445,7 @@ const coreCities: City[] = [
     name: "Playa del Carmen",
     pricePerSqmLocal: 50000,
     typicalUnitSqm: 70,
-    longTermRentMonthlyLocal: 20000,
+    longTermRentMonthlyLocal: 15000,
     shortTermNightlyLocal: 2000,
     shortTermOccupancy: 0.6,
     strAllowed: "yes",
@@ -1527,7 +1540,7 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 650,
     shortTermOccupancy: 0.75,
     strAllowed: "yes",
-    strRules: "DTCM holiday-home permit required.",
+    strRules: "DET holiday-home permit required.",
     highlight: "Mature, liquid waterfront district.",
   }),
   city({
@@ -1540,7 +1553,7 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 850,
     shortTermOccupancy: 0.75,
     strAllowed: "yes",
-    strRules: "DTCM holiday-home permit required.",
+    strRules: "DET holiday-home permit required.",
     highlight: "Prime location, lower yields.",
   }),
   city({
@@ -1553,7 +1566,7 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 420,
     shortTermOccupancy: 0.7,
     strAllowed: "yes",
-    strRules: "DTCM holiday-home permit required.",
+    strRules: "DET holiday-home permit required.",
     highlight: "Affordable, high yields, lots of new supply.",
   }),
   city({
@@ -1566,7 +1579,7 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 600,
     shortTermOccupancy: 0.72,
     strAllowed: "yes",
-    strRules: "DTCM holiday-home permit required.",
+    strRules: "DET holiday-home permit required.",
     highlight: "Central, popular with young professionals.",
   }),
 ];

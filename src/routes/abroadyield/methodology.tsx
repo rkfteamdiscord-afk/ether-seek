@@ -116,7 +116,10 @@ function Methodology() {
             </li>
             <li>
               <strong>Foreign Tax Credit</strong> (Form 1116) = the lower of foreign tax paid and
-              the US tax on that income. Any excess is shown as a carryforward, not as money back.
+              the Form 1116 limitation: your total US tax × foreign-source taxable income ÷
+              worldwide taxable income, with the standard deduction shared out in proportion to
+              income. Any excess is shown as a carryover (1 year back, 10 years forward), not as
+              money back.
             </li>
             <li>
               <strong>Net Investment Income Tax</strong> of {formatPct(usTax.niit.rate)} on the
