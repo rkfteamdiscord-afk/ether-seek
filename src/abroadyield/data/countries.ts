@@ -1200,7 +1200,7 @@ const coreCities: City[] = [
     shortTermOccupancy: 0.72,
     strAllowed: "restricted",
     strRules:
-      "New AL registrations barred in parishes with 10%+ AL (exceptional at 5–10%); licences in containment zones lapse on sale.",
+      "New AL registrations barred in absolute-containment areas (10+ AL per 100 homes) and only exceptional in relative-containment areas (5–10%); in containment areas apartment/house registrations lapse on sale (revised municipal rules in force since December 2025).",
     highlight: "Deepest rental market; prices high.",
   }),
   city({
@@ -1213,7 +1213,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 95,
     shortTermOccupancy: 0.7,
     strAllowed: "restricted",
-    strRules: "AL restrictions in the historic centre.",
+    strRules:
+      "New AL registrations barred in containment parishes (AL ratio of 15% or more): the historic-centre parishes Vitória, São Nicolau, Sé, Santo Ildefonso and Miragaia.",
     highlight: "Lower prices than Lisbon, strong student demand.",
   }),
   city({
@@ -1253,7 +1254,7 @@ const coreCities: City[] = [
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
     strRules:
-      "No new tourist flats in residential buildings in the historic centre (Plan Reside); elsewhere independent access is required, plus regional and municipal licences.",
+      "Plan Reside: in the historic centre new tourist flats only in whole buildings used for that purpose; elsewhere they need an independent entrance and must be on basement, ground or first floors; existing licences continue.",
     highlight: "Strong long-term demand.",
   }),
   city({
@@ -1266,7 +1267,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 175,
     shortTermOccupancy: 0.6,
     strAllowed: "no",
-    strRules: "Tourist licences to be phased out by 2028; rent caps apply.",
+    strRules:
+      "No new tourist-flat (HUT) licences; the city will not renew its ~10,100 existing licences, which expire by November 2028 under Catalonia's 2023 decree-law (upheld by the Constitutional Court in 2025). Rentals of 32+ nights remain allowed.",
     highlight: "Rent-capped, long-term only.",
   }),
   city({
@@ -1280,7 +1282,7 @@ const coreCities: City[] = [
     shortTermOccupancy: 0.65,
     strAllowed: "restricted",
     strRules:
-      "Permanent caps replaced the 2024 moratorium: tourist places at most 8% of neighbourhood population and 2% of housing; stricter in Ciutat Vella.",
+      "Permanent rules replaced the 2024 moratorium (approved 31 March 2026): tourist flats may not exceed 2% of the housing stock of each neighbourhood and district, and are allowed only on ground and first floors in non-saturated areas, with their own street access.",
     highlight: "Good balance of price and rent.",
   }),
   city({
@@ -1322,7 +1324,7 @@ const coreCities: City[] = [
     shortTermOccupancy: 0.7,
     strAllowed: "yes",
     strRules:
-      "CIN code required; keyboxes on public ground banned since January 2026 and guests must be identified in person.",
+      "CIN code required; keyboxes on public ground banned since January 2026 (fines EUR 100–400); guests must be identified face to face or by live video check, not by automated self check-in.",
     highlight: "Italy's most liquid market.",
   }),
   city({
@@ -1349,7 +1351,7 @@ const coreCities: City[] = [
     shortTermOccupancy: 0.72,
     strAllowed: "restricted",
     strRules:
-      "New tourist rentals banned in the UNESCO historic centre (existing ones need five-year permits); limits are being extended to nine outer zones.",
+      "New short-term tourist rentals banned in the UNESCO historic centre and, since a June 2026 council vote, in nine further areas outside it; existing rentals may continue but must comply with the regional law by 2028.",
     highlight: "Long-term and student lets.",
   }),
   city({
@@ -1362,7 +1364,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 135,
     shortTermOccupancy: 0.65,
     strAllowed: "yes",
-    strRules: "CIN code required.",
+    strRules:
+      "CIN code required; Emilia-Romagna's 2025 law also requires a SCIA filing (under constitutional challenge); Bologna's municipal limits were annulled in December 2025.",
     highlight: "University city with steady demand.",
   }),
   city({
@@ -1454,7 +1457,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 2000,
     shortTermOccupancy: 0.6,
     strAllowed: "yes",
-    strRules: "Allowed; check HOA rules.",
+    strRules:
+      "Allowed. Hosts and platforms must register in Quintana Roo's state tourism registry (RETUR-Q; online, free, renewed yearly; fines for unregistered rentals). The state lodging tax is collected through the platforms. Platforms withhold federal income tax and VAT from hosts (4% ISR and half the 16% VAT with an RFC; 20% ISR and all the VAT without one). Check condominium rules.",
     highlight: "Vacation-rental hub; heavy new supply.",
   }),
   city({
@@ -1480,7 +1484,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 1500,
     shortTermOccupancy: 0.55,
     strAllowed: "yes",
-    strRules: "Allowed; mostly inland (no trust needed in the city).",
+    strRules:
+      "Allowed. Yucatán has no specific short-term rental law or mandatory registry yet (Sefotur is preparing regulation). Platforms already pay the state lodging tax. Platforms withhold federal income tax and VAT from hosts (4% ISR and half the 16% VAT with an RFC; 20% ISR and all the VAT without one).",
     highlight: "Safe, affordable colonial city.",
   }),
   city({
@@ -1489,11 +1494,12 @@ const coreCities: City[] = [
     name: "Escazú (San José)",
     pricePerSqmLocal: 1050000,
     typicalUnitSqm: 100,
-    longTermRentMonthlyLocal: 750000,
+    longTermRentMonthlyLocal: 560000,
     shortTermNightlyLocal: 68000,
     shortTermOccupancy: 0.35,
     strAllowed: "yes",
-    strRules: "Allowed; VAT on lodging.",
+    strRules:
+      "Allowed under Law 9742 (non-traditional lodging): register with the Costa Rican Tourism Institute (ICT) and with the tax authority (Tribu-CR), and get a municipal licence (patente); lodging is subject to 13% VAT.",
     highlight: "Long-term demand from expats and executives.",
   }),
   city({
@@ -1506,7 +1512,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 150000,
     shortTermOccupancy: 0.55,
     strAllowed: "yes",
-    strRules: "Allowed; check concession status of beach land.",
+    strRules:
+      "Allowed under Law 9742 (non-traditional lodging): register with the Costa Rican Tourism Institute (ICT) and with the tax authority (Tribu-CR), and get a municipal licence (patente); lodging is subject to 13% VAT. Land in the maritime-terrestrial zone is held by concession (Law 6043), so check the title.",
     highlight: "Surf town with strong vacation demand.",
   }),
   city({
@@ -1519,7 +1526,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 155000,
     shortTermOccupancy: 0.5,
     strAllowed: "yes",
-    strRules: "Allowed; strict zoning in some areas.",
+    strRules:
+      "Allowed under Law 9742 (non-traditional lodging): register with the Costa Rican Tourism Institute (ICT) and with the tax authority (Tribu-CR), and get a municipal licence (patente); lodging is subject to 13% VAT.",
     highlight: "Premium wellness destination.",
   }),
   city({
@@ -1532,7 +1540,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 65000,
     shortTermOccupancy: 0.4,
     strAllowed: "yes",
-    strRules: "Allowed.",
+    strRules:
+      "Allowed under Law 9742 (non-traditional lodging): register with the Costa Rican Tourism Institute (ICT) and with the tax authority (Tribu-CR), and get a municipal licence (patente); lodging is subject to 13% VAT.",
     highlight: "Retiree favourite with mild climate.",
   }),
   city({

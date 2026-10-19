@@ -23,6 +23,8 @@ export interface Slide {
   alt: string;
   /** Says what the photo shows when it is not the city the figures are for. */
   photoCaption: string;
+  /** True when the country or city figures are still sample data. */
+  sample: boolean;
   gross: number;
   afterTax: number;
 }
@@ -151,7 +153,7 @@ export function CinematicHero({
               <strong className="text-ay-sand-2">{(current.afterTax * 100).toFixed(1)}%</strong>
               <span className="block text-sm text-white/55">
                 Example after costs, local and US taxes.
-                {current.country.dataStatus === "sample" ? " Sample data – to be verified." : ""}
+                {current.sample ? " Sample data – to be verified." : ""}
                 {current.photoCaption && !failed[current.photo] ? ` ${current.photoCaption}.` : ""}
               </span>
             </p>

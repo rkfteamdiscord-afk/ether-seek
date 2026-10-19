@@ -178,6 +178,7 @@ function Landing() {
               : "",
           gross: result.grossYield,
           afterTax: result.afterTaxYield,
+          sample: country.dataStatus === "sample" || city.dataStatus === "sample",
         },
       ];
     });

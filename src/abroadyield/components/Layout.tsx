@@ -247,10 +247,13 @@ function Footer() {
 }
 
 function GlobalNotices() {
-  const { countries } = useSiteData();
+  const { countries, cities } = useSiteData();
   const [demo, setDemo] = useState(false);
   useEffect(() => setDemo(getBackend().mode === "local"), []);
-  const hasSample = countries.some((c) => c.published && c.dataStatus === "sample");
+  const published = new Set(countries.filter((c) => c.published).map((c) => c.id));
+  const hasSample =
+    countries.some((c) => c.published && c.dataStatus === "sample") ||
+    cities.some((c) => published.has(c.countryId) && c.dataStatus === "sample");
   if (!hasSample && !demo) return null;
   return (
     <div className="ay-no-print border-b border-ay-warn/20 bg-ay-warn-bg text-ay-warn">
@@ -259,8 +262,8 @@ function GlobalNotices() {
         <p>
           {hasSample ? (
             <>
-              <strong>Sample data – to be verified.</strong> Country figures are indicative and have
-              not yet been verified.{" "}
+              <strong>Sample data – to be verified.</strong> Figures marked as sample are indicative
+              and have not yet been verified.{" "}
             </>
           ) : null}
           {demo ? (

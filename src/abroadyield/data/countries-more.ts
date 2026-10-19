@@ -804,11 +804,11 @@ export const moreCountries: Country[] = [
       ],
       taxableShareOfGross: 1,
       notes:
-        "Rental profit is taxed at 0%, 15% and 25%. Non-primary homes pay no property tax on the first $30,000 of registered value, then 0.6% up to $250,000, 0.8% up to $500,000 and 1% above.",
+        "Rental profit is taxed at 0%, 15% and 25%. By law, tax on income paid to a non-resident must be withheld by the payer, so ask your tenant or rental agent how they handle it and file a Panamanian return through a local accountant to settle the final tax. Homes that are not the owner's main residence are exempt up to $30,000 of registered (cadastral) value; above that, property tax is 0.6% up to $250,000, 0.8% up to $500,000 and 1% above.",
       treatyNotes:
-        "No US–Panama income tax treaty; Panamanian income tax is generally creditable against US tax.",
+        "No US–Panama income tax treaty (only a tax information exchange agreement, in force since 2011); Panamanian income tax is generally creditable against US tax.",
       capitalGainsNotes:
-        "Capital gains on real estate are taxed at 10%; the seller pays an advance of 3% of the higher of price or cadastral value before registration (any excess is refundable), or may elect 10% on the actual gain.",
+        "Capital gains on real estate are taxed at 10% of the gain. The seller usually pays 3% of the higher of the sale price or cadastral value before registration; this 3% can be accepted as the final tax, or the seller can declare 10% of the actual gain and recover any excess. Since Law 208 of 2021, sellers who do not trade property habitually may pay the 10% on the gain directly.",
       meta: meta(S.paTax, S.pwc),
     },
     risks: {
@@ -864,7 +864,7 @@ export const moreCountries: Country[] = [
     acquisition: {
       items: [
         { label: "Registration tax and registry office", kind: "pct", low: 0.015, high: 0.02 },
-        { label: "Notary fees (buyer's share)", kind: "pct", low: 0.0015, high: 0.003 },
+        { label: "Notary fees (buyer's share)", kind: "pct", low: 0.0025, high: 0.0035 },
         { label: "Lawyer", kind: "pct", low: 0.01, high: 0.02 },
       ],
       meta: meta(S.coTax, S.gpg),
@@ -1248,8 +1248,8 @@ export const moreCountries: Country[] = [
         {
           label: "Real estate acquisition tax",
           kind: "pct",
-          low: 0.005,
-          high: 0.02,
+          low: 0.008,
+          high: 0.022,
           notes:
             "3% of the assessed value (to 31 March 2027), which is below the price; residential land is taxed on half its value and housing deductions often reduce the tax further.",
         },
@@ -1383,7 +1383,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 130,
     shortTermOccupancy: 0.65,
     strAllowed: "restricted",
-    strRules: "Registration and change-of-use rules in the centre.",
+    strRules:
+      "Change-of-use authorisation needed from the first night to let a second home; since 1 September 2026 new authorisations in four quota zones are capped at 671 a year, while applications outside these zones stay open all year.",
     highlight: "Riviera demand with a strong summer season.",
   }),
   city({
@@ -1449,7 +1450,7 @@ export const moreCities: City[] = [
     typicalUnitSqm: 60,
     longTermRentMonthlyLocal: 1000,
     shortTermNightlyLocal: 95,
-    shortTermOccupancy: 0.65,
+    shortTermOccupancy: 0.55,
     strAllowed: "yes",
     strRules: "Planning permission may be needed for full-time short lets.",
     highlight: "Low prices and the highest yields here.",
@@ -1600,7 +1601,7 @@ export const moreCities: City[] = [
     name: "Dubrovnik",
     pricePerSqmLocal: 5500,
     typicalUnitSqm: 55,
-    longTermRentMonthlyLocal: 1100,
+    longTermRentMonthlyLocal: 750,
     shortTermNightlyLocal: 200,
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
@@ -1644,7 +1645,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 85,
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
-    strRules: "Under-45-day rentals limited outside tourist zones.",
+    strRules:
+      "Law 80 of 2012 (art. 21) bans lets of under 45 days in homes and residential buildings in the District of Panama unless the unit holds a tourist-lodging permit from the Tourism Authority (ATP); fines US$5,000-50,000. Licensed units in tourist zones such as Casco Antiguo may operate. Enforcement has been weak, and reform bills (e.g. Bill 35 of 2025) are pending but not passed.",
     highlight: "Oversupplied towers: negotiate hard.",
   }),
   city({
@@ -1657,7 +1659,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 125,
     shortTermOccupancy: 0.37,
     strAllowed: "yes",
-    strRules: "Few restrictions; tourism licence for regular lets.",
+    strRules:
+      "Law 80's 45-day minimum applies only in the District of Panama, so it does not cover this town. Check condominium bylaws and municipal zoning.",
     highlight: "Cool mountain town, popular with US retirees.",
   }),
   city({
@@ -1670,7 +1673,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 175,
     shortTermOccupancy: 0.3,
     strAllowed: "yes",
-    strRules: "Few restrictions; weekend demand from the city.",
+    strRules:
+      "Law 80's 45-day minimum applies only in the District of Panama, so it does not cover this town. Check condominium bylaws and municipal zoning.",
     highlight: "Beach town an hour from Panama City.",
   }),
   city({
@@ -1705,14 +1709,14 @@ export const moreCities: City[] = [
     id: "co-cartagena",
     countryId: "co",
     name: "Cartagena",
-    pricePerSqmLocal: 8500000,
+    pricePerSqmLocal: 7000000,
     typicalUnitSqm: 75,
     longTermRentMonthlyLocal: 4200000,
     shortTermNightlyLocal: 450000,
     shortTermOccupancy: 0.55,
     strAllowed: "restricted",
     strRules:
-      "RNT registration and express authorisation in the building's bylaws (most units are in condominium buildings).",
+      "RNT registration and express authorisation of tourist use in the building's bylaws. A MinCIT draft decree (Dec 2025, revised Jul 2026, not yet issued) would add prior verification of the RNT.",
     highlight: "Caribbean tourism, seasonal peaks.",
   }),
   city({
@@ -1863,7 +1867,7 @@ export const moreCities: City[] = [
     shortTermOccupancy: 0.75,
     strAllowed: "restricted",
     strRules:
-      "Minpaku is capped at 180 nights. Several wards (for example Itabashi and Sumida) ban unattended stays from Sunday noon to Friday noon in restricted zones. Shinjuku plans to ban it in residential areas, existing operators included, and cut commercial zones to 120 days.",
+      "Minpaku is capped at 180 nights a year. Wards add their own limits: Itabashi bars stays from Sunday noon to Friday noon in exclusively residential zones unless the host manages the home itself, and Sumida applies the same weekday restriction across the whole ward (from 1 April 2026) unless staff are stationed in or next to the building. Shinjuku proposes banning minpaku in residential-only zones and school districts, existing operators included, and cutting commercial zones to 120 days, with the change expected around summer 2027.",
     highlight: "Huge rental market, low yields.",
   }),
   city({
@@ -1877,7 +1881,7 @@ export const moreCities: City[] = [
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
     strRules:
-      "New special-zone minpaku applications closed on 29 May 2026; existing permits keep 365-day operation. New entrants need a 180-night minpaku registration or a hotel-business licence. A city ordinance (from 30 October 2026, if passed) requires staff on site while guests stay and favours reinforced-concrete buildings.",
+      "New special-zone minpaku applications closed on 29 May 2026; already-certified facilities may keep operating. New entrants need a 180-night minpaku registration or a hotel-business licence. A city ordinance amendment, due to take effect on 30 October 2026 if passed, would require staff on site while guests stay and, for new applications in buildings with other occupants, reinforced-concrete or steel-reinforced-concrete construction.",
     highlight: "Higher yields than Tokyo.",
   }),
   city({
@@ -1891,7 +1895,7 @@ export const moreCities: City[] = [
     shortTermOccupancy: 0.7,
     strAllowed: "restricted",
     strRules:
-      "In exclusively residential zones, host-absent minpaku may operate only from noon on 15 January to noon on 16 March (certified machiya exempt, up to 180 nights). The lodging tax rose on 1 March 2026 to ¥200–10,000 per person per night (¥400 at ¥6k–20k).",
+      "Minpaku is capped at 180 nights per year (counted from noon on 1 April). In exclusively residential zones it may in principle operate only from noon on 15 January to noon on 16 March; city-certified Kyo-machiya businesses are exempt and may operate up to 180 nights. The lodging tax rose on 1 March 2026 to five bands from ¥200 to ¥10,000 per person per night (¥400 at ¥6,000–19,999).",
     highlight: "Tourism magnet with the strictest rules.",
   }),
   city({
@@ -1914,11 +1918,12 @@ export const moreCities: City[] = [
     name: "San Miguel de Allende",
     pricePerSqmLocal: 28000,
     typicalUnitSqm: 110,
-    longTermRentMonthlyLocal: 30000,
+    longTermRentMonthlyLocal: 23000,
     shortTermNightlyLocal: 3500,
     shortTermOccupancy: 0.45,
     strAllowed: "yes",
-    strRules: "Municipal registration and lodging tax; historic-centre building rules.",
+    strRules:
+      "Allowed. Guanajuato's law on lodging through digital platforms (2020) subjects hosts to the state lodging tax. Platforms withhold federal income tax and VAT from hosts (4% ISR and half the 16% VAT with an RFC; 20% ISR and all the VAT without one). No municipal short-term rental registry found; check condominium or subdivision rules.",
     highlight: "Colonial UNESCO town with a large US retiree community.",
   }),
   city({
@@ -1931,20 +1936,22 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 3000,
     shortTermOccupancy: 0.42,
     strAllowed: "yes",
-    strRules: "State tourism registry and lodging tax; strong competition between listings.",
+    strRules:
+      "Allowed. Hosts and platforms must register in Quintana Roo's state tourism registry (RETUR-Q; online, free, renewed yearly; fines for unregistered rentals). The state lodging tax is collected through the platforms. Platforms withhold federal income tax and VAT from hosts (4% ISR and half the 16% VAT with an RFC; 20% ISR and all the VAT without one). Check condominium rules.",
     highlight: "Fast growth but oversupplied with holiday rentals.",
   }),
   city({
     id: "mx-los-cabos",
     countryId: "mx",
     name: "Los Cabos",
-    pricePerSqmLocal: 75000,
+    pricePerSqmLocal: 51000,
     typicalUnitSqm: 100,
     longTermRentMonthlyLocal: 42000,
     shortTermNightlyLocal: 7000,
     shortTermOccupancy: 0.5,
     strAllowed: "yes",
-    strRules: "State tourism registry and lodging tax.",
+    strRules:
+      "Allowed; no mandatory short-term rental registry confirmed. Baja California Sur lodging tax (4% since 2023) applies to lodging booked through platforms. Platforms withhold federal income tax and VAT from hosts (4% ISR and half the 16% VAT with an RFC; 20% ISR and all the VAT without one). Check condominium rules.",
     highlight: "Luxury resort market, often priced in dollars.",
   }),
   city({
@@ -1956,8 +1963,9 @@ export const moreCities: City[] = [
     longTermRentMonthlyLocal: 1150,
     shortTermNightlyLocal: 110,
     shortTermOccupancy: 0.7,
-    strAllowed: "yes",
-    strRules: "AL licence required; Madeira sets its own regional rules.",
+    strAllowed: "restricted",
+    strRules:
+      "AL registration required; Funchal suspended new AL in apartment buildings from September 2025 and has since adopted a municipal AL regulation with containment areas (in force from mid-2026).",
     highlight: "Mild climate all year, a digital-nomad hub.",
   }),
   city({
@@ -1970,7 +1978,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 270,
     shortTermOccupancy: 0.55,
     strAllowed: "restricted",
-    strRules: "Andalusian tourist-rental registration; some buildings ban short lets.",
+    strRules:
+      "Registration in the Andalusian tourist-housing register required; since April 2025 new tourist flats need approval by 3/5 of the owners' community, and some buildings ban short lets.",
     highlight: "Costa del Sol luxury with a big international community.",
   }),
   city({

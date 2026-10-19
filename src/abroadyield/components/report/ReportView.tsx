@@ -121,6 +121,7 @@ export function ReportView({
       : ` (${formatLocal(fromUsd(usd, country.currency, settings.fx.usdPerUnit), country.currency)})`;
   const name = shortName(country);
   const sample = country.dataStatus === "sample";
+  const citySample = city?.dataStatus === "sample";
 
   const change = (patch: ScenarioOverrides) => {
     setOverrides((o) => ({ ...o, ...patch }));
@@ -129,7 +130,13 @@ export function ReportView({
 
   return (
     <div className="space-y-8">
-      {sample ? <SampleDataBanner what={`The ${name} figures in this report`} /> : null}
+      {sample ? (
+        <SampleDataBanner what={`The ${name} figures in this report`} />
+      ) : citySample && city ? (
+        <SampleDataBanner
+          what={`The ${city.name} market figures (price, rents, short-let rules)`}
+        />
+      ) : null}
 
       {/* a) Executive summary */}
       <Card as="section">
@@ -806,6 +813,9 @@ export function ReportView({
           {sample
             ? "This country's data is SAMPLE DATA – TO BE VERIFIED."
             : `Country data verified by ${country.verifiedBy}.`}{" "}
+          {!sample && citySample && city
+            ? `${city.name} market figures are sample data – to be verified.`
+            : ""}{" "}
           Exchange rates: {settings.fx.sourceLabel}, updated {settings.fx.updatedAt}. 1{" "}
           {country.currency} = {formatUsd(fxRate, { cents: true })}.
         </p>
