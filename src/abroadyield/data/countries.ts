@@ -267,7 +267,7 @@ const coreCountries: Country[] = [
             "Set by region (Madrid 6%, Andalusia 7%, Valencia 9%/11%, Catalonia 10–13%). New builds pay 10% VAT plus regional stamp duty instead.",
         },
         { label: "Notary and land registry", kind: "pct", low: 0.003, high: 0.0075 },
-        { label: "Lawyer", kind: "pct", low: 0.01, high: 0.01 },
+        { label: "Lawyer", kind: "pct", low: 0.01, high: 0.015 },
         { label: "NIE, translations and bank setup", kind: "fixed", low: 400, high: 1000 },
       ],
       meta: meta(S.esTax, S.gpg),
@@ -479,7 +479,7 @@ const coreCountries: Country[] = [
       shortTermRate: 0.26,
       taxableShareOfGross: 1,
       notes:
-        "Optional flat tax (cedolare secca) on gross rent instead of progressive IRPEF: 21% on free-market leases (10% on canone concordato). Short lets: 21% on one chosen unit, 26% on the others. From 2026, short-letting three or more units counts as a business (VAT number, ordinary rates, no flat tax).",
+        "Optional flat tax (cedolare secca) on gross rent instead of progressive IRPEF: 21% on free-market leases (10% on canone concordato). Short lets: 21% on one chosen unit and 26% on the second. From 2026, short-letting three or more units is presumed to be a business (VAT number, ordinary rates, no flat tax).",
       treatyNotes: "US–Italy tax treaty in force; Italian tax is generally creditable in the US.",
       capitalGainsNotes:
         "Gains on property held more than five years are generally not taxed in Italy. Within five years the gain is taxed at IRPEF rates or, by choice, a 26% substitute tax collected by the notary; homes renovated with the Superbonus are taxable if sold within 10 years of the works. The US still taxes the gain.",
@@ -553,9 +553,9 @@ const coreCountries: Country[] = [
     lastVerified: SEED_DATE,
     tagline: "Low entry prices and solid yields, with progressive rental tax.",
     summary:
-      "Greece has low transfer costs and some of the highest yields in Southern Europe, especially in Athens. Rental income is taxed progressively up to 45%, and local mortgages for non-residents are rare.",
+      "Greece has low transfer costs and solid yields, especially in Athens. Rental income is taxed progressively up to 45%, and only a few local banks lend to non-residents.",
     keyRisk:
-      "Rental tax rises to 25% above €12,000 of rent a year, 35% above €24,000 and 45% above €35,000.",
+      "Rental tax rises to 25% above €12,000 of rent a year, 35% above €24,000 and 45% above €36,000.",
     minEntryPriceUsd: 100000,
     stability: 6,
     flightHoursFromNyc: 9.5,
@@ -594,7 +594,7 @@ const coreCountries: Country[] = [
       meta: meta(S.grTax, S.gpg),
     },
     financing: {
-      localBankForNonResidents: "no",
+      localBankForNonResidents: "limited",
       maxLtvNonResident: 0.5,
       downPaymentRange: [0.5, 1],
       rateRange: [0.04, 0.055],
@@ -602,8 +602,9 @@ const coreCountries: Country[] = [
       options: [
         {
           name: "Local bank (non-resident mortgage)",
-          available: "no",
-          notes: "Greek banks rarely lend to non-residents.",
+          available: "limited",
+          notes:
+            "Alpha Bank and Eurobank lend to some non-residents, usually at 50–65% loan-to-value.",
         },
         {
           name: "US lender (HELOC / cash-out refi)",
@@ -620,7 +621,7 @@ const coreCountries: Country[] = [
       meta: meta(S.gpg),
     },
     rental: {
-      grossYieldRange: [0.05, 0.075],
+      grossYieldRange: [0.04, 0.065],
       vacancyLong: 0.06,
       managementLong: 0.1,
       managementShort: 0.22,
@@ -630,7 +631,7 @@ const coreCountries: Country[] = [
       hoaMonthlyUsd: 50,
       strFriendliness: 6,
       strRules:
-        "Add: 'and, from 1 July to 31 December 2026, in Thessaloniki's 1st Municipal Community.'",
+        "Short lets must be registered with AADE (AMA number). New registrations are frozen in Athens' 1st, 2nd and 3rd municipal communities and Thessaloniki's 1st municipal community (announced extension to 31 December 2027); a sale cancels the existing registration. Golden Visa homes may not be let short-term.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -640,14 +641,14 @@ const coreCountries: Country[] = [
       brackets: [
         { upTo: 13440, rate: 0.15 },
         { upTo: 26880, rate: 0.25 },
-        { upTo: 39200, rate: 0.35 },
+        { upTo: 40320, rate: 0.35 },
         { upTo: null, rate: 0.45 },
       ],
       taxableShareOfGross: 0.95,
       notes:
-        "Rent is taxed separately on gross income minus a 5% flat deduction: 15% up to €12,000, 25% up to €24,000, 35% up to €35,000 and 45% above (Law 5246/2025, from 2026 income; thresholds stored in USD). From 2026 rent must be paid electronically for the 5% deduction to apply.",
+        "Rent is taxed separately on gross income minus a 5% flat deduction: 15% up to €12,000, 25% up to €24,000, 35% up to €36,000 and 45% above (Law 5246/2025, from 2026 income; thresholds stored in USD). From 2026 rent must be paid through a bank for the 5% deduction to apply.",
       treatyNotes:
-        "US–Greece tax treaty in force (1950); Greek tax is generally creditable in the US.",
+        "US–Greece tax treaty in force (signed 1950, effective 1953); Greek tax is generally creditable in the US.",
       capitalGainsNotes:
         "Greek capital gains tax (15%) on property sold by individuals is suspended until 31 December 2026; an extension is not yet confirmed. The US taxes the gain.",
       meta: meta(S.grTax, S.pwc, S.irsTreaties),
@@ -675,13 +676,15 @@ const coreCountries: Country[] = [
         {
           key: "political",
           level: 3,
-          summary: "Frequent changes to Golden Visa and short-term rental rules.",
+          summary:
+            "Frequent changes to Golden Visa, short-term rental and buyer tax rules (a 15% transfer tax for non-EU buyers has been announced for 2027 but is not yet law).",
           mitigation: "Do not rely on a regime that has changed in the last two years.",
         },
         {
           key: "str",
           level: 3,
-          summary: "Licence freeze in central Athens.",
+          summary:
+            "Registration freeze in central Athens and central Thessaloniki (extension to end-2027 announced).",
           mitigation: "Check the AMA status before buying.",
         },
         {
@@ -726,13 +729,13 @@ const coreCountries: Country[] = [
     flightHoursFromNyc: 4.5,
     lifestyle: { beach: 10, city: 7, lowCost: 8, english: 6, shortFlight: 10, warm: 10 },
     residencyNotes:
-      "Temporary and permanent residency are available with proof of income or savings; property ownership alone does not qualify.",
+      "Temporary residency is available with proof of income or savings, or by owning Mexican real estate worth more than 91,710 UMA-days (about MXN 10.76 million in 2026, roughly US$545,000–580,000; public deed required, some consulates require the deed to be recent). Permanent residency usually follows after four years of temporary residency or with higher income/savings.",
     ownership: {
       status: "restricted",
       summary:
         "Allowed inland. Within 50 km of the coast or 100 km of a border, foreigners hold residential property through a renewable 50-year bank trust.",
       restrictions: [
-        "Restricted zone: ownership through a fideicomiso (bank trust) or a Mexican company.",
+        "Restricted zone: residential property through a fideicomiso (bank trust); a foreign-owned Mexican company may hold restricted-zone property only for non-residential (commercial) use.",
         "Ejido (communal) land cannot be bought safely.",
       ],
       documents: [
@@ -754,7 +757,7 @@ const coreCountries: Country[] = [
           high: 0.05,
           notes: "Varies by state/municipality.",
         },
-        { label: "Notary, registry and appraisal", kind: "pct", low: 0.01, high: 0.02 },
+        { label: "Notary, registry and appraisal", kind: "pct", low: 0.015, high: 0.035 },
         {
           label: "Bank trust setup and permit",
           kind: "fixed",
@@ -770,7 +773,7 @@ const coreCountries: Country[] = [
       localBankForNonResidents: "limited",
       maxLtvNonResident: 0.6,
       downPaymentRange: [0.35, 0.5],
-      rateRange: [0.085, 0.11],
+      rateRange: [0.1, 0.13],
       termYears: 20,
       options: [
         {
@@ -803,7 +806,7 @@ const coreCountries: Country[] = [
       hoaMonthlyUsd: 220,
       strFriendliness: 8,
       strRules:
-        "Short-term rentals are broadly allowed; platforms withhold taxes and some cities (e.g. Mexico City) require registration.",
+        "Short-term rentals are broadly allowed; from 2026 platforms withhold 100% of the VAT for non-resident hosts, Quintana Roo collects its lodging tax through platforms, and Mexico City requires host registration.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -812,7 +815,7 @@ const coreCountries: Country[] = [
       rate: 0.25,
       taxableShareOfGross: 1,
       notes:
-        "Non-residents pay 25% on gross rent without deductions (or 35% on net income through a Mexican legal representative). Short-term lets also owe 16% VAT (IVA) and a state lodging tax; platforms withhold for registered hosts.",
+        "Non-residents pay 25% on gross rent without deductions (or may elect 35% on net income through a Mexican legal representative). Short-term lets also owe 16% VAT (IVA) and a state lodging tax (e.g. 5-6% in Quintana Roo); from 2026 platforms must withhold 100% of the VAT for non-resident hosts (LIVA art. 18-J).",
       treatyNotes:
         "US–Mexico tax treaty in force; Mexican income tax is generally creditable in the US.",
       capitalGainsNotes:
@@ -869,7 +872,7 @@ const coreCountries: Country[] = [
         "Order title insurance and appraisal.",
         "Close before a notario público and register the deed.",
         "Obtain an RFC and register for rental taxes.",
-        "Report the trust, account and rental income in the US (Form 3520 may apply to trusts).",
+        "Report the rental income on Schedule E; a standard Mexican bank trust (fideicomiso) is not treated as a foreign trust (Rev. Rul. 2013-14), so Form 3520 generally does not apply. Report foreign bank accounts on the FBAR / Form 8938 if over the thresholds.",
       ],
       meta: meta(S.mxTax),
     },
@@ -899,7 +902,7 @@ const coreCountries: Country[] = [
       summary:
         "Foreigners have the same ownership rights as citizens, except in the Maritime Zone (200 m from high tide), which is concession land.",
       restrictions: [
-        "Maritime Zone concessions: foreign ownership limited to 49% and residency requirements apply.",
+        "Maritime Zone concessions: not granted to foreigners with under 5 years' residency, nor to companies more than 50% foreign-owned (Law 6043 art. 47).",
       ],
       documents: [
         "Valid passport",
@@ -1459,7 +1462,7 @@ const coreCities: City[] = [
     name: "Puerto Vallarta",
     pricePerSqmLocal: 52000,
     typicalUnitSqm: 80,
-    longTermRentMonthlyLocal: 22000,
+    longTermRentMonthlyLocal: 16000,
     shortTermNightlyLocal: 3800,
     shortTermOccupancy: 0.5,
     strAllowed: "yes",

@@ -164,7 +164,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 150,
       strFriendliness: 4,
       strRules:
-        "...or 90 where the council decides (Paris since 2025; Bordeaux and Montpellier since 2026)...",
+        "Short lets of a whole furnished home need a town-hall declaration and a registration number (national online registration due by 20 May 2026, rollout reportedly slipping). A main home can be let at most 120 nights a year, or 90 where the council decides (Paris since 2025; Bordeaux and Montpellier since 2026). Second homes in large cities need change-of-use authorisation, often with compensation. Since the November 2024 Le Meur law, unclassified tourist lets get only a 30% micro-BIC allowance up to €15,000 (classified: 50% up to €77,700).",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -173,7 +173,7 @@ export const moreCountries: Country[] = [
       rate: 0.372,
       taxableShareOfGross: 0.7,
       notes:
-        "Unfurnished rent under €15,000 a year gets a flat 30% allowance; the rest is taxed at the 20% non-resident minimum rate plus 17.2% social charges. Above the threshold, or by choice, actual expenses are deducted (régime réel).",
+        "Unfurnished rent under €15,000 a year gets a flat 30% allowance; the rest is taxed at the non-resident minimum rate of 20% (30% above about €29,000) plus 17.2% social charges. Above the threshold, or by choice, actual expenses are deducted (régime réel). Furnished (LMNP) profits bear 18.6% social charges from 2026, and since 2025 depreciation claimed under the réel regime is added back to the taxable gain on resale.",
       treatyNotes:
         "US–France tax treaty in force; the US gives a Foreign Tax Credit for French tax on French property income. Since 2019 the IRS accepts CSG and CRDS as creditable (confirmed in its 2025 practice unit). The credit cannot offset the 3.8% Net Investment Income Tax.",
       capitalGainsNotes:
@@ -260,7 +260,7 @@ export const moreCountries: Country[] = [
       localBankForNonResidents: "limited",
       maxLtvNonResident: 0.6,
       downPaymentRange: [0.35, 0.4],
-      rateRange: [0.05, 0.065],
+      rateRange: [0.055, 0.075],
       termYears: 25,
       options: [
         {
@@ -278,7 +278,7 @@ export const moreCountries: Country[] = [
       meta: meta(S.gpg),
     },
     rental: {
-      grossYieldRange: [0.04, 0.07],
+      grossYieldRange: [0.05, 0.08],
       vacancyLong: 0.04,
       managementLong: 0.12,
       managementShort: 0.2,
@@ -388,7 +388,7 @@ export const moreCountries: Country[] = [
       localBankForNonResidents: "limited",
       maxLtvNonResident: 0.6,
       downPaymentRange: [0.35, 0.4],
-      rateRange: [0.04, 0.055],
+      rateRange: [0.05, 0.075],
       termYears: 25,
       options: [
         {
@@ -416,7 +416,7 @@ export const moreCountries: Country[] = [
       hoaMonthlyUsd: 120,
       strFriendliness: 2,
       strRules:
-        "Since 1 March 2026 rent pressure zone rules cover the whole country, so short lets (21 nights or less per the new rules) of a home that is not your principal residence generally need planning permission everywhere. A Fáilte Ireland short-term letting register takes effect on 1 December 2026; hosts must register by 31 December 2026 and show the number on every listing. Further limits (e.g. a 90-night cap in towns over 10,000) are proposed in the Short-Term Letting and Tourism Bill.",
+        "Since 20 June 2025 the whole country is a rent pressure zone, so short lets (21 nights or less per the new rules) of a home that is not your principal residence generally need planning permission everywhere. A Fáilte Ireland short-term letting register takes effect on 1 December 2026; hosts must register by 31 December 2026 and show the number on every listing. Further limits (e.g. a 90-night cap in towns over 10,000) are proposed in the Short-Term Letting and Tourism Bill.",
       meta: meta(S.gpg, S.numbeo),
     },
     localTax: {
@@ -1504,7 +1504,7 @@ export const moreCities: City[] = [
     shortTermOccupancy: 0.5,
     strAllowed: "restricted",
     strRules:
-      "Since 1 March 2026 letting a non-principal home for 21 nights or less needs planning permission; Fáilte Ireland registration from 1 December 2026.",
+      "Since 20 June 2025 (nationwide rent pressure zone) letting a non-principal home for 21 nights or less needs planning permission; Fáilte Ireland registration from 1 December 2026.",
     highlight: "Student and tourist demand on the west coast.",
   }),
   city({
@@ -1544,7 +1544,7 @@ export const moreCities: City[] = [
     typicalUnitSqm: 55,
     longTermRentMonthlyLocal: 1250,
     shortTermNightlyLocal: 150,
-    shortTermOccupancy: 0.75,
+    shortTermOccupancy: 0.62,
     strAllowed: "restricted",
     strRules: "Permit needed beyond about 8 weeks a year.",
     highlight: "Highest prices in Germany, lowest yields.",
@@ -1555,7 +1555,7 @@ export const moreCities: City[] = [
     name: "Leipzig",
     pricePerSqmLocal: 3000,
     typicalUnitSqm: 65,
-    longTermRentMonthlyLocal: 600,
+    longTermRentMonthlyLocal: 680,
     shortTermNightlyLocal: 85,
     shortTermOccupancy: 0.65,
     strAllowed: "restricted",
@@ -1571,9 +1571,10 @@ export const moreCities: City[] = [
     typicalUnitSqm: 55,
     longTermRentMonthlyLocal: 1050,
     shortTermNightlyLocal: 130,
-    shortTermOccupancy: 0.72,
+    shortTermOccupancy: 0.53,
     strAllowed: "restricted",
-    strRules: "Permit required for regular short lets.",
+    strRules:
+      "Ferienwohnungssatzung (Zweckentfremdung): a permit from the building authority is needed to let a flat or room as a holiday let; with a permit, up to six weeks a year; whole-flat permanent lets permitted only with replacement housing or compensation; fines up to EUR 25,000.",
     highlight: "Finance hub with steady corporate demand.",
   }),
   // Croatia (EUR)
@@ -1689,7 +1690,7 @@ export const moreCities: City[] = [
     name: "Medellín",
     pricePerSqmLocal: 7500000,
     typicalUnitSqm: 70,
-    longTermRentMonthlyLocal: 4000000,
+    longTermRentMonthlyLocal: 3200000,
     shortTermNightlyLocal: 250000,
     shortTermOccupancy: 0.5,
     strAllowed: "restricted",
