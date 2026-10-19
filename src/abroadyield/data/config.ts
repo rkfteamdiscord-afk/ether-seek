@@ -208,7 +208,7 @@ export const seedSettings: Settings = {
       AED: 0.2723,
       GBP: 1.33,
       COP: 0.000315,
-      DOP: 0.0162,
+      DOP: 0.0167,
       THB: 0.0299,
       JPY: 0.00633,
     },
