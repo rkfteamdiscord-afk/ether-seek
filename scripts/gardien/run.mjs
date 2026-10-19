@@ -132,7 +132,28 @@ function retryAfter(response, message) {
 let lastModelUsed = "";
 const calmUntil = () => Math.min(...[...blockedUntil.values()].filter((until) => until > Date.now()), Date.now() + 10 * 60000);
 
+/** Keyless fallback (the same free service the ghost uses in the browser) for when Groq's free quota is spent. */
+const FALLBACK_API = env.GARDIEN_FALLBACK_URL || "https://text.pollinations.ai/openai";
+let fallbackDownUntil = 0;
+async function fallbackAi(system, user) {
+  if (env.GARDIEN_FALLBACK === "0" || Date.now() < fallbackDownUntil) return null;
+  const response = await fetch(FALLBACK_API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ model: "openai", temperature: 0.2, private: true, messages: [{ role: "system", content: `${system}\nRéponds uniquement avec l’objet JSON demandé, sans texte autour.` }, { role: "user", content: user }] }), signal: AbortSignal.timeout(90000) }).catch(() => null);
+  if (!response?.ok) { fallbackDownUntil = Date.now() + 10 * 60000; return null; }
+  const text = (await response.json().catch(() => null))?.choices?.[0]?.message?.content ?? "";
+  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+  try { const value = JSON.parse(a >= 0 && b > a ? text.slice(a, b + 1) : ""); lastModelUsed = "IA de secours sans clé (Pollinations)"; return value; } catch { return null; }
+}
+
 async function groq(system, user) {
+  try { return await groqOnly(system, user); } catch (error) {
+    // Groq's free quota is spent or every model refused: keep working with the keyless fallback.
+    const value = await fallbackAi(system, user);
+    if (value) return value;
+    throw error;
+  }
+}
+
+async function groqOnly(system, user) {
   if (!GROQ_KEYS.length) return null;
   if (Date.now() < groqPauseUntil) throw new Error(`IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq du jour atteint)`);
   const models = await listModels();
@@ -262,7 +283,7 @@ function themeContext(theme) {
 }
 
 async function deepAnalysis(issue, commentId, state, reason) {
-  if (Date.now() < groqPauseUntil && !reason.startsWith("incident")) {
+  if (Date.now() < groqPauseUntil && Date.now() < fallbackDownUntil && !reason.startsWith("incident")) {
     state.activity = `😴 IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq gratuit), la surveillance continue`;
     await writeStatus(issue, commentId, state);
     return;
