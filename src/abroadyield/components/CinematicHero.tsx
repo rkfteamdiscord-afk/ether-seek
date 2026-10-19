@@ -150,7 +150,8 @@ export function CinematicHero({
               you keep about{" "}
               <strong className="text-ay-sand-2">{(current.afterTax * 100).toFixed(1)}%</strong>
               <span className="block text-sm text-white/55">
-                Example after costs, local and US taxes. Sample data – to be verified.
+                Example after costs, local and US taxes.
+                {current.country.dataStatus === "sample" ? " Sample data – to be verified." : ""}
                 {current.photoCaption && !failed[current.photo] ? ` ${current.photoCaption}.` : ""}
               </span>
             </p>

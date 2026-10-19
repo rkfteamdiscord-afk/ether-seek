@@ -1,5 +1,6 @@
 import type { City, Country, SectionMeta, Source } from "../types";
 import { moreCities, moreCountries } from "./countries-more";
+import { applyAudit, applyCityAudit } from "./verification";
 
 /**
  * SAMPLE DATA – TO BE VERIFIED.
@@ -1588,6 +1589,6 @@ const coreCities: City[] = [
   }),
 ];
 
-/** All seeded destinations: the original seven plus ten more (countries-more.ts). */
-export const seedCountries: Country[] = [...coreCountries, ...moreCountries];
-export const seedCities: City[] = [...coreCities, ...moreCities];
+/** All seeded destinations: the original seven plus ten more (countries-more.ts), with audit status applied. */
+export const seedCountries: Country[] = [...coreCountries, ...moreCountries].map(applyAudit);
+export const seedCities: City[] = [...coreCities, ...moreCities].map(applyCityAudit);
