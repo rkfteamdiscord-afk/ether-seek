@@ -116,7 +116,9 @@ async function listModels() {
   const response = await fetch(`${GROQ_API}/models`, { headers: { authorization: `Bearer ${GROQ_KEY}` }, signal: AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error(`Groq modèles → ${response.status}`);
   const ids = ((await response.json()).data ?? []).map((model) => model.id);
-  offeredModels = PREFERRED_MODELS.filter((id) => ids.includes(id));
+  // Preferred models first, then any other chat model Groq still offers (it retires and adds models over time).
+  const others = ids.filter((id) => !PREFERRED_MODELS.includes(id) && !/whisper|tts|guard|embed|distil|playai|orpheus|compound|prompt/i.test(id));
+  offeredModels = [...PREFERRED_MODELS.filter((id) => ids.includes(id)), ...others];
   return offeredModels;
 }
 
@@ -134,20 +136,23 @@ async function groq(system, user) {
   if (!GROQ_KEYS.length) return null;
   if (Date.now() < groqPauseUntil) throw new Error(`IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq du jour atteint)`);
   const models = await listModels();
-  const body = (model) => JSON.stringify({ model, temperature: 0.2, max_tokens: 800, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] });
+  const body = (model, json) => JSON.stringify({ model, temperature: 0.2, max_tokens: 800, ...(json ? { response_format: { type: "json_object" } } : {}), messages: [{ role: "system", content: system }, { role: "user", content: user }] });
+  // Without JSON mode, keep only the object the model wrote.
+  const parse = (text) => { const a = text.indexOf("{"), b = text.lastIndexOf("}"); return JSON.parse(a >= 0 && b > a ? text.slice(a, b + 1) : "{}"); };
   const reasons = [];
   // Try each model with each key: a quota used up on one account is still free on the other.
   for (const model of models) {
     for (const [index, key] of GROQ_KEYS.entries()) {
       const slot = `${index}#${model}`;
       if ((blockedUntil.get(slot) ?? 0) > Date.now()) continue;
-      for (let attempt = 0; attempt < 2; attempt++) {
-        const response = await fetch(`${GROQ_API}/chat/completions`, { method: "POST", headers: { authorization: `Bearer ${key}`, "content-type": "application/json" }, body: body(model), signal: AbortSignal.timeout(60000) }).catch(() => null);
+      let json = true;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const response = await fetch(`${GROQ_API}/chat/completions`, { method: "POST", headers: { authorization: `Bearer ${key}`, "content-type": "application/json" }, body: body(model, json), signal: AbortSignal.timeout(60000) }).catch(() => null);
         if (!response) { reasons.push(`${model} : réseau`); break; }
         if (response.ok) {
           lastModelUsed = `${model} (${GROQ_ACCOUNTS[index][0]})`;
           const payload = await response.json();
-          return JSON.parse(payload.choices?.[0]?.message?.content ?? "{}");
+          try { return parse(payload.choices?.[0]?.message?.content ?? "{}"); } catch { reasons.push(`${model} : réponse illisible`); break; }
         }
         const message = clean(await response.text().catch(() => ""), 400);
         if (response.status === 429) {
@@ -158,9 +163,13 @@ async function groq(system, user) {
           reasons.push(`${model} : quota (${Math.ceil(wait / 60)} min)`);
         } else if (response.status === 413) {
           reasons.push(`${model} : demande trop longue`); // this model's per-minute limit is too small for this request only
-        } else if (response.status === 400 || response.status === 404) {
+        } else if (response.status === 400 && json && /json|generate|validat/i.test(message)) {
+          json = false; continue; // the model wrote invalid JSON: ask again without JSON mode
+        } else if (response.status === 404 || /decommission|not supported|does not exist/i.test(message)) {
           blockedUntil.set(slot, Date.now() + 6 * 3600000);
-          reasons.push(`${model} : refusé (${response.status})`);
+          reasons.push(`${model} : indisponible`);
+        } else if (response.status === 400) {
+          reasons.push(`${model} : demande refusée`); // only this request; the model stays available
         } else {
           reasons.push(`${model} : erreur ${response.status}`);
         }
@@ -168,7 +177,7 @@ async function groq(system, user) {
       }
     }
   }
-  if (!reasons.length || (reasons.some((reason) => reason.includes("quota")) && reasons.every((reason) => /quota|trop longue|refusé/.test(reason)))) groqPauseUntil = calmUntil();
+  if (!reasons.length || (reasons.some((reason) => reason.includes("quota")) && reasons.every((reason) => /quota|trop longue|indisponible/.test(reason)))) groqPauseUntil = calmUntil();
   if (!reasons.length) throw new Error(`IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq du jour atteint)`);
   throw new Error(`aucun modèle Groq disponible (${[...new Set(reasons)].slice(0, 4).join(" ; ")})`);
 }
@@ -253,6 +262,11 @@ function themeContext(theme) {
 }
 
 async function deepAnalysis(issue, commentId, state, reason) {
+  if (Date.now() < groqPauseUntil && !reason.startsWith("incident")) {
+    state.activity = `😴 IA en pause jusqu’à ${new Date(groqPauseUntil).toISOString().slice(11, 16)} UTC (quota Groq gratuit), la surveillance continue`;
+    await writeStatus(issue, commentId, state);
+    return;
+  }
   state.activity = "🔍 analyse complète en cours (compilation et tests)";
   await writeStatus(issue, commentId, state);
   // Work on the latest site, including changes made in Lovable since this run started.
@@ -339,6 +353,7 @@ async function deepAnalysis(issue, commentId, state, reason) {
     entry.relecture ? `**Relecture :** ${entry.relecture}` : "",
     `**Décision :** ${entry.decision}`,
   ].filter(Boolean).join("\n\n");
+  if (entry.decision.startsWith("IA en pause") && !reason.startsWith("incident")) { state.activity = `😴 ${entry.decision}`; return; }
   pending.push({ entry, body });
   if (Date.now() - lastRecap >= RECAP_EVERY || reason.startsWith("incident")) await flushRecap(issue);
 }
