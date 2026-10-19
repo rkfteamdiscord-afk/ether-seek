@@ -59,7 +59,7 @@ export const faq: Array<{ question: string; keys: string[]; answer: Pointing }> 
   { question: "Pour qui travailles-tu ?", keys: ["client", "particulier", "entreprise", "createur", "communaute", "public", "cible"], answer: { text: "Ȥrk accompagne particuliers, créateurs, communautés et entreprises. L'objectif est de fournir une solution sur mesure sans avoir à coordonner plusieurs prestataires.", target: guide("apropos-metier") } },
 ];
 
-export const fallback: Pointing = { text: "Hmm… je ne sais pas, mais tu peux consulter la Méthode en 3 étapes décrite sur le site ou contacter Ȥrk directement via WhatsApp.", target: guide("whatsapp") };
+export const fallback: Pointing = { text: "Hmm… je ne sais pas, mais voici les 3 étapes de notre méthode : 1) on échange sur ton idée, tes objectifs et ton budget, 2) Ȥrk conçoit, développe, teste et réalise un audit de cybersécurité, 3) le projet est mis en ligne, hébergé de façon sécurisée et nous assurons le suivi. Tu peux aussi contacter Ȥrk directement via WhatsApp.", target: guide("whatsapp") };
 
 // Everything the ghost may say comes from here, which mirrors the page itself.
 export const siteFacts = `
