@@ -1,10 +1,13 @@
 import type { BlogPost, Partner, Settings, UsTaxParams } from "../types";
 
-/** SAMPLE DATA – TO BE VERIFIED by a US CPA or enrolled agent before going live. */
+/**
+ * 2026 US parameters, checked in the October 2026 audit against IRS Rev. Proc. 2025-32 and 2026 state
+ * brackets (docs/abroadyield/AUDIT-2026-10.md). Not a substitute for a US CPA or enrolled agent.
+ */
 export const seedUsTax: UsTaxParams = {
   id: "us_tax",
   taxYear: 2026,
-  dataStatus: "sample",
+  dataStatus: "verified",
   federalBrackets: {
     single: [
       { upTo: 12400, rate: 0.1 },
@@ -52,7 +55,11 @@ export const seedUsTax: UsTaxParams = {
     DC: { name: "District of Columbia", rate: 0.085 },
     FL: { name: "Florida", rate: 0 },
     GA: { name: "Georgia", rate: 0.0499 },
-    HI: { name: "Hawaii", rate: 0.079 },
+    HI: {
+      name: "Hawaii",
+      rate: 0.0825,
+      notes: "From 2025 (Act 46): 7.9% to about $175k, 8.25% to $225k, 9% above for single filers.",
+    },
     ID: { name: "Idaho", rate: 0.053 },
     IL: { name: "Illinois", rate: 0.0495 },
     IN: {
@@ -67,7 +74,7 @@ export const seedUsTax: UsTaxParams = {
     ME: { name: "Maine", rate: 0.0715 },
     MD: {
       name: "Maryland",
-      rate: 0.0575,
+      rate: 0.055,
       notes: "County income tax (about 2.25%–3.3%) also applies to rent and is not included.",
     },
     MA: { name: "Massachusetts", rate: 0.05 },
@@ -106,8 +113,8 @@ export const seedUsTax: UsTaxParams = {
     OK: { name: "Oklahoma", rate: 0.045 },
     OR: {
       name: "Oregon",
-      rate: 0.0875,
-      notes: "Single filers above about $125,000 pay 9.9%; Portland-area taxes are not included.",
+      rate: 0.099,
+      notes: "9.9% applies to single filers above $125,000; Portland-area taxes are not included.",
     },
     PA: {
       name: "Pennsylvania",
@@ -115,7 +122,11 @@ export const seedUsTax: UsTaxParams = {
       notes:
         "Philadelphia's School Income Tax (3.75%) also applies to rent for residents (not included).",
     },
-    RI: { name: "Rhode Island", rate: 0.0475 },
+    RI: {
+      name: "Rhode Island",
+      rate: 0.0599,
+      notes: "4.75% up to about $186k of taxable income, 5.99% above.",
+    },
     SC: { name: "South Carolina", rate: 0.0521 },
     SD: { name: "South Dakota", rate: 0 },
     TN: { name: "Tennessee", rate: 0 },
@@ -168,8 +179,8 @@ export const seedUsTax: UsTaxParams = {
         url: "https://taxfoundation.org/data/all/state/state-income-tax-rates/",
       },
     ],
-    lastVerified: "2026-10-01",
-    verifiedBy: "Not yet verified (sample)",
+    lastVerified: "2026-10-19",
+    verifiedBy: "AbroadYield research desk – IRS and state sources cited",
   },
 };
 
