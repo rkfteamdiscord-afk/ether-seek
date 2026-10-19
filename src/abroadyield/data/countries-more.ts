@@ -558,7 +558,7 @@ export const moreCountries: Country[] = [
       ],
       taxableShareOfGross: 1,
       notes:
-        "Non-residents file a German return. Under §50 EStG the basic allowance is added back, so tax starts at 14% on the first euro of rent and rises to 42%–45% (bands shown in USD are averaged from the 2026 tariff). Building depreciation is 2% a year (2.5% before 1925, 3% from 2023, optional 5% declining-balance for new builds started Oct 2023–Sep 2029); interest and running costs are deductible. Part of the building charges (Hausgeld) is passed on to tenants.",
+        "Non-residents file a German return. Under §50 EStG the basic allowance is added back, so tax starts at 14% on the first euro of rent and rises to 42%–45% (bands shown in USD are averaged from the 2026 tariff). Building depreciation is 2% a year (2.5% before 1925, 3% from 2023, optional 5% declining-balance for new builds started Oct 2023–Sep 2029); interest and running costs are deductible. The 5.5% solidarity surcharge applies only when German income tax exceeds €20,350 (2026), so rent alone rarely triggers it. Part of the building charges (Hausgeld) is passed on to tenants.",
       treatyNotes:
         "US–Germany tax treaty in force; German tax on German rent is creditable against US tax.",
       capitalGainsNotes:
@@ -605,11 +605,11 @@ export const moreCountries: Country[] = [
     flightHoursFromNyc: 10,
     lifestyle: { beach: 9, city: 5, lowCost: 7, english: 7, shortFlight: 4, warm: 8 },
     residencyNotes:
-      "Owning a home can support a temporary residence permit for property owners (up to about 9 months a year); a digital nomad permit also exists.",
+      "Owning property does not by itself give residence. Since March 2025, third-country nationals over 60 who own property in Croatia can apply for temporary residence (usually issued for up to one year); a digital nomad permit also exists.",
     ownership: {
       status: "restricted",
       summary:
-        "US citizens can buy under reciprocity with consent from the Ministry of Justice and Administration; agricultural land is excluded. A 2025 law removes the consent requirement for OECD citizens once Croatia joins the OECD (not yet in force).",
+        "US citizens can buy under reciprocity with prior consent of the Ministry of Justice, Public Administration and Digital Transformation; agricultural land is excluded. A legislative change would treat OECD citizens like Croatians once Croatia joins the OECD (not yet the case).",
       restrictions: [
         "Ministry of Justice consent required (reciprocity), usually 2–6 months.",
         "Agricultural and protected land excluded.",
@@ -706,7 +706,7 @@ export const moreCountries: Country[] = [
         "Check the land registry extract and the cadastre match the property and permits.",
         "Sign a preliminary contract and pay a 10% deposit.",
         "Apply for Ministry of Justice consent (reciprocity).",
-        "Sign the purchase contract before a notary and pay the transfer tax within 30 days.",
+        "Sign the purchase contract before a notary, report it to the Tax Administration and pay the 3% transfer tax on its assessment.",
         "Register ownership; for holiday lets, apply for categorisation.",
         "Report the foreign account and rental income in the US.",
       ],
@@ -961,7 +961,9 @@ export const moreCountries: Country[] = [
       status: "allowed",
       summary:
         "Foreigners can own property outright. Insist on a definitive Certificate of Title registered at the Title Registry.",
-      restrictions: ["None specific to US citizens."],
+      restrictions: [
+        "None specific to US citizens; as for everyone, border zones, protected areas and the first 60 m of coastline (public domain) cannot be privately owned.",
+      ],
       documents: ["Valid passport", "Proof of funds", "Tax number (RNC) from DGII"],
       timelineWeeks: [6, 12],
       taxIdName: "RNC (Registro Nacional de Contribuyentes)",
@@ -1246,9 +1248,10 @@ export const moreCountries: Country[] = [
         {
           label: "Real estate acquisition tax",
           kind: "pct",
-          low: 0.015,
-          high: 0.03,
-          notes: "Levied on the assessed value, which is below the price.",
+          low: 0.005,
+          high: 0.02,
+          notes:
+            "3% of the assessed value (to 31 March 2027), which is below the price; residential land is taxed on half its value and housing deductions often reduce the tax further.",
         },
         { label: "Registration tax and judicial scrivener", kind: "pct", low: 0.005, high: 0.01 },
         {
@@ -1310,7 +1313,7 @@ export const moreCountries: Country[] = [
       ],
       taxableShareOfGross: 1,
       notes:
-        "Non-residents file a return (16 Feb–15 Mar) through a tax agent. Rental profit is taxed at 5–45% (bands in USD) plus a 2.1% surtax. Non-residents get only the ¥580,000 basic deduction: the 2025–26 top-up is for residents only. There is no inhabitants tax on the rent. A 20.42% withholding applies when the tenant is a company, or an individual using the unit for business. It does not apply when an individual rents it as their own or a relative's home. The withholding is credited on the return. Building depreciation is deductible.",
+        "Non-residents file a return (16 Feb–15 Mar) through a tax agent. Rental profit is taxed at 5–45% (bands in USD) plus a 2.1% surtax. Non-residents get only the basic deduction (¥620,000 from 2026, ¥580,000 for 2025); the temporary top-ups are for residents only. There is no inhabitants tax on the rent. A 20.42% withholding applies when the tenant is a company, or an individual using the unit for business. It does not apply when an individual rents it as their own or a relative's home. The withholding is credited on the return. Building depreciation is deductible.",
       treatyNotes:
         "US–Japan tax treaty in force; Japanese tax on Japanese rent is creditable against US tax.",
       capitalGainsNotes:
@@ -1390,7 +1393,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 4600,
     typicalUnitSqm: 55,
     longTermRentMonthlyLocal: 1050,
-    shortTermNightlyLocal: 95,
+    shortTermNightlyLocal: 115,
     shortTermOccupancy: 0.62,
     strAllowed: "restricted",
     strRules:
@@ -1529,7 +1532,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 5500,
     typicalUnitSqm: 60,
     longTermRentMonthlyLocal: 900,
-    shortTermNightlyLocal: 110,
+    shortTermNightlyLocal: 155,
     shortTermOccupancy: 0.7,
     strAllowed: "no",
     strRules:
@@ -1598,7 +1601,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 5500,
     typicalUnitSqm: 55,
     longTermRentMonthlyLocal: 1100,
-    shortTermNightlyLocal: 270,
+    shortTermNightlyLocal: 200,
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
     strRules: "New holiday-let permits limited in the old town.",
@@ -1638,8 +1641,8 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 2200,
     typicalUnitSqm: 85,
     longTermRentMonthlyLocal: 1150,
-    shortTermNightlyLocal: 110,
-    shortTermOccupancy: 0.5,
+    shortTermNightlyLocal: 85,
+    shortTermOccupancy: 0.6,
     strAllowed: "restricted",
     strRules: "Under-45-day rentals limited outside tourist zones.",
     highlight: "Oversupplied towers: negotiate hard.",
@@ -1763,7 +1766,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 4500,
     shortTermOccupancy: 0.38,
     strAllowed: "yes",
-    strRules: "Registration with the Ministry of Tourism.",
+    strRules:
+      "No national short-term rental registration is in force (MITUR draft withdrawn July 2026); check building rules and declare the income.",
     highlight: "Capital with corporate tenants.",
   }),
   city({
@@ -1776,7 +1780,8 @@ export const moreCities: City[] = [
     shortTermNightlyLocal: 7500,
     shortTermOccupancy: 0.4,
     strAllowed: "yes",
-    strRules: "Registration with the Ministry of Tourism.",
+    strRules:
+      "No national short-term rental registration is in force (MITUR draft withdrawn July 2026); check building rules and declare the income.",
     highlight: "Boutique beach town on the Samaná peninsula.",
   }),
   city({
@@ -1787,9 +1792,10 @@ export const moreCities: City[] = [
     typicalUnitSqm: 80,
     longTermRentMonthlyLocal: 55000,
     shortTermNightlyLocal: 7500,
-    shortTermOccupancy: 0.4,
+    shortTermOccupancy: 0.48,
     strAllowed: "yes",
-    strRules: "Registration with the Ministry of Tourism.",
+    strRules:
+      "No national short-term rental registration is in force (MITUR draft withdrawn July 2026); check building rules and declare the income.",
     highlight: "North-coast kite-surf towns, lower prices.",
   }),
   // Thailand (THB)
@@ -1801,7 +1807,7 @@ export const moreCities: City[] = [
     typicalUnitSqm: 40,
     longTermRentMonthlyLocal: 22000,
     shortTermNightlyLocal: 2000,
-    shortTermOccupancy: 0.7,
+    shortTermOccupancy: 0.42,
     strAllowed: "no",
     strRules: "Under-30-day lets illegal without a hotel licence.",
     highlight: "Deep expat rental market.",
@@ -1813,8 +1819,8 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 135000,
     typicalUnitSqm: 50,
     longTermRentMonthlyLocal: 25000,
-    shortTermNightlyLocal: 3500,
-    shortTermOccupancy: 0.65,
+    shortTermNightlyLocal: 4600,
+    shortTermOccupancy: 0.4,
     strAllowed: "restricted",
     strRules: "Short stays only in hotel-licensed projects.",
     highlight: "Resort island with a strong high season.",
@@ -1850,10 +1856,10 @@ export const moreCities: City[] = [
     id: "jp-tokyo",
     countryId: "jp",
     name: "Tokyo",
-    pricePerSqmLocal: 1300000,
+    pricePerSqmLocal: 1800000,
     typicalUnitSqm: 30,
     longTermRentMonthlyLocal: 120000,
-    shortTermNightlyLocal: 15000,
+    shortTermNightlyLocal: 25000,
     shortTermOccupancy: 0.75,
     strAllowed: "restricted",
     strRules:
@@ -1867,7 +1873,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 750000,
     typicalUnitSqm: 35,
     longTermRentMonthlyLocal: 90000,
-    shortTermNightlyLocal: 12000,
+    shortTermNightlyLocal: 16000,
     shortTermOccupancy: 0.6,
     strAllowed: "restricted",
     strRules:
@@ -1881,7 +1887,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 650000,
     typicalUnitSqm: 40,
     longTermRentMonthlyLocal: 95000,
-    shortTermNightlyLocal: 18000,
+    shortTermNightlyLocal: 28000,
     shortTermOccupancy: 0.7,
     strAllowed: "restricted",
     strRules:
@@ -1895,7 +1901,7 @@ export const moreCities: City[] = [
     pricePerSqmLocal: 450000,
     typicalUnitSqm: 35,
     longTermRentMonthlyLocal: 70000,
-    shortTermNightlyLocal: 10000,
+    shortTermNightlyLocal: 21000,
     shortTermOccupancy: 0.7,
     strAllowed: "restricted",
     strRules: "Minpaku capped at 180 nights.",
@@ -1906,7 +1912,7 @@ export const moreCities: City[] = [
     id: "mx-san-miguel",
     countryId: "mx",
     name: "San Miguel de Allende",
-    pricePerSqmLocal: 42000,
+    pricePerSqmLocal: 28000,
     typicalUnitSqm: 110,
     longTermRentMonthlyLocal: 30000,
     shortTermNightlyLocal: 3500,
@@ -1923,7 +1929,7 @@ export const moreCities: City[] = [
     typicalUnitSqm: 65,
     longTermRentMonthlyLocal: 22000,
     shortTermNightlyLocal: 3000,
-    shortTermOccupancy: 0.5,
+    shortTermOccupancy: 0.42,
     strAllowed: "yes",
     strRules: "State tourism registry and lodging tax; strong competition between listings.",
     highlight: "Fast growth but oversupplied with holiday rentals.",
@@ -1973,9 +1979,9 @@ export const moreCities: City[] = [
     name: "Palermo & Sicily",
     pricePerSqmLocal: 1500,
     typicalUnitSqm: 85,
-    longTermRentMonthlyLocal: 650,
+    longTermRentMonthlyLocal: 780,
     shortTermNightlyLocal: 85,
-    shortTermOccupancy: 0.5,
+    shortTermOccupancy: 0.6,
     strAllowed: "yes",
     strRules: "CIN code required for short lets.",
     highlight: "Some of the lowest prices in Europe; slow resale.",

@@ -9,8 +9,33 @@ import type { City, Country } from "../types";
 export const AUDIT_VERIFIED_BY = "AbroadYield research desk – public sources cited in each section";
 export const AUDIT_VERIFIED_ON = "2026-10-19";
 
-export const verifiedCountryIds: readonly string[] = [];
-export const verifiedCityIds: readonly string[] = [];
+export const verifiedCountryIds: readonly string[] = [
+  "pt",
+  "es",
+  "it",
+  "gr",
+  "mx",
+  "cr",
+  "ae",
+  "gb",
+  "de",
+  "hr",
+  "do",
+];
+export const verifiedCityIds: readonly string[] = [
+  "mx-cdmx",
+  "ae-downtown",
+  "fr-paris",
+  "fr-bordeaux",
+  "fr-montpellier",
+  "gb-manchester",
+  "de-berlin",
+  "de-leipzig",
+  "de-frankfurt",
+  "th-bangkok",
+  "th-phuket",
+  "th-pattaya",
+];
 
 /** Replaces verifiedBy / lastVerified on the row and on every section's meta. */
 function stamp<T>(value: T): T {
