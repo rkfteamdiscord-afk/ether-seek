@@ -100,7 +100,7 @@ The same ${s.refundDays}-day guarantee applies from the date of purchase.`,
     body: () => `AbroadYield introduces users to independent experts: US expat tax firms, international mortgage brokers, local real estate agents and local attorneys.
 
 ## How introductions work
-We only share your details with a partner after you submit a request and tick "I agree to share this information with the selected partner." We share them with one partner per request.
+We only share your details with a partner after you submit a request and tick "I agree to share this information with the selected partner." We share them with one partner per request. We are building our partner network country by country, so an introduction can take time; we reply by email when a suitable partner is available.
 
 ## Referral fees
 AbroadYield may receive a referral fee or commission from partners when we introduce a client or when a client becomes a customer. This never increases the price you pay the partner.

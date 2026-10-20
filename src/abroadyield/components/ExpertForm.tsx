@@ -127,8 +127,9 @@ export function ExpertForm({
         <CheckCircle2 aria-hidden className="size-8 text-ay-good" />
         <p className="mt-2 text-lg font-semibold">Request received.</p>
         <p className="mt-1">
-          We'll pass your details to a vetted partner, who should contact you within 2 business
-          days. You can follow your requests in your account.
+          We're building our partner network country by country. We'll get back to you by email as
+          soon as we can introduce you to a suitable expert, and we only share your details with
+          that partner. You can follow your requests in your account.
         </p>
       </div>
     );
@@ -293,7 +294,7 @@ export function ExpertForm({
         </p>
       ) : null}
       <Button type="submit" disabled={busy} aria-busy={busy}>
-        {busy ? "Sending…" : "Request an introduction"}
+        {busy ? "Sending…" : "Send my request"}
       </Button>
     </form>
   );

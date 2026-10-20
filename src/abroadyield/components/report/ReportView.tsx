@@ -798,8 +798,9 @@ export function ReportView({
       <Card as="section" className="ay-no-print">
         <SectionTitle letter="k" id={`${country.id}-experts`} title="Talk to an expert" />
         <p className="mt-2 text-ay-slate">
-          Get an introduction to a vetted US expat tax firm, international mortgage broker, local
-          agent or attorney for {name}. Free for you.
+          Tell us what you need for {name}: a US expat tax firm, an international mortgage broker, a
+          local agent or an attorney. We'll get back to you when we can introduce you to a suitable
+          partner. Free for you; partners may pay us a referral fee.
         </p>
         <div className="mt-5">
           <ExpertForm defaultCountry={country.id} />

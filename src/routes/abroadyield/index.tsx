@@ -353,16 +353,15 @@ function Landing() {
                 See AbroadYield <span className="ay-italic-accent">in action.</span>
               </h2>
               <p className="mt-5 text-lg text-ay-slate">
-                Seven destinations, the number a listing doesn't show you, and everything you get:
-                the free ranking, the dollar-by-dollar breakdown, the US tax module and vetted
-                experts.
+                The number a listing doesn't show you, and everything you get: the free ranking, the
+                dollar-by-dollar breakdown, the US tax module and expert introductions.
               </p>
               <ul className="mt-8 grid gap-3 text-ay-ink sm:grid-cols-2">
                 {[
                   "Free ranking in 3 minutes",
                   "Every dollar explained",
                   "Built for US taxpayers",
-                  "PDF report and vetted experts",
+                  "PDF report and expert introductions",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2 font-semibold">
                     <Check aria-hidden className="size-4 text-ay-gold" />
@@ -502,8 +501,8 @@ function Landing() {
               },
               {
                 icon: Users,
-                title: "Unlock your full report and talk to vetted experts",
-                text: "After-tax returns step by step, US tax impact, best cities, financing and a buying checklist — then meet a vetted expert if you want one.",
+                title: "Unlock your full report and ask for an expert",
+                text: "After-tax returns step by step, US tax impact, best cities, financing and a buying checklist — then ask for an expert introduction if you want one.",
               },
             ].map(({ icon: Icon, title, text }, index) => (
               <Reveal
@@ -698,7 +697,7 @@ function Landing() {
             <div className="rounded-2xl border border-dashed border-ay-line p-6 text-ay-slate">
               <p className="font-semibold text-ay-ink">Partner network</p>
               <p className="mt-2">
-                Logos of vetted US expat tax firms, mortgage brokers, agents and attorneys will be
+                Partner logos (US expat tax firms, mortgage brokers, agents and attorneys) will be
                 shown here once agreements are signed.
               </p>
             </div>
