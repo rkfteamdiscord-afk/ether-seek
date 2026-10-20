@@ -1009,6 +1009,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }
 .zh-method .zh-arm, .zh-method .zh-fingers { animation-delay: -6s; }
 .lantern-about-left { left: 4%; top: 15%; animation-delay: -1.5s; }
+.candles-method { left: 3%; bottom: 140px; }
 .ghost-about-top { right: 10%; top: 12%; animation-delay: -5s; }
 .ghost-method-top { left: 8%; top: 12%; animation-delay: -8s; }
 @keyframes zombie-rise { 0%,12% { transform: translateY(105px); } 30% { transform: translateY(8px) rotate(-3deg); } 40% { transform: translateY(0) rotate(4deg); } 62% { transform: translateY(2px) rotate(-5deg); } 74% { transform: translateY(12px); } 88%,100% { transform: translateY(105px); } }
