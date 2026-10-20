@@ -301,6 +301,7 @@ function Portfolio() {
         <ZombieHand className="zh-method" />
         <ZombieHand className="zh-method-2" />
         <ZombieHand className="zh-method-left" />
+        <DriftingGhost className="ghost-method-bottom" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
