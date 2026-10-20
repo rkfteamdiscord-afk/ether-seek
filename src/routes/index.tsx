@@ -343,6 +343,7 @@ function Portfolio() {
         <RealPumpkin carved className="ground-pumpkin gp-contact-a" />
         <RealPumpkin skin="ghost" className="ground-pumpkin gp-contact-b" />
         <SwingingLantern className="lantern-right lantern-short" />
+        <DriftingGhost className="ghost-contact-top" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
           <div className="cauldron-panel rise-in flex flex-col items-start justify-between gap-10 px-7 py-12 sm:px-12 lg:flex-row lg:items-center lg:py-16">
