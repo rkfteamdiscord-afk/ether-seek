@@ -297,6 +297,7 @@ function Portfolio() {
         <CandleCluster className="candles-method" />
         <CandleCluster className="candles-method-right" />
         <CandleCluster className="candles-method-left" />
+        <CandleCluster className="candles-method-right-2" />
         <SwingingLantern className="lantern-left" />
         <DriftingGhost className="ghost-low ghost-reverse" />
         <DriftingGhost className="ghost-method-top" />
