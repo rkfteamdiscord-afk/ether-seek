@@ -248,6 +248,7 @@ function Portfolio() {
         <HalloweenScene chapter={2} />
         <SwingingLantern className="lantern-about-left" />
         <CandleCluster className="candles-about" />
+        <CandleCluster className="candles-about-right" />
         <DriftingGhost className="ghost-about-top" />
         <RealPumpkin skin="deep" carved className="ground-pumpkin gp-about-a" />
         <RealPumpkin className="ground-pumpkin gp-about-b" />
