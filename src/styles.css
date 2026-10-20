@@ -1016,6 +1016,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .zh-about .zh-arm, .zh-about .zh-fingers { animation-delay: -1.5s; }
 .candles-about { left: 2%; bottom: 130px; }
 .candles-method { left: 3%; bottom: 140px; }
+.candles-method-right { right: 4%; bottom: 160px; }
 .lantern-method-left { left: 2%; top: 10%; animation-delay: -1s; }
 .ghost-contact-top { top: 10%; right: 15%; animation-delay: -5s; }
 .ghost-method-right { right: 8%; top: 25%; animation-delay: -12s; }
