@@ -1077,7 +1077,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 @keyframes ghost-dots { 0%,100% { transform: translateY(0); opacity: .35; } 50% { transform: translateY(-4px); opacity: 1; } }
 .ghost-chat-note { margin: 0; font-size: 13px; line-height: 1.8; color: var(--muted-foreground, #4b5563); }
 .ghost-chat-chips button:disabled, .ghost-chat-form button:disabled { opacity: .85; cursor: wait; transition: opacity 0.2s ease-in-out; }
-.ghost-chat-chips button:focus-visible, .ghost-chat-form button:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid oklch(0.9 0.2 30); outline-offset: 2px; }
+.ghost-chat-chips button:focus-visible, .ghost-chat-form button:focus-visible, button:focus-visible, a:focus-visible { outline: 4px solid oklch(0.9 0.2 30); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .ghost-thinking span { animation: none; } }
 
 /* ───────── Panneau du gardien ───────── */
