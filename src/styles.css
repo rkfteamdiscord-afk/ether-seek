@@ -1089,7 +1089,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 @media (prefers-reduced-motion: reduce) { .ghost-thinking span { animation: none; } }
 
 /* ───────── Panneau du gardien ───────── */
-.admin-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: oklch(0.7 0.2 145); box-shadow: 0 0 10px oklch(0.6 0.2 145); animation: badge-pulse 4s ease-in-out infinite; }
+.admin-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: oklch(0.8 0.2 145); box-shadow: 0 0 10px oklch(0.6 0.2 145); animation: badge-pulse 4s ease-in-out infinite; }
 .admin-bar { flex: 1; min-height: 12%; border-radius: 6px 6px 2px 2px; transition: background 0.5s ease-in-out, outline 0.2s ease-in-out, opacity 0.2s ease-in-out, box-shadow 0.2s ease-in-out; } .admin-bar:focus-visible { outline: 6px solid oklch(0.99 0.2 30); outline-offset: 4px; }
 .admin-bar.is-ok { background: linear-gradient(to top, oklch(0.55 0.13 150), oklch(0.75 0.17 145)); }
 .admin-bar.is-ko { background: linear-gradient(to top, oklch(0.5 0.18 25), oklch(0.68 0.2 27)); }
