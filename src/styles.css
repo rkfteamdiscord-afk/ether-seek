@@ -1009,6 +1009,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .zh-services .zh-arm, .zh-services .zh-fingers { animation-delay: -3s; }
 .zh-method .zh-arm, .zh-method .zh-fingers { animation-delay: -6s; }
 .zh-method-2 { right: 8%; animation-delay: -4.5s; }
+.zh-method-left { left: 5%; animation-delay: -7s; }
 .zh-method-2 .zh-arm, .zh-method-2 .zh-fingers { animation-delay: -4.5s; }
 .lantern-about-left { left: 4%; top: 15%; animation-delay: -1.5s; }
 .zh-about { left: 12%; animation-delay: -1.5s; }

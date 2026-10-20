@@ -299,6 +299,7 @@ function Portfolio() {
         <RealPumpkin carved className="ground-pumpkin gp-method-a" />
         <ZombieHand className="zh-method" />
         <ZombieHand className="zh-method-2" />
+        <ZombieHand className="zh-method-left" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
