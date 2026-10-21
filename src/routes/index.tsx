@@ -321,6 +321,7 @@ function Portfolio() {
         <SwingingLantern className="lantern-method-bottom-left" />
         <DriftingGhost className="ghost-method-bottom-right" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-method-right" />
+        <RealPumpkin skin="deep" className="ground-pumpkin gp-method-right-2" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
