@@ -992,6 +992,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .ground-pumpkin { position: absolute; z-index: 3; pointer-events: none; bottom: 18px; width: 88px; filter: drop-shadow(0 10px 14px oklch(0.08 0.03 290 / .6)); }
 .ground-pumpkin.is-carved { filter: drop-shadow(0 0 22px oklch(0.75 0.18 55 / .5)) drop-shadow(0 10px 14px oklch(0.08 0.03 290 / .6)); }
 .gp-hero-a { left: 9%; bottom: 40px; width: 96px; } .gp-hero-b { left: 16%; bottom: 30px; width: 64px; }
+.gp-hero-c { right: 5%; bottom: 30px; width: 80px; }
 .gp-services-a { right: 12%; width: 104px; } .gp-services-b { right: 20%; width: 70px; bottom: 12px; }
 .gp-about-a { left: 30%; width: 92px; } .gp-about-b { left: 37%; width: 60px; bottom: 10px; }
 .gp-about-c { left: 5%; bottom: 15px; width: 50px; }
