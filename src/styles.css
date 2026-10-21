@@ -1035,6 +1035,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .gp-method-right-3 { right: 8%; bottom: 25px; width: 60px; }
 .lantern-method-left { left: 2%; top: 10%; animation-delay: -1s; }
 .lantern-method-left-top { left: 5%; top: 5%; animation-delay: -0.5s; }
+.lantern-method-right-top { right: 5%; top: 5%; animation-delay: -0.3s; }
 .lantern-method-right { right: 3%; top: 12%; animation-delay: -0.5s; }
 .lantern-method-bottom-left { left: 4%; bottom: 10%; animation-delay: -1.2s; }
 .lantern-method-bottom-right { right: 4%; bottom: 10%; animation-delay: -0.4s; }

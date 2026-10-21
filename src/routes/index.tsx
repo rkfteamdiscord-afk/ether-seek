@@ -304,6 +304,7 @@ function Portfolio() {
         <HalloweenScene chapter={3} />
         <SwingingLantern className="lantern-method-left" />
         <SwingingLantern className="lantern-method-left-top" />
+        <SwingingLantern className="lantern-method-right-top" />
         <CandleCluster className="candles-method" />
         <CandleCluster className="candles-method-right" />
         <CandleCluster className="candles-method-top-right" />
