@@ -310,6 +310,7 @@ function Portfolio() {
         <DriftingGhost className="ghost-method-top" />
         <DriftingGhost className="ghost-method-right" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-method-left" />
+        <RealPumpkin skin="deep" className="ground-pumpkin gp-method-left-3" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-method-left-2" />
         <RealPumpkin carved className="ground-pumpkin gp-method-a" />
         <ZombieHand className="zh-method" />
