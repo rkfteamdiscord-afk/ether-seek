@@ -313,6 +313,7 @@ function Portfolio() {
         <ZombieHand className="zh-method-2" />
         <ZombieHand className="zh-method-left" />
         <DriftingGhost className="ghost-method-bottom" />
+        <DriftingGhost className="ghost-method-bottom-left" />
         <SwingingLantern className="lantern-method-right" />
         <CandleCluster className="candles-method-bottom-right" />
         <CandleCluster className="candles-method-bottom-right-2" />
