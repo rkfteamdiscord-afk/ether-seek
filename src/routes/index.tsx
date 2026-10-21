@@ -254,6 +254,7 @@ function Portfolio() {
         <RealPumpkin skin="deep" carved className="ground-pumpkin gp-about-a" />
         <RealPumpkin className="ground-pumpkin gp-about-b" />
         <ZombieHand className="zh-about" />
+        <ZombieHand className="zh-about-left" />
         <ZombieHand className="zh-about-right-2" />
         <DriftingGhost className="ghost-about-right" />
         <ZombieHand className="zh-about-right" />

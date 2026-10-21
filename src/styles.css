@@ -1016,6 +1016,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .lantern-about-left { left: 4%; top: 15%; animation-delay: -1.5s; }
 .lantern-about-right { right: 4%; top: 18%; animation-delay: -0.8s; }
 .zh-about { left: 12%; animation-delay: -1.5s; }
+.zh-about-left { left: 4%; bottom: 10%; animation-delay: -4s; }
 .zh-about .zh-arm, .zh-about .zh-fingers { animation-delay: -1.5s; }
 .candles-about { left: 2%; bottom: 130px; }
 .candles-about-right { right: 3%; bottom: 140px; }
