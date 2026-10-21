@@ -257,6 +257,7 @@ function Portfolio() {
         <DriftingGhost className="ghost-about-right" />
         <ZombieHand className="zh-about-right" />
         <RealPumpkin skin="ghost" className="ground-pumpkin gp-about-right" />
+        <DriftingGhost className="ghost-about-bottom" />
         <Cobweb className="web-section-right" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-10">
           <div className="rise-in">
