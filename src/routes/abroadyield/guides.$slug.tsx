@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { CountryVisual } from "@/abroadyield/components/CountryVisual";
 import {
   Card,
+  CityCheckTag,
   Container,
   Disclaimer,
   Pill,
@@ -211,7 +212,10 @@ function GuidePage() {
             <ul className="mt-3 space-y-2">
               {countryCities.map((m) => (
                 <li key={m.city.id} className="flex flex-wrap justify-between gap-2">
-                  <span className="font-semibold">{m.city.name}</span>
+                  <span className="font-semibold">
+                    {m.city.name}
+                    <CityCheckTag city={m.city} />
+                  </span>
                   <span className="text-ay-slate">
                     {formatUsd(m.pricePerSqmUsd)}/m² · gross {formatPct(m.grossYieldLong)}
                   </span>

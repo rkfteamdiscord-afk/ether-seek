@@ -247,13 +247,10 @@ function Footer() {
 }
 
 function GlobalNotices() {
-  const { countries, cities } = useSiteData();
+  const { countries } = useSiteData();
   const [demo, setDemo] = useState(false);
   useEffect(() => setDemo(getBackend().mode === "local"), []);
-  const published = new Set(countries.filter((c) => c.published).map((c) => c.id));
-  const hasSample =
-    countries.some((c) => c.published && c.dataStatus === "sample") ||
-    cities.some((c) => published.has(c.countryId) && c.dataStatus === "sample");
+  const hasSample = countries.some((c) => c.published && c.dataStatus === "sample");
   if (!hasSample && !demo) return null;
   return (
     <div className="ay-no-print border-b border-ay-warn/20 bg-ay-warn-bg text-ay-warn">

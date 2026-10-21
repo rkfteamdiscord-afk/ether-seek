@@ -355,7 +355,11 @@ function ReportPage() {
     );
     return (
       <>
-        {line("City modelled", (r) => r.best?.city.name ?? "Country average")}
+        {line("City modelled", (r) =>
+          r.best
+            ? `${r.best.city.name}${r.best.city.dataStatus === "sample" ? " (to be verified)" : ""}`
+            : "Country average",
+        )}
         {line("Purchase price", (r) =>
           formatUsd(r.result.potentialRentUsd / Math.max(0.0001, r.result.grossYield)),
         )}

@@ -134,6 +134,19 @@ export function FitBadge({ badge }: { badge: Badge }) {
   );
 }
 
+/** Small "to be verified" tag shown next to a city whose market figures are still sample data. */
+export function CityCheckTag({ city }: { city: { dataStatus: string } }) {
+  if (city.dataStatus !== "sample") return null;
+  return (
+    <span
+      title="This city's market figures are indicative and not yet verified."
+      className="ml-2 inline-block rounded-full border border-ay-warn/20 bg-ay-warn-bg px-2 py-0.5 align-middle text-xs font-semibold text-ay-warn"
+    >
+      To be verified
+    </span>
+  );
+}
+
 export function Pill({
   children,
   tone = "neutral",

@@ -22,7 +22,7 @@ import { track } from "../../lib/analytics";
 import { buildKnowledge } from "../../lib/assistant";
 import type { City, Country, Profile, RiskKey, Settings, UsTaxParams } from "../../types";
 import { ExpertForm } from "../ExpertForm";
-import { Card, Disclaimer, Pill, SampleDataBanner, SourceNote, Stat } from "../ui";
+import { Card, CityCheckTag, Disclaimer, Pill, SampleDataBanner, SourceNote, Stat } from "../ui";
 import { AssistantPanel } from "./AssistantPanel";
 import { Waterfall } from "./Waterfall";
 
@@ -130,13 +130,7 @@ export function ReportView({
 
   return (
     <div className="space-y-8">
-      {sample ? (
-        <SampleDataBanner what={`The ${name} figures in this report`} />
-      ) : citySample && city ? (
-        <SampleDataBanner
-          what={`The ${city.name} market figures (price, rents, short-let rules)`}
-        />
-      ) : null}
+      {sample ? <SampleDataBanner what={`The ${name} figures in this report`} /> : null}
 
       {/* a) Executive summary */}
       <Card as="section">
@@ -201,6 +195,7 @@ export function ReportView({
               {cities.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
+                  {c.dataStatus === "sample" ? " (to be verified)" : ""}
                 </option>
               ))}
             </select>
@@ -304,7 +299,12 @@ export function ReportView({
       <Card as="section">
         <SectionTitle letter="e" id={`${country.id}-returns`} title="Returns, step by step" />
         <p className="mt-2 text-ay-slate">
-          {city ? `${city.name}, ` : ""}
+          {city ? (
+            <>
+              {city.name}
+              <CityCheckTag city={city} />,{" "}
+            </>
+          ) : null}
           {strategy === "short" ? "short-term rental" : "long-term rental"},{" "}
           {formatUsd(input.priceUsd)}
           {local(input.priceUsd)},{" "}
@@ -661,6 +661,7 @@ export function ReportView({
                 <tr key={m.city.id} className="border-b border-ay-line/60 align-top">
                   <th scope="row" className="py-3 pr-3 font-semibold">
                     {m.city.name}
+                    <CityCheckTag city={m.city} />
                     <span className="block text-sm font-normal text-ay-slate">
                       {m.city.highlight}
                     </span>

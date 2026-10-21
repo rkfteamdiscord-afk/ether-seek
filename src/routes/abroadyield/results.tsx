@@ -33,7 +33,7 @@ export const Route = createFileRoute("/abroadyield/results")({
 
 function Results() {
   const { profile, ready } = useProfile();
-  const { countries, cities, settings, usTax } = useSiteData();
+  const { countries, settings, usTax } = useSiteData();
   const { checkout } = Route.useSearch();
   const orders = useMyOrders();
   const [unlock, setUnlock] = useState<string[] | null>(null);
@@ -70,11 +70,7 @@ function Results() {
     recordUnlockClick(ids);
     setUnlock(ids);
   };
-  const hasSample = ranked.some(
-    (r) =>
-      r.country.dataStatus === "sample" ||
-      cities.some((c) => c.countryId === r.country.id && c.dataStatus === "sample"),
-  );
+  const hasSample = ranked.some((r) => r.country.dataStatus === "sample");
   const top = ranked
     .filter((r) => r.badge !== "not")
     .slice(0, settings.pricing.maxCountriesPerReport)
@@ -126,7 +122,7 @@ function Results() {
       ) : null}
       {hasSample ? (
         <div className="mt-6">
-          <SampleDataBanner what="Some country or city figures used in this ranking" />
+          <SampleDataBanner what="The country figures used in this ranking" />
         </div>
       ) : null}
 
