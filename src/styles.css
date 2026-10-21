@@ -1054,6 +1054,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .zh-method-right-edge { right: 2%; bottom: 20%; animation-delay: -8s; }
 .zh-method-right-edge .zh-arm, .zh-method-right-edge .zh-fingers { animation-delay: -8s; }
 .lantern-method-bottom-right-2 { right: 12%; bottom: 15%; animation-delay: -1.1s; }
+.candles-services-bottom-left { left: 3%; bottom: 80px; }
 .ghost-method-bottom-right { right: 8%; bottom: 15%; animation-delay: -12s; }
 .ghost-method-bottom-left { left: 8%; bottom: 15%; animation-delay: -15s; }
 .ghost-contact-left { left: 8%; top: 35%; animation-delay: -12s; }

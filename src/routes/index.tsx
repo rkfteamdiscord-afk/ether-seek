@@ -218,6 +218,7 @@ function Portfolio() {
         <RealPumpkin carved className="ground-pumpkin gp-services-a" />
         <RealPumpkin skin="ghost" carved className="ground-pumpkin gp-services-b" />
         <ZombieHand className="zh-services" />
+        <CandleCluster className="candles-services-bottom-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-3xl">
             <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> Ce que je crée</p>
