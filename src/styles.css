@@ -1024,6 +1024,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .candles-about-right { right: 3%; bottom: 140px; }
 .candles-method { left: 3%; bottom: 140px; }
 .candles-method-right { right: 4%; bottom: 160px; }
+.candles-method-top-right { right: 2%; top: 25%; }
 .candles-method-left { left: 1.5%; bottom: 100px; }
 .candles-method-right-2 { right: 2%; bottom: 110px; }
 .candles-method-bottom-right { right: 1.5%; bottom: 80px; }

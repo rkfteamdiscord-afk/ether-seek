@@ -305,6 +305,7 @@ function Portfolio() {
         <SwingingLantern className="lantern-method-left-top" />
         <CandleCluster className="candles-method" />
         <CandleCluster className="candles-method-right" />
+        <CandleCluster className="candles-method-top-right" />
         <CandleCluster className="candles-method-left" />
         <CandleCluster className="candles-method-right-2" />
         <SwingingLantern className="lantern-left" />
