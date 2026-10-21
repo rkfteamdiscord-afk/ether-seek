@@ -1046,6 +1046,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .candles-about-bottom-right { right: 2%; bottom: 60px; }
 .candles-method-bottom-right-3 { right: 10%; bottom: 30px; }
 .candles-method-bottom-right-4 { right: 1%; bottom: 15px; }
+.candles-method-bottom-left { left: 2%; bottom: 20px; }
 .lantern-about-bottom-right { right: 5%; bottom: 12%; animation-delay: -0.9s; }
 .gp-method-bottom-left { left: 5%; bottom: 15px; width: 64px; }
 .zh-method-right-edge { right: 2%; bottom: 20%; animation-delay: -8s; }
