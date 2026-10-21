@@ -212,6 +212,7 @@ function Portfolio() {
 
       <section id="services" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={1} />
+        <SwingingLantern className="lantern-services-left" />
         <SwingingLantern className="lantern-right" />
         <DriftingGhost className="ghost-high" />
         <RealPumpkin carved className="ground-pumpkin gp-services-a" />

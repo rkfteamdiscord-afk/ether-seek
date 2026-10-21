@@ -822,6 +822,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 /* ───────── Lanternes-citrouilles qui se balancent ───────── */
 .swinging-lantern { position: absolute; top: 0; z-index: 3; width: 64px; pointer-events: none; transform-origin: 50% 0; animation: lantern-swing 4.6s ease-in-out infinite; }
 .lantern-right { right: 7%; } .lantern-left { left: 6%; animation-delay: -2.3s; }
+.lantern-services-left { left: 3%; top: 12%; animation-delay: -1.8s; }
 .swinging-lantern-string { display: block; width: 1.5px; height: 90px; margin: 0 auto; background: linear-gradient(oklch(0.7 0.03 290 / .2), oklch(0.75 0.03 290 / .8)); }
 .lantern-short .swinging-lantern-string { height: 40px; }
 .swinging-lantern-pumpkin { width: 64px; height: 58px; display: block; filter: drop-shadow(0 0 16px oklch(0.75 0.17 55 / .55)); }
