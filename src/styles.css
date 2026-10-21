@@ -1023,6 +1023,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .candles-method-left { left: 1.5%; bottom: 100px; }
 .candles-method-right-2 { right: 2%; bottom: 110px; }
 .candles-method-bottom-right { right: 1.5%; bottom: 80px; }
+.gp-method-right { right: 25%; bottom: 15px; width: 80px; }
 .lantern-method-left { left: 2%; top: 10%; animation-delay: -1s; }
 .lantern-method-right { right: 3%; top: 12%; animation-delay: -0.5s; }
 .zh-about-right { right: 8%; animation-delay: -2s; }
