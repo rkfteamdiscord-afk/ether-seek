@@ -1031,6 +1031,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .zh-about-right { right: 8%; animation-delay: -2s; }
 .gp-about-right { right: 12%; bottom: 20px; width: 76px; }
 .zh-about-right .zh-arm, .zh-about-right .zh-fingers { animation-delay: -2s; }
+.lantern-about-bottom-left { left: 5%; bottom: 8%; animation-delay: -0.7s; }
 .ghost-about-bottom { bottom: 15%; left: 45%; animation-delay: -12s; }
 .ghost-method-bottom { left: 4%; bottom: 10%; animation-delay: -12s; }
 .ghost-contact-top { top: 10%; right: 15%; animation-delay: -5s; }
