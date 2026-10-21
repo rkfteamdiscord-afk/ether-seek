@@ -319,6 +319,7 @@ function Portfolio() {
         <CandleCluster className="candles-method-bottom-right" />
         <CandleCluster className="candles-method-bottom-right-2" />
         <SwingingLantern className="lantern-method-bottom-left" />
+        <DriftingGhost className="ghost-method-bottom-right" />
         <RealPumpkin skin="deep" className="ground-pumpkin gp-method-right" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
