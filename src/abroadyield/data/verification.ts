@@ -86,6 +86,21 @@ export const verifiedCityIds: readonly string[] = [
   "pt-madeira",
   "es-marbella",
   "it-sicily",
+  "pt-algarve",
+  "pt-braga",
+  "gr-chania",
+  "gr-corfu",
+  "mx-pv",
+  "ae-marina",
+  "ae-jvc",
+  "ie-galway",
+  "hr-split",
+  "hr-dubrovnik",
+  "pa-boquete",
+  "pa-pedasi",
+  "co-santa-marta",
+  "th-chiang-mai",
+  "mx-los-cabos",
 ];
 
 /** Replaces verifiedBy / lastVerified on the row and on every section's meta. */

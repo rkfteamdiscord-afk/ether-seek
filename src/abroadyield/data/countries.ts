@@ -1227,7 +1227,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 130,
     shortTermOccupancy: 0.55,
     strAllowed: "yes",
-    strRules: "AL licences generally available; very seasonal.",
+    strRules:
+      "AL registration (RNAL) required. As of July 2026 no Algarve municipality had a binding AL containment area in force. Faro (draft published June 2025) and Lagoa (draft put to consultation January 2026) have draft AL regulations that would create containment areas. Under Decree-Law 151/2026, municipalities with more than 1,000 AL units have until 31 Dec 2026 to adopt a regulation or extend a suspension of new registrations; existing registrations stay valid.",
     highlight: "Beach lifestyle, seasonal rentals.",
   }),
   city({
@@ -1240,7 +1241,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 120,
     shortTermOccupancy: 0.51,
     strAllowed: "yes",
-    strRules: "Fewer restrictions than Lisbon/Porto.",
+    strRules:
+      "AL registration (RNAL) required. No Braga AL regulation, containment area or suspension found in force in 2026; the council said it was preparing a municipal AL regulation and would not decide in a hurry. Under Decree-Law 151/2026, municipalities with more than 1,000 AL units have until 31 Dec 2026 to decide on a regulation. A municipal tourist tax applies to AL stays.",
     highlight: "Highest long-term yields in this list.",
   }),
   city({
@@ -1471,7 +1473,8 @@ const coreCities: City[] = [
     shortTermNightlyLocal: 3800,
     shortTermOccupancy: 0.5,
     strAllowed: "yes",
-    strRules: "Allowed; check HOA rules.",
+    strRules:
+      "Allowed; no Puerto Vallarta or Jalisco short-term rental registry or night cap found (Jalisco proposals not approved). Jalisco's state lodging tax is 5% in 2026 (4% in 2025) and explicitly covers lodging offered through digital platforms. Puerto Vallarta's 2026 Revenue Law adds a per-night 'environmental sanitation' charge of 50% of one UMA (about MXN 57) on homes and flats rented through platforms. Platforms withhold federal income tax and VAT from hosts. Check condominium rules.",
     highlight: "Established US expat community.",
   }),
   city({
