@@ -1033,6 +1033,8 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .gp-about-right { right: 12%; bottom: 20px; width: 76px; }
 .zh-about-right .zh-arm, .zh-about-right .zh-fingers { animation-delay: -2s; }
 .lantern-about-bottom-left { left: 5%; bottom: 8%; animation-delay: -0.7s; }
+.zh-about-right-2 { right: 15%; animation-delay: -5s; }
+.zh-about-right-2 .zh-arm, .zh-about-right-2 .zh-fingers { animation-delay: -5s; }
 .ghost-method-bottom-left { left: 8%; bottom: 15%; animation-delay: -15s; }
 .ghost-contact-left { left: 8%; top: 35%; animation-delay: -12s; }
 .ghost-about-bottom { bottom: 15%; left: 45%; animation-delay: -12s; }
