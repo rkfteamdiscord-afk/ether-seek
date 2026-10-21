@@ -309,6 +309,7 @@ function Portfolio() {
         <ZombieHand className="zh-method-left" />
         <DriftingGhost className="ghost-method-bottom" />
         <SwingingLantern className="lantern-method-right" />
+        <CandleCluster className="candles-method-bottom-right" />
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
