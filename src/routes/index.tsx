@@ -296,6 +296,7 @@ function Portfolio() {
       <section id="methode" className="halloween-stage relative py-24 lg:py-32">
         <HalloweenScene chapter={3} />
         <SwingingLantern className="lantern-method-left" />
+        <SwingingLantern className="lantern-method-left-top" />
         <CandleCluster className="candles-method" />
         <CandleCluster className="candles-method-right" />
         <CandleCluster className="candles-method-left" />
