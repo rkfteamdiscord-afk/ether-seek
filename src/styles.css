@@ -1000,7 +1000,8 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .gp-method-left { left: 8%; bottom: 20px; width: 72px; }
 .gp-method-left-2 { left: 14%; bottom: 15px; width: 56px; }
 .gp-method-left-3 { left: 20%; bottom: 8px; width: 48px; }
-.gp-contact-a { right: 9%; bottom: 112px; width: 90px; } .gp-contact-special { left: 20%; bottom: 100px; width: 80px; } .gp-contact-b { right: 15%; bottom: 104px; width: 58px; }
+.gp-contact-a { right: 9%; bottom: 112px; width: 90px; } .gp-contact-special { left: 20%; bottom: 100px; width: 80px; }
+.gp-contact-special-2 { left: 25%; bottom: 110px; width: 70px; } .gp-contact-b { right: 15%; bottom: 104px; width: 58px; }
 [data-halloween-phase="arrival"] :is(.ground-pumpkin, .zombie-hand) { visibility: hidden; }
 @media (max-width: 640px) { .ground-pumpkin { width: 62px !important; } .gp-hero-b, .gp-services-b, .gp-about-b, .gp-contact-b { display: none; } }
 

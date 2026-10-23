@@ -380,7 +380,7 @@ function Portfolio() {
       <section id="contact" className="halloween-stage halloween-contact relative text-foreground">
         <HalloweenScene chapter={4} />
         <DriftingGhost className="ghost-contact-left" />
-        <CandleCluster className="candles-contact" /><RealPumpkin carved className="gp-contact-special" />
+        <CandleCluster className="candles-contact" /><RealPumpkin carved className="gp-contact-special" /><RealPumpkin carved className="gp-contact-special-2" />
         <RealPumpkin carved className="ground-pumpkin gp-contact-a" />
         <RealPumpkin skin="ghost" className="ground-pumpkin gp-contact-b" />
         <SwingingLantern className="lantern-right lantern-short" />
