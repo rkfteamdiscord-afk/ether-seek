@@ -150,6 +150,9 @@ export const arrivalCopy = {
 export const hostingCopy = {
   en: {
     eyebrow: "Bot hosting • Website hosting • Web panel",
+    teaserEyebrow: "Coming soon",
+    teaserText: "Host your Discord bots and websites, and manage them from a web panel.",
+    teaserCta: "Discover",
     title: "Hosting services",
     soon: "Soon",
     intro: "Ȥrk. is preparing a new hosting service to host and manage your Discord bots, websites and other digital projects directly from our official website.",
@@ -175,6 +178,9 @@ export const hostingCopy = {
   },
   fr: {
     eyebrow: "Hébergement de bots • Hébergement de sites • Panel web",
+    teaserEyebrow: "Bientôt",
+    teaserText: "Héberge tes bots Discord et tes sites, et gère-les depuis un panel web.",
+    teaserCta: "Découvrir",
     title: "Services d’hébergement",
     soon: "Bientôt",
     intro: "Ȥrk. prépare un nouveau service d’hébergement pour héberger et gérer tes bots Discord, tes sites web et tes autres projets numériques directement depuis notre site officiel.",

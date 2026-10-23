@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { halloweenOffer } from "@/lib/seasonal-offer";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   Ghost,
@@ -15,6 +15,7 @@ import {
   HeartHandshake,
   MessageCircle,
   Mail,
+  Rocket,
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
@@ -30,7 +31,7 @@ import { NightSky } from "@/components/NightSky";
 import { StudioVideo } from "@/components/StudioVideo";
 import { useLang } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
-import { siteCopy } from "@/lib/site-copy";
+import { hostingCopy, siteCopy } from "@/lib/site-copy";
 
 const discordUrl = "https://discord.gg/4qRhB4c5me";
 const emailUrl = "mailto:zrk.pro.dev@gmail.com";
@@ -330,6 +331,21 @@ function Portfolio() {
             <p className="mt-6 text-lg leading-8 text-muted-foreground">{t.videoText}</p>
           </div>
           <StudioVideo label={t.videoLabel} />
+        </div>
+      </section>
+
+      <section id="hosting" className="relative px-6 pb-6 lg:px-10">
+        <div className="hosting-teaser glass mx-auto grid max-w-4xl grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3 rounded-[1.5rem] p-4 sm:grid-cols-[auto_1fr_auto] sm:p-5">
+          <div className="spell-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-seasonal-soft text-seasonal sm:h-11 sm:w-11"><Rocket className="h-5 w-5" aria-hidden="true" /></div>
+          <div className="min-w-0">
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-base font-bold sm:text-lg">
+              <span>Ȥrk<span className="text-seasonal">.</span> {hostingCopy[lang].title}</span> <span className="soon-chip soon-chip-inline">{hostingCopy[lang].teaserEyebrow}</span>
+            </p>
+            <p className="mt-0.5 text-sm leading-6 text-muted-foreground">{hostingCopy[lang].teaserText}</p>
+          </div>
+          <Link to="/hosting" className="glass col-start-2 inline-flex items-center gap-2 justify-self-start rounded-full px-4 py-2 text-sm font-semibold text-foreground sm:col-start-auto">
+            {hostingCopy[lang].teaserCta} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </section>
 
