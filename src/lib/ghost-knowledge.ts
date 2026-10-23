@@ -10,7 +10,7 @@ export type Pointing = { text: string; target: string };
 
 export const offer = `−${halloweenOffer.discountPercent} %`;
 export const guide = (name: string) => `[data-guide="${name}"]`;
-export const askStep: Pointing = { text: "Tu as des questions ? Clique sur moi, je te réponds !", target: "" };
+export const askStep: Pointing = { text: "Tu as des questions sur nos services, la méthode ou la promo ? Clique sur moi, je te réponds avec les infos du site !", target: "" };
 
 /** A short guided tour for each part of the page, each step pointing at what it describes. */
 export const tours: Record<string, Pointing[]> = {
