@@ -118,70 +118,79 @@ function answerFor(question: string, lang: Lang): Pointing {
 
 /** Flies the guide ghost itself to whatever it talks about, touches it, then floats back home. */
 function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Element | null, enabled: boolean) {
-  // Keep the actual position across target changes: restarting at zero causes a jump.
-  const position = useRef({ x: 0, y: 0 });
+  // Keep the actual position and speed across target changes: restarting at zero causes a jump.
+  const motion = useRef({ x: 0, y: 0, vx: 0, vy: 0 });
   useEffect(() => {
     const ghost = home.current;
     const sprite = ghost?.querySelector<HTMLElement>(".ghost-guide-sprite");
+    const bubble = ghost?.querySelector<HTMLElement>(".ghost-guide-bubble");
     if (!ghost || !sprite) return;
     let raf = 0, touchedAt = 0, last = performance.now();
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Moving the bubble to another side moves the sprite inside its box: shift the box back so it does not jump.
-    const setSide = (key: "flip" | "below", on: boolean) => {
-      if ((ghost.dataset[key] === "true") === on) return;
-      const before = sprite.getBoundingClientRect();
-      ghost.dataset[key] = on ? "true" : "false";
-      const after = sprite.getBoundingClientRect();
-      position.current.x -= after.left - before.left;
-      position.current.y -= after.top - before.top;
+    // Where the sprite sits at rest: measured once, so each frame reads the page at most once.
+    const rest = sprite.getBoundingClientRect();
+    const originX = rest.left - motion.current.x, originY = rest.top - motion.current.y, size = rest.width, height = rest.height;
+    const set = (key: string, value: string) => { if (ghost.dataset[key] !== value) ghost.dataset[key] = value; };
+    // The bubble floats around the sprite (absolutely placed), so choosing its side never moves the ghost.
+    // It goes where the ghost will stop: left of it near the right edge, below it near the top.
+    let bubbleWidth = "";
+    const placeBubble = (x: number, y: number) => {
+      // Room on each side, minus the 8px gap to the sprite and a 20px screen margin.
+      const right = window.innerWidth - x - size - 28, left = x - 28;
+      const flip = right < 240 && left > right;
+      set("flip", flip ? "true" : "false");
+      set("below", y < 150 ? "true" : "false");
+      const width = `${Math.round(Math.min(320, Math.max(150, flip ? left : right)))}px`;
+      if (bubble && width !== bubbleWidth) { bubble.style.maxWidth = width; bubbleWidth = width; }
     };
-    const flip = (on: boolean) => setSide("flip", on);
     const place = (now: number) => {
-      if (!enabled || !target || (touchedAt > 0 && now - touchedAt >= 1600)) { flip(false); setSide("below", false); }
-      const { x, y } = position.current;
-      const dt = Math.min(now - last, 50);
+      const m = motion.current;
+      const dt = Math.min((now - last) / 1000, 1 / 30);
       last = now;
-      let tx = 0, ty = 0;
       const returning = touchedAt > 0 && now - touchedAt >= 1600;
-      let canTouch = false;
+      let tx = 0, ty = 0, canTouch = false;
       if (enabled && target && !returning) {
         const to = target.getBoundingClientRect();
-        const base = sprite.getBoundingClientRect();
-        const ox = base.left - x, oy = base.top - y;
         if (to.bottom > 0 && to.top < window.innerHeight && to.width > 0) {
           // Approach from below: the crown of the head meets the element's lower edge.
-          const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - base.width / 2), window.innerWidth - base.width - 8);
-          // Near the right edge the bubble would leave the screen: show it on the ghost's left.
-          flip(destX + ghost.getBoundingClientRect().width > window.innerWidth - 8);
-          // Near the top, the bubble would rise off screen: show it below the head instead.
-          setSide("below", to.bottom < 160);
-          const contactY = Math.min(to.bottom, window.innerHeight - base.height - 8 + base.height * 0.05);
-          const destY = Math.max(8, contactY - base.height * 0.05);
-          tx = destX - ox; ty = destY - oy;
+          const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - size / 2), window.innerWidth - size - 8);
+          const contactY = Math.min(to.bottom, window.innerHeight - height - 8 + height * 0.05);
+          const destY = Math.max(8, contactY - height * 0.05);
+          tx = destX - originX; ty = destY - originY;
           canTouch = true;
+          placeBubble(destX, destY);
         }
       }
-      const k = reduce ? 1 : 1 - Math.exp(-dt / (returning || !target || !enabled ? 340 : 170));
-      position.current.x += (tx - x) * k;
-      position.current.y += (ty - y) * k;
-      if (!touchedAt && canTouch && Math.hypot(tx - position.current.x, ty - position.current.y) < 3) {
+      if (!canTouch) placeBubble(originX, originY);
+      if (reduce) { m.x = tx; m.y = ty; m.vx = m.vy = 0; }
+      else {
+        // Critically damped spring: eases out of rest, glides, and settles without overshoot or snapping.
+        const w = returning || !canTouch ? 5 : 7.5;
+        m.vx += (w * w * (tx - m.x) - 2 * w * m.vx) * dt;
+        m.vy += (w * w * (ty - m.y) - 2 * w * m.vy) * dt;
+        m.x += m.vx * dt; m.y += m.vy * dt;
+      }
+      if (!touchedAt && canTouch && Math.hypot(tx - m.x, ty - m.y) < 4 && Math.hypot(m.vx, m.vy) < 60) {
         touchedAt = now;
-        ghost.dataset["touching"] = "true";
+        set("touching", "true");
         target?.classList.add("guide-highlight");
       }
-      if (returning) {
-        ghost.dataset["touching"] = "false";
+      if (returning && ghost.dataset["touching"] === "true") {
+        set("touching", "false");
         target?.classList.remove("guide-highlight");
       }
-      ghost.dataset["travel"] = returning || !target || !enabled ? "returning" : touchedAt ? "touching" : "flying";
-      ghost.style.transform = `translate3d(${position.current.x.toFixed(1)}px, ${position.current.y.toFixed(1)}px, 0)`;
-      // Back home with nothing to show: stop measuring the page every frame until the next target.
-      const home = (returning || !target || !enabled) && Math.hypot(position.current.x, position.current.y) < 0.5;
-      if (home) { position.current = { x: 0, y: 0 }; ghost.style.transform = "translate3d(0px, 0px, 0)"; return; }
+      set("travel", returning || !canTouch ? "returning" : touchedAt ? "touching" : "flying");
+      ghost.style.transform = `translate3d(${m.x.toFixed(2)}px, ${m.y.toFixed(2)}px, 0)`;
+      // Back home with nothing to show: stop the loop until the next target.
+      if (!canTouch && Math.hypot(m.x, m.y) < 0.4 && Math.hypot(m.vx, m.vy) < 2) {
+        Object.assign(m, { x: 0, y: 0, vx: 0, vy: 0 });
+        ghost.style.transform = "translate3d(0px, 0px, 0)";
+        return;
+      }
       raf = requestAnimationFrame(place);
     };
     raf = requestAnimationFrame(place);
-    return () => { cancelAnimationFrame(raf); ghost.dataset["touching"] = "false"; target?.classList.remove("guide-highlight"); };
+    return () => { cancelAnimationFrame(raf); set("touching", "false"); target?.classList.remove("guide-highlight"); };
   }, [home, target, enabled]);
 }
 

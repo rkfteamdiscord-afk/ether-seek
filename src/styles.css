@@ -629,7 +629,7 @@ html { scroll-behavior: smooth; }
 .night-moon-crater:nth-child(1) { width: 22%; height: 22%; top: 28%; left: 52%; }
 .night-moon-crater:nth-child(2) { width: 14%; height: 14%; top: 58%; left: 30%; }
 .night-moon-crater:nth-child(3) { width: 10%; height: 10%; top: 66%; left: 62%; }
-.night-grain { position: absolute; inset: -50%; opacity: .07; mix-blend-mode: overlay;
+.night-grain { position: absolute; inset: -50%; opacity: .04; /* plain blending: an overlay blend over the whole screen cost every frame */
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 @keyframes star-twinkle { from { opacity: .35; } to { opacity: .8; } }
 
@@ -960,7 +960,7 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 @media (max-width: 640px) { .ghost-swarm { opacity: .6; } .swarm-ghost-3, .swarm-ghost-4 { display: none; } }
 
 /* ───────── Le fantôme guide et ses petites infos ───────── */
-.ghost-guide { position: fixed; left: 16px; bottom: 18px; z-index: 56; display: flex; align-items: flex-end; gap: 8px; max-width: min(380px, calc(100vw - 190px)); pointer-events: none; }
+.ghost-guide { position: fixed; left: 16px; bottom: 18px; z-index: 56; width: 64px; pointer-events: none; will-change: transform; /* own GPU layer: flying never repaints its glow */ }
 .ghost-guide-sprite { width: 64px; flex-shrink: 0; opacity: 0; transform: translateX(-160%) rotate(-20deg); transition: transform .7s cubic-bezier(.2,.9,.25,1.2), opacity .5s ease; filter: drop-shadow(0 0 16px oklch(0.9 0.05 290 / .7)); }
 .ghost-guide-sprite .ghost-sprite { animation: guide-bob 2.6s ease-in-out infinite alternate; }
 .ghost-guide[data-travel="flying"] .ghost-guide-sprite .ghost-sprite,
@@ -974,15 +974,15 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .ghost-guide[data-touching="true"] .ghost-head-impact i:nth-child(2) { animation-delay: .16s; }
 .ghost-guide[data-touching="true"] .ghost-head-impact i:nth-child(3) { animation-delay: .32s; }
 @keyframes ghost-impact-wave { 0% { opacity: 0; transform: scale(.2); } 12% { opacity: 1; } 100% { opacity: 0; transform: scale(3.2); } }
-.ghost-guide-bubble { margin: 0 0 46px; padding: 10px 14px; border-radius: 16px 16px 16px 4px; font-size: 14px; line-height: 1.45; color: var(--foreground); background: color-mix(in oklab, var(--card) 88%, transparent); border: 1px solid color-mix(in oklab, var(--seasonal) 45%, transparent); box-shadow: 0 12px 36px -12px color-mix(in oklab, var(--seasonal) 60%, transparent); backdrop-filter: blur(10px); opacity: 0; transform: translateY(10px) scale(.9); transform-origin: bottom left; transition: opacity .4s ease .25s, transform .45s cubic-bezier(.2,.9,.25,1.2) .25s; }
-.ghost-guide[data-flip="true"] { flex-direction: row-reverse; }
-.ghost-guide[data-below="true"] { align-items: flex-start; }
-.ghost-guide[data-below="true"] .ghost-guide-bubble { margin: 58px 0 0; }
+/* Absolutely placed around the sprite: changing side never moves the ghost itself. */
+.ghost-guide-bubble { position: absolute; left: calc(100% + 8px); bottom: 46px; width: max-content; max-width: 320px; margin: 0; padding: 10px 14px; border-radius: 16px 16px 16px 4px; font-size: 14px; line-height: 1.45; color: var(--foreground); background: color-mix(in oklab, var(--card) 88%, transparent); border: 1px solid color-mix(in oklab, var(--seasonal) 45%, transparent); box-shadow: 0 12px 36px -12px color-mix(in oklab, var(--seasonal) 60%, transparent); backdrop-filter: blur(10px); opacity: 0; transform: translateY(10px) scale(.9); transform-origin: bottom left; transition: opacity .4s ease .25s, transform .45s cubic-bezier(.2,.9,.25,1.2) .25s; }
+.ghost-guide[data-flip="true"] .ghost-guide-bubble { left: auto; right: calc(100% + 8px); }
+.ghost-guide[data-below="true"] .ghost-guide-bubble { bottom: auto; top: calc(100% + 4px); }
 .ghost-guide[data-flip="true"] .ghost-guide-bubble { border-radius: 16px 16px 4px 16px; transform-origin: bottom right; }
 .ghost-guide[data-visible="true"] .ghost-guide-sprite { opacity: .95; transform: none; }
 .ghost-guide[data-visible="true"] .ghost-guide-bubble { opacity: 1; transform: none; }
 @keyframes guide-bob { from { transform: translateY(-4px) rotate(-4deg); } to { transform: translateY(6px) rotate(4deg); } }
-@media (max-width: 640px) { .ghost-guide { left: 8px; bottom: 12px; max-width: calc(100vw - 150px); } .ghost-guide-sprite { width: 46px; } .ghost-guide-bubble { font-size: 13px; margin-bottom: 34px; } }
+@media (max-width: 640px) { .ghost-guide { left: 8px; bottom: 12px; width: 46px; } .ghost-guide-sprite { width: 46px; } .ghost-guide-bubble { font-size: 13px; bottom: 34px; } }
 
 /* ───────── Étincelles qui suivent la souris ───────── */
 .cursor-sparkles { position: fixed; inset: 0; z-index: 80; width: 100%; height: 100%; pointer-events: none; }
@@ -1201,3 +1201,6 @@ html { scroll-behavior: smooth; }
 [data-halloween-phase="arrival"] > :is(section, aside, footer) *, [data-halloween-phase="arrival"] > .night-sky * { animation-play-state: paused !important; }
 /* Section links land below the floating bar instead of under it. */
 .night-page > section[id] { scroll-margin-top: 5.5rem; }
+/* The small hosting announcement on the home page. */
+.soon-chip.soon-chip-inline { position: static; }
+.hosting-teaser { border: 1px solid color-mix(in oklab, var(--seasonal) 35%, transparent); }
