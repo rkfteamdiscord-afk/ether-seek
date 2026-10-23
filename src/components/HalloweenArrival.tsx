@@ -7,6 +7,8 @@ import { ArrowRight, Check, X } from "lucide-react";
 import { HalloweenWeather } from "./HalloweenWeather";
 import { HalloweenStaircase } from "./HalloweenStaircase";
 import { FogShader } from "./FogShader";
+import { arrivalCopy } from "@/lib/site-copy";
+import type { Lang } from "@/lib/i18n";
 import flyingWitch from "@/assets/halloween-flying-witch.png";
 
 export type HalloweenPhase = "arrival" | "releasing" | "ready" | "revealed";
@@ -140,7 +142,8 @@ function sparkleTrail(canvas: HTMLCanvasElement, flight: HTMLElement, size: numb
   return () => cancelAnimationFrame(raf);
 }
 
-export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPhase; onPhaseChange: (phase: HalloweenPhase) => void }) {
+export function HalloweenArrival({ phase, onPhaseChange, lang }: { phase: HalloweenPhase; onPhaseChange: (phase: HalloweenPhase) => void; lang: Lang }) {
+  const text = arrivalCopy[lang];
   const [open, setOpen] = useState(false);
   const flightRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -269,21 +272,21 @@ export function HalloweenArrival({ phase, onPhaseChange }: { phase: HalloweenPha
       <canvas ref={trailRef} className="arrival-trail" aria-hidden="true" />
       <div ref={flightRef} className="arrival-flight" aria-hidden="true"><FlyingWitch /><span className="stolen-zrk">Ȥrk</span></div>
       <div ref={logoRef} className="arrival-logo" aria-hidden="true">Ȥrk<span>.</span></div>
-      <Button variant="outline" size="sm" className="arrival-skip" onClick={() => onPhaseChange("ready")}><X className="h-4 w-4" /> Passer l’animation</Button>
+      <Button variant="outline" size="sm" className="arrival-skip" onClick={() => onPhaseChange("ready")}><X className="h-4 w-4" /> {text.skip}</Button>
     </div>}
     {phase === "ready" && <div className="pumpkin-surprise">
-      <Button variant="ghost" className="pumpkin-trigger" aria-label="Clique sur la citrouille" onClick={() => { onPhaseChange("revealed"); setOpen(true); }}>
-        <PumpkinPatch className="pumpkin-trigger-art" /><span>Clique dessus !</span>
+      <Button variant="ghost" className="pumpkin-trigger" aria-label={text.pumpkinLabel} onClick={() => { onPhaseChange("revealed"); setOpen(true); }}>
+        <PumpkinPatch className="pumpkin-trigger-art" /><span>{text.pumpkin}</span>
       </Button>
     </div>}
     {phase === "releasing" && <div className="candy-burst" aria-hidden="true"><div className="reveal-witch"><FlyingWitch /></div>{Array.from({ length: 32 }, (_, i) => <span key={i} className={`burst-candy candy-${i % 16}`}><svg width="32" height="24" viewBox="0 0 80 50"><path d="m22 14-18-9 4 20-4 20 18-9m36-22 18-9-4 20 4 20-18-9" className="deco-violet" /><rect x="20" y="8" width="40" height="34" rx="10" className="deco-orange" /><path d="m31 10 12 30m1-30 12 30" fill="none" className="deco-gold" strokeWidth="5" /></svg></span>)}</div>}
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-md border-seasonal/30 text-center">
         <PumpkinPatch className="mx-auto h-32 w-48" />
-        <DialogHeader><DialogTitle className="text-center font-display text-3xl">Bravo !</DialogTitle><DialogDescription className="text-center text-base">Tu as −{halloweenOffer.discountPercent} % sur toutes les prestations avec le code</DialogDescription></DialogHeader>
+        <DialogHeader><DialogTitle className="text-center font-display text-3xl">{text.bravo}</DialogTitle><DialogDescription className="text-center text-base">{text.reward}</DialogDescription></DialogHeader>
         <strong className="rounded-md border border-dashed border-seasonal bg-seasonal-soft py-4 font-mono text-2xl text-seasonal">{halloweenOffer.code}</strong>
-        <Button asChild onClick={() => setOpen(false)}><a href="#contact">Contacter Ȥrk <ArrowRight className="h-4 w-4" /></a></Button>
-        <Button variant="ghost" onClick={() => setOpen(false)}><Check className="h-4 w-4" /> Continuer la visite</Button>
+        <Button asChild onClick={() => setOpen(false)}><a href="#contact">{text.contact} <ArrowRight className="h-4 w-4" /></a></Button>
+        <Button variant="ghost" onClick={() => setOpen(false)}><Check className="h-4 w-4" /> {text.keepVisiting}</Button>
       </DialogContent>
     </Dialog>
   </>;

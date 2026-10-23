@@ -28,13 +28,13 @@ import { ZombieHand } from "@/components/Zombies";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 import { StudioVideo } from "@/components/StudioVideo";
+import { LangProvider, useLang } from "@/lib/i18n";
+import { siteCopy } from "@/lib/site-copy";
 
 const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
 const emailUrl = "mailto:zrk.pro.dev@gmail.com";
-const whatsappUrl =
-  "https://api.whatsapp.com/send?phone=33787444309&text=" +
-  encodeURIComponent("Bonjour Ȥrk, je souhaite commander un site / une application.");
+const whatsappUrl = (message: string) => "https://api.whatsapp.com/send?phone=33787444309&text=" + encodeURIComponent(message);
 
 const WhatsAppIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -51,16 +51,16 @@ const DiscordIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ȥrk — Création de sites web et applications" },
+      { title: "Ȥrk — Websites and apps" },
       {
         name: "description",
         content:
-          "Ȥrk conçoit des sites web, applications iOS et Android, bots et solutions numériques sécurisées sur mesure.",
+          "Ȥrk builds tailor-made websites, iOS and Android apps, bots and secure digital products.",
       },
-      { property: "og:title", content: "Ȥrk — Studio de création numérique" },
+      { property: "og:title", content: "Ȥrk — Digital creation studio" },
       {
         property: "og:description",
-        content: "Sites web, applications mobiles, bots et cybersécurité : un accompagnement humain, complet et sur mesure.",
+        content: "Websites, mobile apps, bots and cybersecurity: human, complete and tailor-made support.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -70,37 +70,24 @@ export const Route = createFileRoute("/")({
   component: Portfolio,
 });
 
-const services = [
-  {
-    icon: Globe2,
-    title: "Sites web",
-    text: "Sites vitrines, portfolios, boutiques et plateformes rapides, élégants et pensés pour convertir vos visiteurs.",
-  },
-  {
-    icon: Smartphone,
-    title: "Applications mobiles",
-    text: "Applications iOS et Android prêtes à être publiées sur l’App Store et le Play Store.",
-  },
-  {
-    icon: Bot,
-    title: "Bots & automatisations",
-    text: "Bots Telegram, WhatsApp et Discord conçus autour de vos besoins, de votre communauté ou de votre activité.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Cybersécurité",
-    text: "Audit, protection des accès et bonnes pratiques intégrés pour livrer des produits solides et fiables.",
-  },
-];
+const serviceIcons = [Globe2, Smartphone, Bot, ShieldCheck];
+const stepIcons = [MessageCircle, Code2, HeartHandshake];
 
-const commitments = [
-  "Un interlocuteur unique du premier échange à la livraison",
-  "Une solution conçue sur mesure, sans modèle générique",
-  "Un suivi clair et régulier pendant toute la création",
-  "La sécurité prise en compte dès le début du projet",
-];
+/** French flag drawn inline so it shows on every system (emoji flags do not on Windows). */
+const FrenchFlag = () => (
+  <svg viewBox="0 0 3 2" className="h-4 w-6 shrink-0 rounded-[3px] shadow-sm" aria-hidden="true"><path fill="#002654" d="M0 0h1v2H0z" /><path fill="#fff" d="M1 0h1v2H1z" /><path fill="#ce1126" d="M2 0h1v2H2z" /></svg>
+);
+const BritishFlag = () => (
+  <svg viewBox="0 0 60 30" className="h-4 w-6 shrink-0 rounded-[3px] shadow-sm" aria-hidden="true"><path fill="#012169" d="M0 0h60v30H0z" /><path stroke="#fff" strokeWidth="6" d="m0 0 60 30m0-30L0 30" /><path stroke="#c8102e" strokeWidth="2" d="m0 0 60 30m0-30L0 30" /><path stroke="#fff" strokeWidth="10" d="M30 0v30M0 15h60" /><path stroke="#c8102e" strokeWidth="6" d="M30 0v30M0 15h60" /></svg>
+);
 
 function Portfolio() {
+  return <LangProvider><Page /></LangProvider>;
+}
+
+function Page() {
+  const { lang, setLang } = useLang();
+  const t = siteCopy[lang];
   const [showOffer, setShowOffer] = useState(true);
   const [phase, setPhase] = useState<HalloweenPhase>("arrival");
   return (
@@ -110,34 +97,39 @@ function Portfolio() {
       <PumpkinDefs />
       <GhostSwarm />
       <SpiderWalkers />
-      <GhostGuide phase={phase} />
+      <GhostGuide phase={phase} lang={lang} />
       <CursorSparkles />
-      <HalloweenArrival phase={phase} onPhaseChange={setPhase} />
+      <HalloweenArrival phase={phase} onPhaseChange={setPhase} lang={lang} />
       <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6">
         <div className="liquid-bar mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full pl-6 pr-2.5">
-          <a href="#accueil" data-header-logo className="font-brand text-2xl font-extrabold text-foreground" aria-label="Accueil Ȥrk">
+          <a href="#accueil" data-header-logo className="font-brand text-2xl font-extrabold text-foreground" aria-label={t.homeLabel}>
             Ȥrk<span className="text-seasonal">.</span>
           </a>
-          <nav className="liquid-nav hidden items-center gap-1 rounded-full p-1 text-sm font-medium md:flex" aria-label="Navigation principale">
-            <a className="nav-pill" href="#services">Services</a>
-            <a className="nav-pill" href="#apropos">À propos</a>
-            <a className="nav-pill" href="#methode">Méthode</a>
+          <nav className="liquid-nav hidden items-center gap-1 rounded-full p-1 text-sm font-medium md:flex" aria-label={t.navLabel}>
+            <a className="nav-pill" href="#services">{t.nav.services}</a>
+            <a className="nav-pill" href="#apropos">{t.nav.about}</a>
+            <a className="nav-pill" href="#methode">{t.nav.method}</a>
           </nav>
-          <Button asChild className="halloween-button ember-button h-11 rounded-full bg-seasonal px-5 font-semibold text-seasonal-foreground hover:bg-seasonal/90">
-            <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> Commander un site <ArrowRight className="h-4 w-4" /></a>
-          </Button>
+          <div className="flex items-center gap-2">
+            <button type="button" data-guide="langue" lang={lang === "en" ? "fr" : "en"} aria-label={t.langButtonLabel} onClick={() => setLang(lang === "en" ? "fr" : "en")} className="lang-switch glass inline-flex h-11 items-center gap-2.5 rounded-full px-4 font-display text-base font-bold text-foreground sm:px-5">
+              {lang === "en" ? <FrenchFlag /> : <BritishFlag />} {t.langButton}
+            </button>
+            <Button asChild className="halloween-button ember-button hidden h-11 rounded-full bg-seasonal px-5 font-semibold text-seasonal-foreground hover:bg-seasonal/90 sm:inline-flex">
+              <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> {t.order} <ArrowRight className="h-4 w-4" /></a>
+            </Button>
+          </div>
         </div>
       </header>
 
       {showOffer && (
-        <aside data-guide="promo-bandeau" role="status" aria-label="Offre Halloween" className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
+        <aside data-guide="promo-bandeau" role="status" aria-label={t.offerLabel} className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-2.5 lg:px-10">
             <Pumpkins className="pumpkins-notice" />
             <p className="flex-1 text-sm leading-6">
-              <strong className="text-seasonal">Halloween : −{halloweenOffer.discountPercent} %</strong> sur toutes les prestations avec le code{" "}
+              <strong className="text-seasonal">{t.offerTitle}</strong> {t.offerText}{" "}
               <strong className="rounded-md border border-seasonal/40 bg-background/40 px-2 py-0.5 font-bold tracking-wide">{halloweenOffer.code}</strong>
             </p>
-            <Button variant="ghost" size="icon" aria-label="Fermer l’offre Halloween" onClick={() => setShowOffer(false)} className="shrink-0 rounded-full text-foreground hover:bg-foreground/10 hover:text-foreground">
+            <Button variant="ghost" size="icon" aria-label={t.offerClose} onClick={() => setShowOffer(false)} className="shrink-0 rounded-full text-foreground hover:bg-foreground/10 hover:text-foreground">
               <X />
             </Button>
           </div>
@@ -160,32 +152,30 @@ function Portfolio() {
             <div className="decor-anchor glass mb-8 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide text-foreground/90">
               <AttachedDecor chapter={0} index={3} />
               <Ghost className="h-4 w-4 text-seasonal" aria-hidden="true" />
-              Studio digital indépendant
+              {t.eyebrow}
               <span className="mx-1 hidden h-1 w-1 rounded-full bg-seasonal sm:inline-block" aria-hidden="true" />
-              <span className="hidden text-seasonal sm:inline">Édition Halloween</span>
+              <span className="hidden text-seasonal sm:inline">{t.eyebrowSeason}</span>
             </div>
             <h1 data-guide="accueil-titre" className="halloween-title font-display text-5xl leading-[1.05] font-extrabold sm:text-6xl lg:text-7xl">
               <Cobweb />
-              <span className="zrk-identity">Ȥrk</span> crée vos <span className="ember-text pr-2">sites et applications</span> avec sérieux.
+              <span className="zrk-identity">Ȥrk</span> {t.heroBefore} <span className="ember-text pr-2">{t.heroHighlight}</span> {t.heroAfter}
             </h1>
             <p data-guide="accueil-texte" className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9">
-              Je transforme une idée en un produit numérique clair, moderne et fiable : site web, application mobile, bot ou outil sur mesure. Vous échangez directement avec moi, simplement, du cadrage à la mise en ligne.
+              {t.heroText}
             </p>
             <div data-guide="accueil-boutons" className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg" className="halloween-button ember-button h-auto min-h-13 rounded-full bg-seasonal px-7 py-3.5 text-base font-semibold text-seasonal-foreground hover:bg-seasonal/90">
-                <a href="#contact"><Cobweb /> Commander un site <MessageCircle className="h-4 w-4" /></a>
+                <a href="#contact"><Cobweb /> {t.order} <MessageCircle className="h-4 w-4" /></a>
               </Button>
               <Button asChild variant="outline" size="lg" className="decor-anchor glass h-auto min-h-13 whitespace-normal rounded-full px-7 py-3.5 text-base hover:bg-card/80">
                 <a data-guide="discord" href={discordUrl} target="_blank" rel="noopener noreferrer">
                   <AttachedDecor chapter={0} index={1} />
-                  <DiscordIcon /> Rejoindre le serveur Discord
+                  <DiscordIcon /> {t.joinDiscord}
                 </a>
               </Button>
             </div>
             <div data-guide="accueil-promesse" className="mt-11 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sur mesure</span>
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Sécurisé</span>
-              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> Accompagnement direct</span>
+              {t.promise.map((item) => <span key={item} className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-seasonal" /> {item}</span>)}
             </div>
           </div>
 
@@ -195,11 +185,11 @@ function Portfolio() {
             <Cobweb className="web-avatar" />
             <Pumpkins className="pumpkins-avatar" />
             <div className="glass relative overflow-hidden rounded-[1.75rem] p-3 shadow-2xl">
-              <img src={avatarUrl} alt="Photo de profil de Ȥrk" className="zrk-portrait aspect-square w-full rounded-[1.25rem] object-cover" />
+              <img src={avatarUrl} alt={t.portraitAlt} className="zrk-portrait aspect-square w-full rounded-[1.25rem] object-cover" />
               <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-5">
                 <div>
                   <p className="font-brand text-2xl font-bold">Ȥrk</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Créateur de produits numériques</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{t.portraitRole}</p>
                 </div>
                 <div className="spell-icon flex h-11 w-11 items-center justify-center rounded-full bg-seasonal-soft text-seasonal">
                   <BadgeCheck className="h-6 w-6" />
@@ -222,27 +212,30 @@ function Portfolio() {
         <DriftingGhost className="ghost-services-bottom-right" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-3xl">
-            <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> Ce que je crée</p>
-            <h2 className="halloween-title moon-text mt-5 font-display text-4xl leading-tight font-bold sm:text-6xl"><Cobweb />Une solution complète pour votre projet.</h2>
+            <p className="eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> {t.servicesEyebrow}</p>
+            <h2 className="halloween-title moon-text mt-5 font-display text-4xl leading-tight font-bold sm:text-6xl"><Cobweb />{t.servicesTitle}</h2>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              De la première maquette à la publication, je construis des produits utiles, agréables à utiliser et simples à faire évoluer.
+              {t.servicesText}
             </p>
           </div>
           <div className="mt-16 grid gap-6 md:grid-cols-2">
-            {services.map((service, index) => (
+            {t.services.map((service, index) => {
+              const Icon = serviceIcons[index] ?? Globe2;
+              return (
               <article key={service.title} data-guide={`service-${index}`} className="halloween-card spell-card glass rise-in group p-8">
                 <AttachedDecor chapter={1} index={index as 0 | 1 | 2 | 3} />
                 <Cobweb className="web-card" />
                 <div className="flex items-center justify-between">
                   <div className="spell-icon flex h-13 w-13 items-center justify-center rounded-2xl bg-seasonal-soft text-seasonal">
-                    <service.icon className="h-6 w-6" />
+                    <Icon className="h-6 w-6" />
                   </div>
                   <span className="font-display text-sm text-muted-foreground">0{index + 1}</span>
                 </div>
                 <h3 className="mt-7 font-display text-2xl font-bold sm:text-3xl">{service.title}</h3>
                 <p className="mt-3 max-w-xl leading-7 text-muted-foreground">{service.text}</p>
               </article>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -270,28 +263,21 @@ function Portfolio() {
         <Cobweb className="web-section-right" />
         <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-10">
           <div className="rise-in">
-            <p className="eyebrow"><Ghost className="h-4 w-4" aria-hidden="true" /> À propos de moi</p>
-            <h2 data-guide="apropos-titre" className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />Je suis <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
+            <p className="eyebrow"><Ghost className="h-4 w-4" aria-hidden="true" /> {t.aboutEyebrow}</p>
+            <h2 data-guide="apropos-titre" className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />{t.aboutTitle} <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
             <div className="decor-anchor glass mt-9 rounded-[1.5rem] p-2.5 shadow-2xl">
               <AttachedDecor chapter={2} index={1} />
-              <img src={bannerHd} alt="L’univers visuel du studio Ȥrk" className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
+              <img src={bannerHd} alt={t.bannerAlt} className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
             </div>
           </div>
           <div className="rise-in space-y-6 text-base leading-8 text-muted-foreground sm:text-lg">
-            <p>
-              Je suis développeur indépendant et fondateur de <strong className="font-semibold text-foreground">Ȥrk</strong>. J’accompagne les particuliers, créateurs, communautés et entreprises qui veulent donner vie à une idée numérique sans devoir coordonner plusieurs prestataires.
-            </p>
-            <p data-guide="apropos-metier">
-              Mon cœur de métier est la <strong className="font-semibold text-foreground">création de sites web et d’applications mobiles</strong>. Je m’occupe de l’apparence, du fonctionnement, des données, de la mise en ligne et du suivi. Je développe aussi des bots Telegram, WhatsApp et Discord ainsi que des outils d’automatisation adaptés à votre activité.
-            </p>
-            <p>
-              Ma spécialisation en cybersécurité n’est pas là pour donner une image inquiétante : elle me permet surtout de concevoir des projets plus fiables. Les accès, les données et l’hébergement sont réfléchis avec sérieux dès le départ.
-            </p>
-            <p data-guide="apropos-propriete">
-              Je privilégie une relation simple et transparente. Vous parlez directement avec la personne qui conçoit votre projet, vous suivez son avancement et vous recevez une solution qui vous appartient vraiment.
-            </p>
+            {t.about.map(([before, strong, after], index) => (
+              <p key={index} data-guide={index === 1 ? "apropos-metier" : index === 3 ? "apropos-propriete" : undefined}>
+                {before}{strong && <strong className="font-semibold text-foreground">{strong}</strong>}{after}
+              </p>
+            ))}
             <div data-guide="apropos-engagements" className="grid gap-3 pt-4 sm:grid-cols-2">
-              {commitments.map((item, index) => (
+              {t.commitments.map((item, index) => (
                 <div key={item} className="decor-anchor glass flex gap-3 rounded-2xl p-4 text-sm leading-6 text-foreground">
                   {index < 2 && <AttachedDecor chapter={2} index={index === 0 ? 2 : 3} />}
                   <Check className="mt-1 h-4 w-4 shrink-0 text-seasonal" /> {item}
@@ -343,15 +329,11 @@ function Portfolio() {
         <Cobweb className="web-section-left" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="rise-in max-w-2xl">
-            <p className="eyebrow">Une collaboration simple</p>
-            <h2 className="decor-anchor moon-text mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={3} index={0} />Votre idée, accompagnée de A à Z.</h2>
+            <p className="eyebrow">{t.methodEyebrow}</p>
+            <h2 className="decor-anchor moon-text mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={3} index={0} />{t.methodTitle}</h2>
           </div>
           <div className="mt-16 grid gap-6 md:grid-cols-3">
-            {[
-              { icon: MessageCircle, n: "01", t: "On échange", d: "Vous m’expliquez votre idée, vos objectifs et votre budget." },
-              { icon: Code2, n: "02", t: "Je construis", d: "Je conçois, développe et teste votre solution avec vous." },
-              { icon: HeartHandshake, n: "03", t: "Je vous accompagne", d: "Je mets le projet en ligne et reste disponible après la livraison." },
-            ].map((step, index) => (
+            {t.steps.map((step, index) => ({ ...step, n: `0${index + 1}`, icon: stepIcons[index] ?? MessageCircle })).map((step, index) => (
               <article key={step.n} data-guide={`etape-${index}`} className="decor-anchor spell-card glass rise-in p-8">
                 <AttachedDecor chapter={3} index={index === 0 ? 1 : index === 1 ? 2 : 3} />
                 <div className="flex items-start justify-between">
@@ -369,11 +351,11 @@ function Portfolio() {
       <section id="video" className="halloween-stage relative py-20 lg:py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1fr_auto] lg:px-10">
           <div className="rise-in max-w-xl">
-            <p className="eyebrow">Le studio en 50 secondes</p>
-            <h2 className="moon-text mt-5 font-display text-4xl font-bold sm:text-6xl">Tout Ȥrk, en une vidéo.</h2>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">Sites web, applications mobiles, bots et cybersécurité : un aperçu rapide de ce que je crée, en format vertical.</p>
+            <p className="eyebrow">{t.videoEyebrow}</p>
+            <h2 className="moon-text mt-5 font-display text-4xl font-bold sm:text-6xl">{t.videoTitle}</h2>
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">{t.videoText}</p>
           </div>
-          <StudioVideo />
+          <StudioVideo label={t.videoLabel} />
         </div>
       </section>
 
@@ -389,16 +371,16 @@ function Portfolio() {
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
           <div className="cauldron-panel rise-in flex flex-col items-start justify-between gap-10 px-7 py-12 sm:px-12 lg:flex-row lg:items-center lg:py-16">
             <div className="max-w-2xl">
-              <p className="eyebrow">Parlons de votre idée</p>
-              <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={4} index={0} />Besoin d’un site, d’une app ou d’un bot ?</h2>
-              <p data-guide="contact-promo" className="mt-6 inline-flex items-center gap-2 rounded-full border border-seasonal/40 bg-seasonal-soft px-4 py-2 text-sm font-medium text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> −{halloweenOffer.discountPercent} % sur toute prestation · Code {halloweenOffer.code}</p>
-              <p className="mt-5 leading-7 text-muted-foreground">Présentez-moi votre projet par WhatsApp, Discord ou e-mail. Je vous répondrai directement pour voir comment le réaliser.</p>
+              <p className="eyebrow">{t.contactEyebrow}</p>
+              <h2 className="decor-anchor mt-4 font-display text-4xl font-bold sm:text-5xl"><AttachedDecor chapter={4} index={0} />{t.contactTitle}</h2>
+              <p data-guide="contact-promo" className="mt-6 inline-flex items-center gap-2 rounded-full border border-seasonal/40 bg-seasonal-soft px-4 py-2 text-sm font-medium text-seasonal"><Ghost className="h-4 w-4 shrink-0" aria-hidden="true" /> {t.contactPromo}</p>
+              <p className="mt-5 leading-7 text-muted-foreground">{t.contactText}</p>
             </div>
             <div data-guide="contact-boutons" className="halloween-contact-buttons relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:min-w-64">
               <Cobweb />
               <a
                 data-guide="whatsapp"
-                href={whatsappUrl}
+                href={whatsappUrl(t.whatsappMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="decor-anchor ember-button inline-flex items-center justify-center gap-2 rounded-full bg-seasonal px-6 py-4 font-semibold text-seasonal-foreground"
@@ -420,7 +402,7 @@ function Portfolio() {
                 className="decor-anchor glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 font-semibold text-foreground transition hover:bg-card"
               >
                 <AttachedDecor chapter={4} index={3} />
-                <Mail className="h-5 w-5 text-primary" /> E-mail
+                <Mail className="h-5 w-5 text-primary" /> {t.email}
               </a>
             </div>
           </div>
@@ -430,7 +412,7 @@ function Portfolio() {
       <footer className="relative border-t border-border/40 bg-background/70 backdrop-blur">
         <Ghost className="halloween-footer-ghost h-8 w-8 text-seasonal" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-10">
-          <p>© 2026 <span className="font-brand font-semibold text-foreground">Ȥrk</span> — Création numérique sur mesure</p>
+          <p>© 2026 <span className="font-brand font-semibold text-foreground">Ȥrk</span> — {t.footer}</p>
           <p className="flex items-center gap-4">Designed by Eliza <a href="/admin" className="rounded-full border border-border/60 px-3 py-1 text-xs transition-colors hover:border-seasonal hover:text-seasonal">🛡️ Admin</a></p>
         </div>
       </footer>

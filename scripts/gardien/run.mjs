@@ -219,7 +219,7 @@ function errorContext(results) {
 const THEMES = {
   bug: "Corrige l’erreur de compilation ou le test qui échoue montré ci-dessous. C’est la priorité absolue.",
   deco: "Ajoute OU améliore UNE décoration d’Halloween sur la page, en réutilisant uniquement les composants déjà importés (RealPumpkin avec skin \"orange\" | \"deep\" | \"ghost\" et carved, ZombieHand, CandleCluster, SwingingLantern, DriftingGhost) et, si besoin, une règle CSS de position dans src/styles.css. Place-la dans les marges ou en bas d’une section, jamais sur le texte ou les boutons, avec une classe de position unique.",
-  fantome: "Enrichis les réponses du petit fantôme dans src/lib/ghost-knowledge.ts : plus de détails dans les étapes de visite ou les réponses toutes prêtes, ou une nouvelle question toute prête. N’utilise QUE des faits présents dans siteFacts : jamais de prix, de délai ou de promesse inventés.",
+  fantome: "Enrichis les réponses du petit fantôme dans src/lib/ghost-knowledge.ts (français) ou src/lib/ghost-knowledge-en.ts (anglais, langue par défaut du site ; une nouvelle question s’ajoute dans les deux langues) : plus de détails dans les étapes de visite ou les réponses toutes prêtes, ou une nouvelle question toute prête. N’utilise QUE des faits présents dans siteFacts : jamais de prix, de délai ou de promesse inventés.",
   detail: "Fais UNE petite amélioration visuelle ou d’accessibilité (animation plus douce, contraste, espacement, texte alternatif…) sans changer le design global.",
 };
 

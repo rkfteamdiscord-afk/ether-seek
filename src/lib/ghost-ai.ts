@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { ghostTargets, systemPrompt, type GhostReply, type GhostTarget, type GhostTurn } from "./ghost-prompt";
+import { ghostTargets, systemPromptFor, type GhostReply, type GhostTarget, type GhostTurn } from "./ghost-prompt";
 
 export type { GhostReply, GhostTarget, GhostTurn };
 
@@ -10,15 +10,15 @@ export type { GhostReply, GhostTarget, GhostTurn };
  * and the ghost then falls back to its built-in answers.
  */
 
-function validate(input: unknown): { question: string; history: GhostTurn[] } {
-  const value = (input ?? {}) as { question?: unknown; history?: unknown };
+function validate(input: unknown): { question: string; history: GhostTurn[]; lang: "en" | "fr" } {
+  const value = (input ?? {}) as { question?: unknown; history?: unknown; lang?: unknown };
   const question = typeof value.question === "string" ? value.question.trim().slice(0, 300) : "";
   if (!question) throw new Error("Question manquante");
   const history = (Array.isArray(value.history) ? value.history : [])
     .filter((turn): turn is GhostTurn => !!turn && (turn.role === "user" || turn.role === "assistant") && typeof turn.content === "string")
     .slice(-6)
     .map((turn) => ({ role: turn.role, content: turn.content.slice(0, 400) }));
-  return { question, history };
+  return { question, history, lang: value.lang === "fr" ? "fr" : "en" };
 }
 
 // Groq retires models over time: use GROQ_MODEL if set, else the best one still offered.
@@ -53,7 +53,7 @@ export const askGhost = createServerFn({ method: "POST" })
           temperature: 0.6,
           max_tokens: 220,
           response_format: { type: "json_object" },
-          messages: [{ role: "system", content: systemPrompt }, ...data.history, { role: "user", content: data.question }],
+          messages: [{ role: "system", content: systemPromptFor(data.lang) }, ...data.history, { role: "user", content: data.question }],
         }),
         signal: AbortSignal.timeout(12000),
       });
