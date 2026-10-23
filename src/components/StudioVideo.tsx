@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 
 /**
- * The studio's 30-second vertical video, shown in a glass phone frame.
+ * The studio's 50-second vertical video, shown in a glass phone frame.
  * It plays muted while it is on screen and pauses when scrolled away; with
  * reduced motion it never starts by itself, and the controls are always there.
  */
-export function StudioVideo() {
+export function StudioVideo({ label }: { label: string }) {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function StudioVideo() {
         playsInline
         controls
         preload="metadata"
-        aria-label="Vidéo de présentation du studio Ȥrk : exemples de sites, services, méthode et contact"
+        aria-label={label}
       />
     </div>
   );

@@ -1,4 +1,5 @@
-import { ghostTargets, systemPrompt, type GhostReply, type GhostTarget, type GhostTurn } from "./ghost-prompt";
+import type { Lang } from "./i18n";
+import { ghostTargets, systemPromptFor, type GhostReply, type GhostTarget, type GhostTurn } from "./ghost-prompt";
 
 /**
  * Browser fallback for the guide ghost's AI, used when the site runs without a server
@@ -20,8 +21,9 @@ function parseReply(content: string): GhostReply {
 }
 
 /** First the chat-style endpoint, then the plain text one; null if both fail. */
-export async function askGhostInBrowser(question: string, history: GhostTurn[]): Promise<GhostReply> {
+export async function askGhostInBrowser(question: string, history: GhostTurn[], lang: Lang): Promise<GhostReply> {
   const asked = question.slice(0, 300);
+  const systemPrompt = systemPromptFor(lang);
   try {
     const response = await fetch(ENDPOINT, {
       method: "POST",

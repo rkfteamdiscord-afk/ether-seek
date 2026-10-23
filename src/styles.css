@@ -680,6 +680,11 @@ html { scroll-behavior: smooth; }
 .liquid-nav { background: oklch(0.1 0.03 290 / .35); box-shadow: inset 0 1px 2px oklch(0.05 0.02 290 / .6), inset 0 -1px 0 oklch(1 0 0 / .06); }
 .nav-pill { position: relative; padding: .55rem 1.1rem; border-radius: 999px; color: var(--muted-foreground); transition: color .25s ease, background-color .25s ease, box-shadow .25s ease, transform .4s var(--spring); }
 .nav-pill:hover { color: var(--foreground); background: oklch(1 0 0 / .1); box-shadow: inset 0 1px 0 oklch(1 0 0 / .25), 0 6px 18px -8px color-mix(in oklab, var(--seasonal) 60%, transparent); }
+/* The big language switch: a glass pill ringed in the seasonal colour so it is the first thing you spot. */
+.lang-switch { border: 1.5px solid color-mix(in oklab, var(--seasonal) 70%, transparent); box-shadow: 0 0 22px -4px color-mix(in oklab, var(--seasonal) 55%, transparent), inset 0 1px 0 oklch(1 0 0 / .25); transition: transform .4s var(--spring), box-shadow .25s ease; }
+.lang-switch:hover { transform: translateY(-1px) scale(1.04); box-shadow: 0 0 30px -2px color-mix(in oklab, var(--seasonal) 70%, transparent), inset 0 1px 0 oklch(1 0 0 / .3); }
+.lang-switch:focus-visible { outline: 3px solid var(--seasonal); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .lang-switch, .lang-switch:hover { transition: none; transform: none; } }
 .nav-pill:active { transform: scale(.95); transition-duration: .1s; }
 .nav-pill:focus-visible { outline: 2px solid var(--seasonal); outline-offset: 2px; }
 
@@ -967,6 +972,10 @@ h2.font-display { letter-spacing: -0.03em; line-height: 1.05; }
 .ghost-guide[data-touching="true"] .ghost-head-impact i:nth-child(3) { animation-delay: .32s; }
 @keyframes ghost-impact-wave { 0% { opacity: 0; transform: scale(.2); } 12% { opacity: 1; } 100% { opacity: 0; transform: scale(3.2); } }
 .ghost-guide-bubble { margin: 0 0 46px; padding: 10px 14px; border-radius: 16px 16px 16px 4px; font-size: 14px; line-height: 1.45; color: var(--foreground); background: color-mix(in oklab, var(--card) 88%, transparent); border: 1px solid color-mix(in oklab, var(--seasonal) 45%, transparent); box-shadow: 0 12px 36px -12px color-mix(in oklab, var(--seasonal) 60%, transparent); backdrop-filter: blur(10px); opacity: 0; transform: translateY(10px) scale(.9); transform-origin: bottom left; transition: opacity .4s ease .25s, transform .45s cubic-bezier(.2,.9,.25,1.2) .25s; }
+.ghost-guide[data-flip="true"] { flex-direction: row-reverse; }
+.ghost-guide[data-below="true"] { align-items: flex-start; }
+.ghost-guide[data-below="true"] .ghost-guide-bubble { margin: 58px 0 0; }
+.ghost-guide[data-flip="true"] .ghost-guide-bubble { border-radius: 16px 16px 4px 16px; transform-origin: bottom right; }
 .ghost-guide[data-visible="true"] .ghost-guide-sprite { opacity: .95; transform: none; }
 .ghost-guide[data-visible="true"] .ghost-guide-bubble { opacity: 1; transform: none; }
 @keyframes guide-bob { from { transform: translateY(-4px) rotate(-4deg); } to { transform: translateY(6px) rotate(4deg); } }

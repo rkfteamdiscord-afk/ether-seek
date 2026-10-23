@@ -3,6 +3,8 @@ import type { HalloweenPhase } from "./HalloweenArrival";
 import { askGhost, type GhostReply, type GhostTarget } from "@/lib/ghost-ai";
 import { askGhostInBrowser } from "@/lib/ghost-browser-ai";
 import { askStep, fallback, faq, guide, tours, type Pointing } from "@/lib/ghost-knowledge";
+import { askStepEn, fallbackEn, faqEn, ghostUi, languageHint, toursEn } from "@/lib/ghost-knowledge-en";
+import type { Lang } from "@/lib/i18n";
 
 /** Little sheet ghost with a wavy hem; purely decorative. */
 export function GhostSprite({ className = "" }: { className?: string }) {
@@ -95,13 +97,19 @@ const targetSelectors: Record<GhostTarget, string> = {
   aucun: "",
 };
 
+/** The ghost's words in each language; English is the site's default. */
+const knowledge = {
+  en: { tours: toursEn, faq: faqEn, askStep: askStepEn, fallback: fallbackEn },
+  fr: { tours, faq, askStep, fallback },
+};
+
 const normalize = (value: string) => value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 /** Built-in answer used for the ready-made questions and whenever the AI is unavailable. */
-function answerFor(question: string): Pointing {
+function answerFor(question: string, lang: Lang): Pointing {
   const text = normalize(question);
-  let best: Pointing = fallback, score = 0;
-  for (const entry of faq) {
+  let best: Pointing = knowledge[lang].fallback, score = 0;
+  for (const entry of knowledge[lang].faq) {
     const hits = entry.keys.filter((key) => text.includes(normalize(key))).length;
     if (hits > score) { score = hits; best = entry.answer; }
   }
@@ -118,7 +126,18 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
     if (!ghost || !sprite) return;
     let raf = 0, touchedAt = 0, last = performance.now();
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Moving the bubble to another side moves the sprite inside its box: shift the box back so it does not jump.
+    const setSide = (key: "flip" | "below", on: boolean) => {
+      if ((ghost.dataset[key] === "true") === on) return;
+      const before = sprite.getBoundingClientRect();
+      ghost.dataset[key] = on ? "true" : "false";
+      const after = sprite.getBoundingClientRect();
+      position.current.x -= after.left - before.left;
+      position.current.y -= after.top - before.top;
+    };
+    const flip = (on: boolean) => setSide("flip", on);
     const place = (now: number) => {
+      if (!enabled || !target || (touchedAt > 0 && now - touchedAt >= 1600)) { flip(false); setSide("below", false); }
       const { x, y } = position.current;
       const dt = Math.min(now - last, 50);
       last = now;
@@ -132,6 +151,10 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
         if (to.bottom > 0 && to.top < window.innerHeight && to.width > 0) {
           // Approach from below: the crown of the head meets the element's lower edge.
           const destX = Math.min(Math.max(8, to.left + Math.min(to.width * 0.3, 60) - base.width / 2), window.innerWidth - base.width - 8);
+          // Near the right edge the bubble would leave the screen: show it on the ghost's left.
+          flip(destX + ghost.getBoundingClientRect().width > window.innerWidth - 8);
+          // Near the top, the bubble would rise off screen: show it below the head instead.
+          setSide("below", to.bottom < 160);
           const contactY = Math.min(to.bottom, window.innerHeight - base.height - 8 + base.height * 0.05);
           const destY = Math.max(8, contactY - base.height * 0.05);
           tx = destX - ox; ty = destY - oy;
@@ -166,13 +189,14 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
  * small AI on the server (see ghost-ai.ts), with the built-in answers as a fallback.
  * Nothing is stored; only the ghost button and its panel take clicks.
  */
-export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
-  const [tip, setTip] = useState<string>("");
+export function GhostGuide({ phase, lang }: { phase: HalloweenPhase; lang: Lang }) {
+  const ui = ghostUi[lang];
+  const [tip, setTip] = useState<{ text: string; lang: Lang }>({ text: "", lang });
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [thinking, setThinking] = useState(false);
   const [draft, setDraft] = useState("");
-  const [log, setLog] = useState<Array<{ from: "ghost" | "you"; text: string }>>([{ from: "ghost", text: "Bouh ! Pose-moi n’importe quelle question sur Ȥrk, ou choisis-en une. Je te montre la réponse sur la page." }]);
+  const [log, setLog] = useState<Array<{ from: "ghost" | "you"; text: string }>>([{ from: "ghost", text: ui.hello }]);
   const [target, setTarget] = useState<Element | null>(null);
   const lastTour = useRef(new Map<string, number>());
   const tourTimers = useRef<number[]>([]);
@@ -183,6 +207,10 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
   const bubbleTimer = useRef(0);
   const openRef = useRef(false);
   openRef.current = open;
+  const langRef = useRef(lang);
+  langRef.current = lang;
+  // The very first tour opens with a French hint pointing at the language button.
+  const hintShown = useRef(false);
   const ready = phase !== "arrival" && phase !== "releasing";
 
   const point = (selector: string, scroll: boolean, duration: number) => {
@@ -196,8 +224,8 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
 
   const stopTour = () => { tourTimers.current.forEach((timer) => window.clearTimeout(timer)); tourTimers.current = []; };
 
-  const say = (text: string, selector: string, duration: number) => {
-    setTip(text);
+  const say = (text: string, selector: string, duration: number, spoken: Lang = langRef.current) => {
+    setTip({ text, lang: spoken });
     setVisible(true);
     point(selector, false, duration);
     window.clearTimeout(bubbleTimer.current);
@@ -213,19 +241,36 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
       if (now - (lastTour.current.get(id) ?? 0) < 25000 || openRef.current) return;
       lastTour.current.set(id, now);
       stopTour();
-      const tour = tours[id];
+      const words = knowledge[langRef.current];
+      const tour = words.tours[id];
       if (!tour) return;
-      [...tour, askStep].forEach((item, i) => {
-        tourTimers.current.push(window.setTimeout(() => { if (!openRef.current) say(item.text, item.target, step); }, i * step));
+      const hint = !hintShown.current && langRef.current === "en";
+      hintShown.current = true;
+      const steps: Array<Pointing & { lang?: Lang }> = [...(hint ? [{ ...languageHint, lang: "fr" as const }] : []), ...tour, words.askStep];
+      steps.forEach((item, i) => {
+        tourTimers.current.push(window.setTimeout(() => { if (!openRef.current) say(item.text, item.target, i === 0 && hint ? 6500 : step, item.lang); }, i === 0 ? 0 : i * step + (hint ? 1900 : 0)));
       });
     };
     const observer = new IntersectionObserver((entries) => {
       const id = entries.find((item) => item.isIntersecting)?.target.id;
-      if (id && tours[id]) play(id);
+      if (id && knowledge[langRef.current].tours[id]) play(id);
     }, { rootMargin: "-45% 0px -45% 0px" });
     Object.keys(tours).forEach((id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
     return () => { observer.disconnect(); stopTour(); };
   }, [ready]);
+
+  // Switching language: the panel greets in the new language and pending tour steps stop.
+  const shownLang = useRef(lang);
+  useEffect(() => {
+    if (shownLang.current === lang) return;
+    shownLang.current = lang;
+    hintShown.current = true;
+    stopTour();
+    setVisible(false);
+    setTarget(null);
+    setLog([{ from: "ghost", text: ghostUi[lang].hello }]);
+    lastTour.current.clear();
+  }, [lang]);
 
   useEffect(() => () => { stopTour(); window.clearTimeout(pointTimer.current); window.clearTimeout(bubbleTimer.current); }, []);
 
@@ -262,11 +307,11 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
     setLog((current) => [...current, { from: "you" as const, text: question }].slice(-8));
     setThinking(true);
     let result: GhostReply = null;
-    try { result = await askGhost({ data: { question, history } }); } catch { result = null; }
+    try { result = await askGhost({ data: { question, history, lang } }); } catch { result = null; }
     // No server or no Groq key (static hosting): ask the keyless AI straight from the browser.
-    if (!result) result = await askGhostInBrowser(question, history);
+    if (!result) result = await askGhostInBrowser(question, history, lang);
     setThinking(false);
-    reply(result ? { text: result.answer, target: targetSelectors[result.target] } : answerFor(question));
+    reply(result ? { text: result.answer, target: targetSelectors[result.target] } : answerFor(question, lang));
   };
 
   useGhostTravel(home, target, ready && !open);
@@ -275,30 +320,30 @@ export function GhostGuide({ phase }: { phase: HalloweenPhase }) {
   return (
     <>
       <div ref={home} className="ghost-guide" data-visible={visible && !open ? "true" : "false"} data-open={open ? "true" : "false"}>
-        <button ref={button} type="button" className="ghost-guide-sprite" aria-label="Poser une question au fantôme" aria-expanded={open} aria-controls="ghost-chat" onClick={() => setOpen((value) => !value)}>
+        <button ref={button} type="button" className="ghost-guide-sprite" aria-label={ui.ask} aria-expanded={open} aria-controls="ghost-chat" onClick={() => setOpen((value) => !value)}>
           <GhostSprite />
           <span className="ghost-head-impact" aria-hidden="true"><i /><i /><i /></span>
           <span className="ghost-guide-badge" aria-hidden="true">?</span>
         </button>
-        <p className="ghost-guide-bubble" role="status" aria-live="polite">{tip}</p>
-        <section id="ghost-chat" className="ghost-chat" role="dialog" aria-label="Questions au fantôme" hidden={!open}>
+        <p className="ghost-guide-bubble" role="status" aria-live="polite" lang={tip.lang}>{tip.text}</p>
+        <section id="ghost-chat" className="ghost-chat" role="dialog" aria-label={ui.dialog} hidden={!open}>
           <header className="ghost-chat-head">
-            <strong>Pose-moi une question !</strong>
-            <button type="button" className="ghost-chat-close" aria-label="Fermer les questions" onClick={() => { setOpen(false); button.current?.focus(); }}>×</button>
+            <strong>{ui.title}</strong>
+            <button type="button" className="ghost-chat-close" aria-label={ui.close} onClick={() => { setOpen(false); button.current?.focus(); }}>×</button>
           </header>
           <div className="ghost-chat-log" aria-live="polite">
             {log.map((message, i) => <p key={i} className={`ghost-chat-msg from-${message.from}`}>{message.text}</p>)}
-            {thinking && <p className="ghost-chat-msg from-ghost ghost-thinking" aria-label="Le fantôme réfléchit"><span /><span /><span /></p>}
+            {thinking && <p className="ghost-chat-msg from-ghost ghost-thinking" aria-label={ui.thinking}><span /><span /><span /></p>}
           </div>
           <div className="ghost-chat-chips">
-            {faq.map((entry) => <button key={entry.question} type="button" disabled={thinking} onClick={() => askReady(entry.question, entry.answer)}>{entry.question}</button>)}
+            {knowledge[lang].faq.map((entry) => <button key={entry.question} type="button" disabled={thinking} onClick={() => askReady(entry.question, entry.answer)}>{entry.question}</button>)}
           </div>
           <form className="ghost-chat-form" onSubmit={(event) => { event.preventDefault(); const question = draft.trim(); if (!question || thinking) return; setDraft(""); void askAi(question); }}>
-            <label htmlFor="ghost-question" className="sr-only">Ta question</label>
-            <input ref={input} id="ghost-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Écris ta question…" autoComplete="off" maxLength={300} />
-            <button type="submit" disabled={thinking}>Demander</button>
+            <label htmlFor="ghost-question" className="sr-only">{ui.label}</label>
+            <input ref={input} id="ghost-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder={ui.placeholder} autoComplete="off" maxLength={300} />
+            <button type="submit" disabled={thinking}>{ui.send}</button>
           </form>
-          <p className="ghost-chat-note">Les questions écrites sont envoyées à un service d’IA (Groq ou Pollinations) pour te répondre. Rien n’est enregistré sur le site.</p>
+          <p className="ghost-chat-note">{ui.note}</p>
         </section>
       </div>
     </>
