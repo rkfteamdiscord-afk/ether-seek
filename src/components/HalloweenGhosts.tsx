@@ -175,6 +175,9 @@ function useGhostTravel(home: React.RefObject<HTMLElement | null>, target: Eleme
       }
       ghost.dataset["travel"] = returning || !target || !enabled ? "returning" : touchedAt ? "touching" : "flying";
       ghost.style.transform = `translate3d(${position.current.x.toFixed(1)}px, ${position.current.y.toFixed(1)}px, 0)`;
+      // Back home with nothing to show: stop measuring the page every frame until the next target.
+      const home = (returning || !target || !enabled) && Math.hypot(position.current.x, position.current.y) < 0.5;
+      if (home) { position.current = { x: 0, y: 0 }; ghost.style.transform = "translate3d(0px, 0px, 0)"; return; }
       raf = requestAnimationFrame(place);
     };
     raf = requestAnimationFrame(place);

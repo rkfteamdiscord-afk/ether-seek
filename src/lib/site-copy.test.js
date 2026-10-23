@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { arrivalCopy, siteCopy } from "./site-copy";
+import { arrivalCopy, hostingCopy, siteCopy } from "./site-copy";
 import { halloweenOffer } from "./seasonal-offer";
 
 /** Same keys, same list lengths: a text added in one language must exist in the other. */
@@ -9,6 +9,7 @@ describe("Site copy", () => {
   test("English and French have the same texts", () => {
     expect(shape(siteCopy.en)).toEqual(shape(siteCopy.fr));
     expect(shape(arrivalCopy.en)).toEqual(shape(arrivalCopy.fr));
+    expect(shape(hostingCopy.en)).toEqual(shape(hostingCopy.fr));
   });
   test("both languages show the shared Halloween offer", () => {
     for (const lang of ["en", "fr"]) {

@@ -84,8 +84,11 @@ export function FogShader({ variant = "ground" }: { variant?: "ground" | "dense"
     resize(); window.addEventListener("resize", resize);
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const start = performance.now();
-    let raf = 0;
+    let raf = 0, drawn = 0;
     const draw = (now: number) => {
+      // The fog drifts slowly: 30 frames a second look the same and halve the GPU work.
+      if (!still && now - drawn < 30) { raf = requestAnimationFrame(draw); return; }
+      drawn = now;
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(time, 20 + (now - start) / 1000);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

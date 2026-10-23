@@ -35,7 +35,8 @@ export function HalloweenWeather({ layer = "back" }: { layer?: "back" | "front" 
     let width = 0, height = 0, raf = 0;
     const resize = () => {
       width = window.innerWidth; height = window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio, 1.5);
+      // Soft fog and fast rain look the same at 1× density, for less than half the pixels.
+      const dpr = 1;
       canvas.width = width * dpr; canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };

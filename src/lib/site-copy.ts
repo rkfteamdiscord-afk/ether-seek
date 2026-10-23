@@ -15,6 +15,7 @@ export const siteCopy = {
     homeLabel: "Ȥrk home",
     navLabel: "Main navigation",
     nav: { services: "Services", about: "About", method: "Method" },
+    menu: { open: "Menu", openLabel: "Open the menu", close: "Close the menu", pages: "Pages", sections: "On this page", home: "Home", hosting: "Hosting", soon: "Soon", video: "Video", contact: "Contact" },
     order: "Order a website",
     offerLabel: "Halloween offer",
     offerTitle: `Halloween: ${off}`,
@@ -79,6 +80,7 @@ export const siteCopy = {
     homeLabel: "Accueil Ȥrk",
     navLabel: "Navigation principale",
     nav: { services: "Services", about: "À propos", method: "Méthode" },
+    menu: { open: "Menu", openLabel: "Ouvrir le menu", close: "Fermer le menu", pages: "Pages", sections: "Sur cette page", home: "Accueil", hosting: "Hébergement", soon: "Bientôt", video: "Vidéo", contact: "Contact" },
     order: "Commander un site",
     offerLabel: "Offre Halloween",
     offerTitle: `Halloween : ${off}`,
@@ -142,4 +144,58 @@ export const siteCopy = {
 export const arrivalCopy = {
   en: { skip: "Skip the animation", pumpkinLabel: "Click the pumpkin", pumpkin: "Click it!", bravo: "Well done!", reward: `You get ${off} on every service with the code`, contact: "Contact Ȥrk", keepVisiting: "Keep exploring" },
   fr: { skip: "Passer l’animation", pumpkinLabel: "Clique sur la citrouille", pumpkin: "Clique dessus !", bravo: "Bravo !", reward: `Tu as ${off} sur toutes les prestations avec le code`, contact: "Contacter Ȥrk", keepVisiting: "Continuer la visite" },
+} satisfies Record<Lang, unknown>;
+
+/** The hosting page, announced as coming soon: nothing here is a price, limit or date. */
+export const hostingCopy = {
+  en: {
+    eyebrow: "Bot hosting • Website hosting • Web panel",
+    title: "Hosting services",
+    soon: "Soon",
+    intro: "Ȥrk. is preparing a new hosting service to host and manage your Discord bots, websites and other digital projects directly from our official website.",
+    comingTitle: "What’s coming?",
+    coming: [
+      { title: "Bot hosting", text: "Host and manage your Discord bots." },
+      { title: "Website hosting", text: "Deploy and manage your websites." },
+      { title: "Web panel", text: "Control your services through a dedicated panel on our website." },
+      { title: "Discord integration", text: "Manage certain features directly through our Discord server." },
+    ],
+    plansTitle: "Hosting plans",
+    plans: [
+      { title: "Free plan", text: "Get started with free hosting." },
+      { title: "Premium plan", text: "Unlock additional resources and features." },
+    ],
+    warning: "Features, limits, pricing and launch date are not confirmed yet.",
+    tagline: "Your projects. Our infrastructure.",
+    panel: "Access the panel",
+    panelLabel: "Access the panel (coming soon)",
+    panelSoon: "Soon…",
+    panelSoonText: "The panel isn’t open yet. Stay tuned on Discord!",
+    discord: "Join the Discord server",
+  },
+  fr: {
+    eyebrow: "Hébergement de bots • Hébergement de sites • Panel web",
+    title: "Services d’hébergement",
+    soon: "Bientôt",
+    intro: "Ȥrk. prépare un nouveau service d’hébergement pour héberger et gérer tes bots Discord, tes sites web et tes autres projets numériques directement depuis notre site officiel.",
+    comingTitle: "Ce qui arrive",
+    coming: [
+      { title: "Hébergement de bots", text: "Héberge et gère tes bots Discord." },
+      { title: "Hébergement de sites", text: "Déploie et gère tes sites web." },
+      { title: "Panel web", text: "Contrôle tes services depuis un panel dédié sur notre site." },
+      { title: "Intégration Discord", text: "Gère certaines fonctionnalités directement depuis notre serveur Discord." },
+    ],
+    plansTitle: "Les offres",
+    plans: [
+      { title: "Offre gratuite", text: "Commence avec un hébergement gratuit." },
+      { title: "Offre Premium", text: "Débloque des ressources et des fonctionnalités en plus." },
+    ],
+    warning: "Les fonctionnalités, les limites, les prix et la date de lancement ne sont pas encore confirmés.",
+    tagline: "Vos projets. Notre infrastructure.",
+    panel: "Accéder au panel",
+    panelLabel: "Accéder au panel (bientôt disponible)",
+    panelSoon: "Bientôt…",
+    panelSoonText: "Le panel n’est pas encore ouvert. Reste à l’affût sur Discord !",
+    discord: "Rejoindre le serveur Discord",
+  },
 } satisfies Record<Lang, unknown>;
