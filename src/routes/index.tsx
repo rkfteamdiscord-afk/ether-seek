@@ -18,8 +18,8 @@ import {
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
-import bannerHd from "@/assets/zrk-banner-hd-wide.png";
-import { Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost, CandleCluster } from "@/components/HalloweenDecor";
+import bannerHd from "@/assets/zrk-banner-hd-wide.webp";
+import { usePauseOffscreenDecor, Cobweb, Pumpkins, HalloweenGarland, HalloweenScene, AttachedDecor, DecorDefs, SwingingLantern, DriftingGhost, CandleCluster } from "@/components/HalloweenDecor";
 import { SpiderWalkers } from "@/components/SpiderWalkers";
 import { GhostSwarm, GhostGuide } from "@/components/HalloweenGhosts";
 import { CursorSparkles } from "@/components/CursorSparkles";
@@ -28,10 +28,10 @@ import { ZombieHand } from "@/components/Zombies";
 import { HalloweenArrival, WitchDuel, type HalloweenPhase } from "@/components/HalloweenArrival";
 import { NightSky } from "@/components/NightSky";
 import { StudioVideo } from "@/components/StudioVideo";
-import { LangProvider, useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/i18n";
+import { SiteHeader } from "@/components/SiteHeader";
 import { siteCopy } from "@/lib/site-copy";
 
-const avatarUrl = "/zrk-avatar.gif";
 const discordUrl = "https://discord.gg/4qRhB4c5me";
 const emailUrl = "mailto:zrk.pro.dev@gmail.com";
 const whatsappUrl = (message: string) => "https://api.whatsapp.com/send?phone=33787444309&text=" + encodeURIComponent(message);
@@ -73,25 +73,14 @@ export const Route = createFileRoute("/")({
 const serviceIcons = [Globe2, Smartphone, Bot, ShieldCheck];
 const stepIcons = [MessageCircle, Code2, HeartHandshake];
 
-/** French flag drawn inline so it shows on every system (emoji flags do not on Windows). */
-const FrenchFlag = () => (
-  <svg viewBox="0 0 3 2" className="h-4 w-6 shrink-0 rounded-[3px] shadow-sm" aria-hidden="true"><path fill="#002654" d="M0 0h1v2H0z" /><path fill="#fff" d="M1 0h1v2H1z" /><path fill="#ce1126" d="M2 0h1v2H2z" /></svg>
-);
-const BritishFlag = () => (
-  <svg viewBox="0 0 60 30" className="h-4 w-6 shrink-0 rounded-[3px] shadow-sm" aria-hidden="true"><path fill="#012169" d="M0 0h60v30H0z" /><path stroke="#fff" strokeWidth="6" d="m0 0 60 30m0-30L0 30" /><path stroke="#c8102e" strokeWidth="2" d="m0 0 60 30m0-30L0 30" /><path stroke="#fff" strokeWidth="10" d="M30 0v30M0 15h60" /><path stroke="#c8102e" strokeWidth="6" d="M30 0v30M0 15h60" /></svg>
-);
-
 function Portfolio() {
-  return <LangProvider><Page /></LangProvider>;
-}
-
-function Page() {
-  const { lang, setLang } = useLang();
+  const { lang } = useLang();
   const t = siteCopy[lang];
   const [showOffer, setShowOffer] = useState(true);
   const [phase, setPhase] = useState<HalloweenPhase>("arrival");
+  usePauseOffscreenDecor();
   return (
-    <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-hidden font-body text-foreground">
+    <main data-halloween-phase={phase} className="night-page relative min-h-screen overflow-x-clip font-body text-foreground">
       <NightSky />
       <DecorDefs />
       <PumpkinDefs />
@@ -100,26 +89,7 @@ function Page() {
       <GhostGuide phase={phase} lang={lang} />
       <CursorSparkles />
       <HalloweenArrival phase={phase} onPhaseChange={setPhase} lang={lang} />
-      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6">
-        <div className="liquid-bar mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full pl-6 pr-2.5">
-          <a href="#accueil" data-header-logo className="font-brand text-2xl font-extrabold text-foreground" aria-label={t.homeLabel}>
-            Ȥrk<span className="text-seasonal">.</span>
-          </a>
-          <nav className="liquid-nav hidden items-center gap-1 rounded-full p-1 text-sm font-medium md:flex" aria-label={t.navLabel}>
-            <a className="nav-pill" href="#services">{t.nav.services}</a>
-            <a className="nav-pill" href="#apropos">{t.nav.about}</a>
-            <a className="nav-pill" href="#methode">{t.nav.method}</a>
-          </nav>
-          <div className="flex items-center gap-2">
-            <button type="button" data-guide="langue" lang={lang === "en" ? "fr" : "en"} aria-label={t.langButtonLabel} onClick={() => setLang(lang === "en" ? "fr" : "en")} className="lang-switch glass inline-flex h-11 items-center gap-2.5 rounded-full px-4 font-display text-base font-bold text-foreground sm:px-5">
-              {lang === "en" ? <FrenchFlag /> : <BritishFlag />} {t.langButton}
-            </button>
-            <Button asChild className="halloween-button ember-button hidden h-11 rounded-full bg-seasonal px-5 font-semibold text-seasonal-foreground hover:bg-seasonal/90 sm:inline-flex">
-              <a href="#contact"><Cobweb /><AttachedDecor chapter={0} index={0} /> {t.order} <ArrowRight className="h-4 w-4" /></a>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader page="home" orderDecor={<><Cobweb /><AttachedDecor chapter={0} index={0} /></>} />
 
       {showOffer && (
         <aside data-guide="promo-bandeau" role="status" aria-label={t.offerLabel} className="halloween-offer relative border-b border-seasonal/30 bg-seasonal-soft text-foreground">
@@ -185,7 +155,11 @@ function Page() {
             <Cobweb className="web-avatar" />
             <Pumpkins className="pumpkins-avatar" />
             <div className="glass relative overflow-hidden rounded-[1.75rem] p-3 shadow-2xl">
-              <img src={avatarUrl} alt={t.portraitAlt} className="zrk-portrait aspect-square w-full rounded-[1.25rem] object-cover" />
+              {/* The animated portrait plays as a small looping video: the old 3.7 MB GIF was decoded frame by frame on the main thread. */}
+              <video className="zrk-portrait aspect-square w-full rounded-[1.25rem] object-cover" autoPlay muted loop playsInline poster="/zrk-avatar-poster.jpg" aria-label={t.portraitAlt}>
+                <source src="/zrk-avatar.webm" type="video/webm" />
+                <source src="/zrk-avatar.mp4" type="video/mp4" />
+              </video>
               <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-5">
                 <div>
                   <p className="font-brand text-2xl font-bold">Ȥrk</p>
@@ -267,7 +241,7 @@ function Page() {
             <h2 data-guide="apropos-titre" className="decor-anchor mt-5 font-display text-4xl font-bold sm:text-6xl"><AttachedDecor chapter={2} index={0} />{t.aboutTitle} <span className="zrk-identity ember-text">Ȥrk</span>.</h2>
             <div className="decor-anchor glass mt-9 rounded-[1.5rem] p-2.5 shadow-2xl">
               <AttachedDecor chapter={2} index={1} />
-              <img src={bannerHd} alt={t.bannerAlt} className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
+              <img src={bannerHd} alt={t.bannerAlt} width={1920} height={1080} loading="lazy" decoding="async" className="aspect-[16/9] w-full rounded-[1.1rem] object-cover" />
             </div>
           </div>
           <div className="rise-in space-y-6 text-base leading-8 text-muted-foreground sm:text-lg">

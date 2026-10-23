@@ -9,12 +9,12 @@ import { HalloweenStaircase } from "./HalloweenStaircase";
 import { FogShader } from "./FogShader";
 import { arrivalCopy } from "@/lib/site-copy";
 import type { Lang } from "@/lib/i18n";
-import flyingWitch from "@/assets/halloween-flying-witch.png";
+import flyingWitch from "@/assets/halloween-flying-witch.webp";
 
 export type HalloweenPhase = "arrival" | "releasing" | "ready" | "revealed";
 
 export function FlyingWitch() {
-  return <img src={flyingWitch} width={1024} height={768} alt="" aria-hidden="true" className="flying-witch-image" />;
+  return <img src={flyingWitch} width={512} height={384} decoding="async" alt="" aria-hidden="true" className="flying-witch-image" />;
 }
 
 function LegacyWitch() {

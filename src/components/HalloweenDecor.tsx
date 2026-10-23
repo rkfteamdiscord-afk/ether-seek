@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { extraMotifs, ExtraIllustration, type ExtraMotif } from "./HalloweenExtras";
 import { PumpkinPatch } from "./RealPumpkin";
-import ghost from "@/assets/halloween-ghost.png";
-import witchKit from "@/assets/halloween-witch-kit.png";
+import ghost from "@/assets/halloween-ghost.webp";
+import witchKit from "@/assets/halloween-witch-kit.webp";
 
 type WebDrawing = { radials: string; spiral: string; loose: string; dew: Array<[number, number]> };
 
@@ -43,7 +44,12 @@ export function Cobweb({ className = "" }: { className?: string }) {
       <path d={web.radials} className="web-radial" vectorEffect="non-scaling-stroke" />
       <path d={web.spiral} className="web-spiral" vectorEffect="non-scaling-stroke" />
       <path d={web.loose} className="web-loose" vectorEffect="non-scaling-stroke" />
-      {web.dew.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.3" className="web-dew" style={{ animationDelay: `${(i * 0.7) % 4}s` }} />)}
+      {/* Dew drops twinkle in four groups: one animation per group instead of one per drop. */}
+      {[0, 1, 2, 3].map((group) => (
+        <g key={group} className="web-dew" style={{ animationDelay: `${group}s` }}>
+          {web.dew.filter((_, i) => i % 4 === group).map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.3" />)}
+        </g>
+      ))}
     </svg>
   );
 }
@@ -99,7 +105,7 @@ const motifs: readonly Motif[] = [...originalMotifs, ...extraMotifs];
 /** Decorative illustrations only: never carry information or intercept input. */
 function Illustration({ kind }: { kind: Motif }) {
   if (kind === "ghost" || kind === "witch") {
-    return <img src={kind === "ghost" ? ghost : witchKit} alt="" width={kind === "ghost" ? 672 : 992} height={kind === "ghost" ? 992 : 672} loading="lazy" />;
+    return <img src={kind === "ghost" ? ghost : witchKit} alt="" width={kind === "ghost" ? 336 : 496} height={kind === "ghost" ? 496 : 336} loading="lazy" decoding="async" />;
   }
   const drawings: Record<Exclude<OriginalMotif, "ghost" | "witch">, React.ReactNode> = {
     spider: <><path d="M50 0V35M39 43 20 30 10 43M38 50 15 48 6 61M39 59 22 69 18 83M61 43 80 30 90 43M62 50 85 48 94 61M61 59 78 69 82 83" fill="none"/><ellipse cx="50" cy="56" rx="15" ry="20"/><circle cx="45" cy="48" r="3" className="deco-light"/><circle cx="55" cy="48" r="3" className="deco-light"/></>,
@@ -183,4 +189,20 @@ export function CandleCluster({ className = "" }: { className?: string }) {
       ))}
     </div>
   );
+}
+
+/**
+ * Pauses every decoration animation in the parts of the page that are off screen
+ * (hundreds of candles, dew drops and lanterns otherwise keep animating out of sight).
+ * Nothing visible changes: a part wakes up shortly before it scrolls into view.
+ */
+export function usePauseOffscreenDecor() {
+  useEffect(() => {
+    const parts = document.querySelectorAll<HTMLElement>(".night-page > :is(section, aside, footer)");
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) (entry.target as HTMLElement).toggleAttribute("data-offscreen", !entry.isIntersecting);
+    }, { rootMargin: "300px 0px" });
+    parts.forEach((part) => observer.observe(part));
+    return () => { observer.disconnect(); parts.forEach((part) => part.removeAttribute("data-offscreen")); };
+  }, []);
 }

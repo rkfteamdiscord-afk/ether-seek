@@ -1,4 +1,4 @@
-import flyingWitch from "@/assets/halloween-flying-witch.png";
+import flyingWitch from "@/assets/halloween-flying-witch.webp";
 import { FogShader } from "./FogShader";
 import { ZombieWalker } from "./Zombies";
 
