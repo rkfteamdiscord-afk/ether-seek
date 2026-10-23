@@ -148,6 +148,7 @@ export function HalloweenArrival({ phase, onPhaseChange, lang }: { phase: Hallow
   const flightRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLCanvasElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (revealTimer.current) clearTimeout(revealTimer.current); }, []);
   useEffect(() => {
@@ -212,6 +213,9 @@ export function HalloweenArrival({ phase, onPhaseChange, lang }: { phase: Hallow
         { t: 1, x: width + size, y: -size },
       ],
     ];
+    // The fog, lightning and stairs (CSS) wait for this moment: on a slow phone the page shows
+    // seconds before this script runs, and starting apart the witch would steal the logo in the fog.
+    sceneRef.current?.setAttribute("data-started", "true");
     const animations = [flight.animate(flightKeyframes(flights), { duration, fill: "both", easing: "linear" }),
     headerLogo.animate([{ opacity: 1, offset: 0 }, { opacity: 1, offset: grab + .02 }, { opacity: 0, offset: grab + .03 }, { opacity: 0, offset: giveBack + .02 }, { opacity: 1, offset: giveBack + .03 }, { opacity: 1 }], { duration, fill: "both" }),
     logo.animate([
@@ -255,7 +259,7 @@ export function HalloweenArrival({ phase, onPhaseChange, lang }: { phase: Hallow
   }, [phase, onPhaseChange]);
 
   return <>
-    {phase === "arrival" && <div className="halloween-arrival">
+    {phase === "arrival" && <div ref={sceneRef} className="halloween-arrival">
       <div className="arrival-vignette" aria-hidden="true" />
       <div className="arrival-blackout" aria-hidden="true">
         <svg className="arrival-bolt" viewBox="0 0 120 600" fill="none"><path d="M76 0 44 180l28 8-52 190 24 6L4 600l80-256-26-6 44-160-28-8Z" /><path d="m58 250-40 60m66-130 30 50" /></svg>
